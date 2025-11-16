@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Bellhart Clinic - Login</title>
+
+  <link rel="stylesheet" href="styles/main.css" />
+</head>
+
+<body class="auth-page">
+    <div class="auth-shell">
+        <div class="auth-card">
+
+            <header class="auth-header">
+                <img src="icons/BellhartLogo.png" class="auth-logo" />
+                <span class="auth-brand">Bellhart Clinic</span>
+            </header>
+
+            <form class="auth-form">
+                
+                <div class="auth-field">
+                    <label for="email">Email</label>
+                    <input
+                        id="email"
+                        type="email"
+                        class="input input-pill"
+                        placeholder="Enter your email"
+                    />
+                </div>
+
+                <div class="auth-field">
+                    <label for="password">Password</label>
+
+                    <div class="password-input">
+                        <input
+                            id="password"
+                            type="password"
+                            class="input password-input-field"
+                            placeholder="Enter your password"
+                        />
+                        <button type="button" class="password-toggle" aria-label="Toggle password visibility"></button>
+                    </div>
+
+                    <div class="auth-links">
+                        <a href="#" class="auth-link-small">Forgot password?</a>
+                    </div>
+                </div>
+
+                <!-- change later !! -->
+                <a href="dashboard.html" class="btn-primary btn-full">Sign in</a>
+
+            </form>
+            
+            <footer class="auth-footer">
+                <p>Don't have an account?</p>
+                <p>
+                    <a href="register.html" class="auth-link-underline">Sign up</a>
+                    or
+                    <a href="#" class="auth-link-underline">Continue as guest</a>
+                </p>
+            </footer>
+
+        </div>
+    </div>
+
+    <script>
+        const toggleBtn = document.querySelector('.password-toggle');
+        const pwd = document.querySelector('#password');
+
+        const eyeOpen = 'icons/eye.svg';
+        const eyeSlash = 'icons/eye-slash.svg'
+
+        toggleBtn.style.maskImage = `url(${eyeOpen})`;
+        toggleBtn.style.webkitMaskImage = `url(${eyeOpen})`;
+
+        toggleBtn.addEventListener('click', () => {
+            const isHidden = pwd.type === 'password';
+            
+            pwd.type = isHidden ? 'text' : 'password';
+
+            const icon = isHidden ? eyeSlash : eyeOpen;
+
+            toggleBtn.style.maskImage = `url(${icon})`;
+            toggleBtn.style.webkitMaskImage = `url(${icon})`;
+        });
+    </script>
+</body>
+</html>

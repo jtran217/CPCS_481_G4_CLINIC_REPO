@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Bellhart Clinic - Register</title>
+
+  <link rel="stylesheet" href="styles/main.css" />
+</head>
+
+<body class="auth-page">
+  <div class="auth-shell">
+    <div class="auth-card">
+
+      <!-- Header -->
+      <header class="auth-header">
+        <img src="icons/BellhartLogo.png" alt="Bellhart Clinic logo" class="auth-logo"/>
+        <span class="auth-brand">Bellhart Clinic</span>
+      </header>
+
+      <!-- Form -->
+      <form class="auth-form" action="#" method="post">
+        <!-- First / Last name row -->
+        <div class="auth-row">
+          <div class="auth-field auth-field-half">
+            <label for="first-name">First Name</label>
+            <input
+              id="first-name"
+              name="firstName"
+              type="text"
+              class="input"
+              placeholder="First Name"
+            />
+          </div>
+
+          <div class="auth-field auth-field-half">
+            <label for="last-name">Last Name</label>
+            <input
+              id="last-name"
+              name="lastName"
+              type="text"
+              class="input"
+              placeholder="Last Name"
+            />
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="auth-field">
+          <label for="email">Email</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            class="input"
+            placeholder="Enter your email"
+            autocomplete="email"
+          />
+        </div>
+
+        <!-- Password -->
+        <div class="auth-field">
+          <label for="password">Password</label>
+          <div class="password-input">
+            <input
+                id="password"
+                name="password"
+                type="password"
+                class="input password-input-field"
+                placeholder="Enter your password"
+                autocomplete="new-password"
+            />
+            <button
+                type="button"
+                class="password-toggle"
+                aria-label="Toggle password visibility"
+            >
+            </button>
+          </div>
+          <p class="auth-helper-text">Must be at least 8 characters</p>
+        </div>
+
+        <!-- Fake reCAPTCHA -->
+        <div class="captcha-container">
+          <div class="captcha-box">
+            <div class="captcha-left">
+                <input type="checkbox" id="captcha-check" />
+                <label for="captcha-check">I'm not a robot</label>
+            </div>
+            <div class="captcha-right">
+                <img src="icons/recaptcha.svg" alt="reCAPTCHA" class="captcha-logo" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Sign up button -->
+        <a href="dashboard.html" class="btn-primary btn-full">Sign up</a>
+      </form>
+
+      <!-- Footer -->
+      <footer class="auth-footer">
+        <p>Already have an account?</p>
+        <p>
+            <a href="login.html" class="auth-link-underline">Login</a> instead
+        </p>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Password eye toggle -->
+  <script>
+    const toggleBtn = document.querySelector('.password-toggle');
+    const pwd = document.querySelector('#password');
+
+    const eyeOpen = 'icons/eye.svg';
+    const eyeSlash = 'icons/eye-slash.svg';
+
+    if(toggleBtn && pwd) {
+        toggleBtn.style.maskImage = `url(${eyeOpen})`;
+        toggleBtn.style.webkitMaskImage = `url(${eyeOpen})`;
+
+        toggleBtn.addEventListener('click', () => {
+            const isHidden = pwd.type === 'password';
+            pwd.type = isHidden ? 'text' : 'password';
+            const icon = isHidden ? eyeSlash : eyeOpen;
+            toggleBtn.style.maskImage = `url(${icon})`;
+            toggleBtn.style.webkitMaskImage = `url(${icon})`;
+        });
+    }
+  </script>
+</body>
+</html>
