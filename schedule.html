@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <title>Bellhart Clinic</title>
 
-  <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/schedule.css" />
 </head>
 <body>
   <div class="app-shell">
@@ -14,7 +14,126 @@
       <div id="topbar-container"></div>
       <main class="content">
         <div id="page-header-container"></div>
-        <!-- TODO: Implement schedule content -->
+        
+        <div class="schedule-layout">
+          <!-- Left Column: Filters -->
+          <aside class="filters-panel">
+            <div class="filters-header">
+              <h2 class="filters-title">Filters</h2>
+              <span class="filter-icon"></span>
+            </div>
+
+            <!-- Doctor Filter -->
+            <div class="filter-group">
+              <label class="filter-label">Doctor</label>
+              <select class="filter-select">
+                <option value="all">All Doctors</option>
+                <option value="dr-lee">Dr. Lee</option>
+                <option value="dr-kaur">Dr. Kaur</option>
+                <option value="dr-smith">Dr. Smith</option>
+              </select>
+            </div>
+
+            <!-- Appointment Type Filter -->
+            <div class="filter-group">
+              <label class="filter-label">Appointment Type</label>
+              <div class="filter-checkboxes">
+                <label class="checkbox-label">
+                  <input type="checkbox" checked />
+                  <span>Consultation</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" checked />
+                  <span>Lab Test</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" checked />
+                  <span>Follow-Up</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Availability Filter -->
+            <div class="filter-group">
+              <label class="filter-label">Availability</label>
+              <div class="filter-checkboxes">
+                <label class="checkbox-label">
+                  <input type="checkbox" checked />
+                  <span>Available</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" checked />
+                  <span>Booked</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" checked />
+                  <span>Waitlist</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Location Filter -->
+            <div class="filter-group">
+              <label class="filter-label">Location</label>
+              <select class="filter-select">
+                <option value="all">All Locations</option>
+                <option value="downtown">Downtown</option>
+                <option value="north">North Branch</option>
+                <option value="west">West Branch</option>
+              </select>
+            </div>
+
+            <!-- Reset Filters -->
+            <button class="reset-filters">Reset filters</button>
+          </aside>
+
+          <!-- Right Column: Calendar/Schedule -->
+          <div class="schedule-main">
+            <!-- Calendar Header -->
+            <div class="calendar-header">
+              <div class="calendar-controls">
+                <div class="view-toggle">
+                  <button class="view-btn view-btn--active" data-view="week">Week</button>
+                  <button class="view-btn" data-view="month">Month</button>
+                </div>
+
+                <div class="date-navigation">
+                  <button class="nav-arrow" data-nav="prev">
+                    <span>&lt;</span>
+                  </button>
+                  <span class="date-range">Nov 30 – Dec 6, 2025</span>
+                  <button class="nav-arrow" data-nav="next">
+                    <span>&gt;</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="calendar-legend">
+                <div class="legend-item">
+                  <span class="legend-dot legend-dot--available"></span>
+                  <span>Available</span>
+                </div>
+                <div class="legend-item">
+                  <span class="legend-dot legend-dot--booked"></span>
+                  <span>Booked</span>
+                </div>
+                <div class="legend-item">
+                  <span class="legend-dot legend-dot--waitlist"></span>
+                  <span>Waitlist</span>
+                </div>
+                <div class="legend-item">
+                  <span class="legend-dot legend-dot--blocked"></span>
+                  <span>Cancelled</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Week View Calendar -->
+            <div class="calendar-week" id="calendar-container">
+              <!-- Calendar grid will be populated by JavaScript -->
+            </div>
+          </div>
+        </div>
       </main>
     </div>
   </div>
