@@ -4,67 +4,124 @@ loadComponent('page-header-container', 'components/page-header.html', (container
   container.querySelector('[data-subtitle]').textContent = 'Select a time slot to book or view appointment details.';
 });
 
-// Sample appointment data
-const sampleAppointments = [
-  { day: 0, time: '08:00', doctor: 'Dr. Lee', type: 'Consultation', availability: 'completed' },
-  { day: 0, time: '09:00', doctor: 'Dr. Lee', type: 'Consultation', availability: 'available' },
-  { day: 0, time: '10:30', doctor: 'Dr. Kaur', type: 'Follow-Up', availability: 'available' },
-  { day: 1, time: '09:00', doctor: 'Dr. Smith', type: 'Lab Test', availability: 'completed' },
-  { day: 2, time: '09:30', doctor: 'Dr. Lee', type: 'Follow-Up', availability: 'available' },
-  { day: 2, time: '10:00', doctor: 'Dr. Lee', type: 'Follow-Up', availability: 'booked', status: 'Pending' },
-  { day: 2, time: '11:00', doctor: 'Dr. Smith', type: 'Lab Test', availability: 'available' },
-  { day: 3, time: '10:00', doctor: 'Dr. Smith', type: 'Lab Test', availability: 'waitlist', waitlist: 5 },
-];
+// Availability color mapping
+const availabilityColors = {
+  available: {
+    backgroundColor: 'var(--color-success-soft)',
+    borderColor: 'var(--color-success-500)',
+    textColor: '#000'
+  },
+  booked: {
+    backgroundColor: 'var(--color-info-soft)',
+    borderColor: 'var(--color-info-500)',
+    textColor: '#000'
+  },
+  waitlist: {
+    backgroundColor: 'var(--color-warning-soft)',
+    borderColor: 'var(--color-warning-500)',
+    textColor: '#000'
+  },
+  cancelled: {
+    backgroundColor: 'var(--color-error-soft)',
+    borderColor: 'var(--color-error-500)',
+    textColor: '#000'
+  },
+  completed: {
+    backgroundColor: '#f3f4f6',
+    borderColor: '#d1d5db',
+    textColor: '#6b7280'
+  }
+};
 
-// Build calendar week view
-function buildCalendarWeek() {
-  const container = document.getElementById('calendar-container');
-  if (!container) return;
+// Load appointments from JSON
+let appointments = [];
 
-  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  const dates = [30, 1, 2, 3, 4, 5, 6];
-  const timeSlots = ['08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00'];
-
-  let html = '<div class="calendar-grid">';
-
-  // Header row
-  html += '<div class="calendar-header-row">';
-  html += '<div class="time-header">Time</div>';
-  days.forEach((day, i) => {
-    html += `
-      <div class="day-header">
-        <span class="day-name">${day}</span>
-        <span class="day-number">${dates[i]}</span>
-      </div>
-    `;
-  });
-  html += '</div>';
-
-  // Time slots and cells
-  timeSlots.forEach(time => {
-    html += `<div class="time-slot">${time}</div>`;
-    
-    days.forEach((_, dayIndex) => {
-      const appointment = sampleAppointments.find(apt => apt.day === dayIndex && apt.time === time);
-      
-      html += '<div class="calendar-cell">';
-      if (appointment) {
-        html += `
-          <div class="appointment-slot" data-availability="${appointment.availability}">
-            <div class="slot-doctor">${appointment.doctor}</div>
-            <div class="slot-type">${appointment.type}</div>
-            ${appointment.waitlist ? `<div class="slot-waitlist">${appointment.waitlist} on waitlist</div>` : ''}
-          </div>
-        `;
-      }
-      html += '</div>';
-    });
-  });
-
-  html += '</div>';
-  container.innerHTML = html;
+async function loadAppointments() {
+  try {
+    const response = await fetch('data/appointments.json');
+    const data = await response.json();
+    appointments = data.appointments;
+    return appointments;
+  } catch (error) {
+    console.error('Error loading appointments:', error);
+    return [];
+  }
 }
 
-// Initialize calendar when page loads
-buildCalendarWeek();
+// Initialize FullCalendar
+document.addEventListener('DOMContentLoaded', async function() {
+  const calendarEl = document.getElementById('calendar');
+  if (!calendarEl) return;
+
+  // Load appointments from JSON
+  await loadAppointments();
+
+  const calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: 'timeGridWeek',
+    headerToolbar: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'timeGridWeek,dayGridMonth'
+    },
+    slotMinTime: '08:00:00',
+    slotMaxTime: '17:30:00',
+    allDaySlot: false,
+    height: 'auto',
+    expandRows: true,
+    slotDuration: '00:30:00',
+    slotLabelInterval: '01:00',
+    events: appointments,
+    
+    // Custom event rendering
+    eventContent: function(arg) {
+      const { event } = arg;
+      const { type, availability, waitlist } = event.extendedProps;
+      
+      const colors = availabilityColors[availability];
+      
+      const container = document.createElement('div');
+      container.className = 'fc-event-custom';
+      container.style.backgroundColor = colors.backgroundColor;
+      container.style.borderColor = colors.borderColor;
+      container.style.borderLeftWidth = '3px';
+      container.style.borderLeftStyle = 'solid';
+      container.style.color = colors.textColor;
+      container.style.padding = '6px 8px';
+      container.style.fontSize = '13px';
+      container.style.height = '100%';
+      container.style.boxSizing = 'border-box';
+      
+      // Show doctor name
+      let html = `<div style="font-weight: 600; margin-bottom: 2px;">${event.title}</div>`;
+      
+      // Only show type for booked, completed, and cancelled (user already made selection)
+      if (type && ['booked', 'completed', 'cancelled'].includes(availability)) {
+        html += `<div style="font-size: 12px; color: #6b7280;">${type}</div>`;
+      }
+      
+      // Show waitlist count if applicable
+      if (waitlist) {
+        html += `<div style="font-size: 11px; color: #92400e; margin-top: 4px; font-weight: 500;">${waitlist} on waitlist</div>`;
+      }
+      
+      container.innerHTML = html;
+      return { domNodes: [container] };
+    },
+    
+    eventClick: function(info) {
+      alert('Appointment: ' + info.event.title + '\nType: ' + info.event.extendedProps.type);
+      // TODO: Open appointment details modal
+    }
+  });
+
+  calendar.render();
+  
+  // Force resize after render to fix initial display issue
+  setTimeout(() => {
+    calendar.updateSize();
+  }, 100);
+  
+  // Store calendar instance globally for filter interactions
+  window.scheduleCalendar = calendar;
+});
 
