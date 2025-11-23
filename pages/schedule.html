@@ -9,28 +9,28 @@
     <!-- Doctor Filter -->
     <div class="filter-group">
       <label class="filter-label">Doctor</label>
-      <select class="filter-select">
+      <select class="filter-select" id="doctor-filter">
         <option value="all">All Doctors</option>
-        <option value="dr-lee">Dr. Lee</option>
-        <option value="dr-kaur">Dr. Kaur</option>
-        <option value="dr-smith">Dr. Smith</option>
+        <option value="Dr. Lee">Dr. Lee</option>
+        <option value="Dr. Kaur">Dr. Kaur</option>
+        <option value="Dr. Smith">Dr. Smith</option>
       </select>
     </div>
 
     <!-- Appointment Type Filter -->
     <div class="filter-group">
       <label class="filter-label">Appointment Type</label>
-      <div class="filter-checkboxes">
+      <div class="filter-checkboxes" id="type-filters">
         <label class="checkbox-label">
-          <input type="checkbox" checked />
+          <input type="checkbox" data-type="consultation" />
           <span>Consultation</span>
         </label>
         <label class="checkbox-label">
-          <input type="checkbox" checked />
+          <input type="checkbox" data-type="lab-test" />
           <span>Lab Test</span>
         </label>
         <label class="checkbox-label">
-          <input type="checkbox" checked />
+          <input type="checkbox" data-type="follow-up" />
           <span>Follow-Up</span>
         </label>
       </div>
@@ -39,17 +39,17 @@
     <!-- Availability Filter -->
     <div class="filter-group">
       <label class="filter-label">Availability</label>
-      <div class="filter-checkboxes">
+      <div class="filter-checkboxes" id="availability-filters">
         <label class="checkbox-label">
-          <input type="checkbox" checked />
+          <input type="checkbox" data-availability="available" />
           <span>Available</span>
         </label>
         <label class="checkbox-label">
-          <input type="checkbox" checked />
+          <input type="checkbox" data-availability="booked" />
           <span>Booked</span>
         </label>
         <label class="checkbox-label">
-          <input type="checkbox" checked />
+          <input type="checkbox" data-availability="waitlist" />
           <span>Waitlist</span>
         </label>
       </div>
@@ -58,7 +58,7 @@
     <!-- Location Filter -->
     <div class="filter-group">
       <label class="filter-label">Location</label>
-      <select class="filter-select">
+      <select class="filter-select" id="location-filter">
         <option value="all">All Locations</option>
         <option value="downtown">Downtown</option>
         <option value="north">North Branch</option>
