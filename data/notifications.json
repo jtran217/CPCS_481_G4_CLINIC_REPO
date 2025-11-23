@@ -1,0 +1,40 @@
+{
+  "notifications": [
+    {
+      "id": 1,
+      "type": "appointment",
+      "title": "Appointment Confirmed",
+      "message": "Your appointment with Dr. Lee on Nov 20 at 10:30 AM has been confirmed.",
+      "time": "5 min",
+      "isRead": false,
+      "icon": "📅"
+    },
+    {
+      "id": 2,
+      "type": "lab",
+      "title": "Lab Results Ready",
+      "message": "Blood test (Oct 16) — results available to view",
+      "time": "2h",
+      "isRead": false,
+      "icon": "🩺"
+    },
+    {
+      "id": 3,
+      "type": "reminder",
+      "title": "Health Reminder",
+      "message": "Follow-up blood test for cholesterol in 2 weeks",
+      "time": "1 day",
+      "isRead": true,
+      "icon": "⏰"
+    },
+    {
+      "id": 4,
+      "type": "appointment",
+      "title": "Appointment Rescheduled",
+      "message": "Your appointment with Dr. Smith has been moved to Nov 22 at 2:00 PM",
+      "time": "3 days",
+      "isRead": true,
+      "icon": "📅"
+    }
+  ]
+}

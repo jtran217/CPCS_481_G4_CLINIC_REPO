@@ -63,8 +63,9 @@
         </div>
 
         <div class="topbar-right">
-          <button class="icon-btn" aria-label="Notifications">
+          <button class="icon-btn" aria-label="Notifications" id="notifications-btn">
             <span class="topbar-icon icon-bell"></span>
+            <span class="notification-badge" id="notification-badge">2</span>
           </button>
 
           <div class="profile-pill">
@@ -82,6 +83,24 @@
         <div id="page-header-container"></div>
         <div id="page-content"></div>
       </main>
+    </div>
+  </div>
+
+  <!-- Notification Modal -->
+  <div class="notification-modal" id="notification-modal">
+    <div class="notification-modal-content">
+      <div class="notification-header">
+        <h3>Notifications</h3>
+        <button class="close-btn" id="close-notifications" aria-label="Close notifications">
+          <span class="close-icon">&times;</span>
+        </button>
+      </div>
+      <div class="notification-list" id="notification-list">
+        <!-- Notifications will be loaded dynamically -->
+      </div>
+      <div class="notification-footer">
+        <span class="notification-time">Earlier</span>
+      </div>
     </div>
   </div>
 

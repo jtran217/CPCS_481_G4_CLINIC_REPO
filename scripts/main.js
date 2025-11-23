@@ -4,7 +4,7 @@
 const routes = {
   dashboard: {
     path: 'pages/dashboard.html',
-    title: 'Welcome [User]!', //TODO: Get user name logic
+    title: 'Welcome [User]!',
     subtitle: 'Here\'s your healthcare at a glance!'
   },
   schedule: {
@@ -36,7 +36,6 @@ async function loadPage(routeName) {
     const html = await response.text();
     pageContentEl.innerHTML = html;
 
-    // Update header
     if (headerContainer) {
       headerContainer.innerHTML = `
         <div class="page-header">
@@ -46,12 +45,9 @@ async function loadPage(routeName) {
       `;
     }
 
-    // Update active nav item
     updateActiveNav(routeName);
 
-    // If this page needs JS (e.g. schedule calendar), init it now
     if (routeName === 'schedule') {
-      // Wait a tick for DOM to be ready
       setTimeout(() => {
         if (typeof initSchedulePage === 'function') {
           initSchedulePage();
@@ -65,12 +61,9 @@ async function loadPage(routeName) {
 }
 
 function updateActiveNav(routeName) {
-  // Clear all active states
   document.querySelectorAll('.nav-item').forEach((item) => {
     item.classList.remove('nav-item--active');
   });
-
-  // Set active for current route
   const activeLink = document.querySelector(`.nav-item[data-route="${routeName}"]`);
   if (activeLink) {
     activeLink.classList.add('nav-item--active');
@@ -88,18 +81,185 @@ function handleRouteChange() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Handle initial route
   handleRouteChange();
-
-  // Handle back/forward
   window.addEventListener('hashchange', handleRouteChange);
-
-  // Handle nav link clicks (optional – hash already does most of it)
   document.body.addEventListener('click', (e) => {
     const link = e.target.closest('[data-route]');
     if (!link) return;
     e.preventDefault();
     const routeName = link.getAttribute('data-route');
-    window.location.hash = routeName; // triggers hashchange → loadPage
+    window.location.hash = routeName; 
   });
+
+  initNotifications();
 });
+
+
+let notifications = [];
+
+async function loadNotifications() {
+  try {
+    const response = await fetch('data/notifications.json');
+    const data = await response.json();
+    notifications = data.notifications || [];
+    updateNotificationBadge();
+  } catch (error) {
+    console.error('Error loading notifications:', error);
+    notifications = [];
+  }
+}
+
+function updateNotificationBadge() {
+  const badge = document.getElementById('notification-badge');
+  const unreadCount = notifications.filter(n => !n.isRead).length;
+  
+  if (badge) {
+    badge.textContent = unreadCount > 0 ? unreadCount : '';
+    badge.style.display = unreadCount > 0 ? 'flex' : 'none';
+  }
+}
+
+function renderNotifications() {
+  const notificationList = document.getElementById('notification-list');
+  if (!notificationList) return;
+
+  notificationList.innerHTML = '';
+
+  if (notifications.length === 0) {
+    notificationList.innerHTML = `
+      <div class="notification-item">
+        <div class="notification-content">
+          <p class="notification-title">No notifications</p>
+          <p class="notification-message">You're all caught up!</p>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  notifications.forEach(notification => {
+    const notificationElement = createNotificationElement(notification);
+    notificationList.appendChild(notificationElement);
+  });
+}
+
+function createNotificationElement(notification) {
+  const element = document.createElement('div');
+  element.className = `notification-item ${notification.isRead ? '' : 'unread'}`;
+  element.dataset.id = notification.id;
+
+  let iconClass = 'appointment';
+  if (notification.type === 'lab') iconClass = 'lab';
+  if (notification.type === 'reminder') iconClass = 'reminder';
+
+  element.innerHTML = `
+    <div class="notification-icon ${iconClass}">
+      ${notification.icon}
+    </div>
+    <div class="notification-content">
+      <h4 class="notification-title">${notification.title}</h4>
+      <p class="notification-message">${notification.message}</p>
+      <div class="notification-time">${notification.time}</div>
+    </div>
+  `;
+
+  element.addEventListener('click', () => {
+    markNotificationAsRead(notification.id);
+  });
+
+  return element;
+}
+
+function markNotificationAsRead(notificationId) {
+  const notification = notifications.find(n => n.id === notificationId);
+  if (notification && !notification.isRead) {
+    notification.isRead = true;
+    updateNotificationBadge();
+
+    const notificationElement = document.querySelector(`[data-id="${notificationId}"]`);
+    if (notificationElement) {
+      notificationElement.classList.remove('unread');
+    }
+  }
+}
+
+function showNotifications() {
+  const modal = document.getElementById('notification-modal');
+  if (modal) {
+    renderNotifications();
+    modal.classList.add('show');
+
+    document.addEventListener('keydown', handleEscapeKey);
+  }
+}
+
+function hideNotifications() {
+  const modal = document.getElementById('notification-modal');
+  if (modal) {
+    modal.classList.remove('show');
+    document.removeEventListener('keydown', handleEscapeKey);
+  }
+}
+
+function handleEscapeKey(e) {
+  if (e.key === 'Escape') {
+    hideNotifications();
+  }
+}
+
+function initNotifications() {
+  loadNotifications();
+
+  const notificationBtn = document.getElementById('notifications-btn');
+  if (notificationBtn) {
+    notificationBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      showNotifications();
+    });
+  }
+
+  const closeBtn = document.getElementById('close-notifications');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', hideNotifications);
+  }
+
+  const modal = document.getElementById('notification-modal');
+  if (modal) {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        hideNotifications();
+      }
+    });
+  }
+
+  const modalContent = document.querySelector('.notification-modal-content');
+  if (modalContent) {
+    modalContent.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+  }
+}
+// Added for possibly future use, but we prob will hard code it tbh
+function addNotification(notification) {
+  const newNotification = {
+    id: Date.now(),
+    isRead: false,
+    time: 'now',
+    ...notification
+  };
+  
+  notifications.unshift(newNotification);
+  updateNotificationBadge();
+  
+  if (document.getElementById('notification-modal').classList.contains('show')) {
+    renderNotifications();
+  }
+}
+
+function markAllAsRead() {
+  notifications.forEach(notification => {
+    notification.isRead = true;
+  });
+  updateNotificationBadge();
+  renderNotifications();
+}
