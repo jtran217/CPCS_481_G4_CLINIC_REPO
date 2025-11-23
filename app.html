@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bellhart Clinic</title>
+
+  <link rel="stylesheet" href="styles/root.css" />
+  <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/schedule.css" />
+
+  <!-- FullCalendar for schedule page -->
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Static sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <img src="icons/BellhartLogo.png" alt="Bellhart Clinic" class="logo-image" />
+        <span class="logo-text">Bellhart Clinic</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="#dashboard" class="nav-item" data-route="dashboard">
+          <span class="nav-icon nav-icon-dashboard"></span>
+          <span>Dashboard</span>
+        </a>
+
+        <a href="#schedule" class="nav-item" data-route="schedule">
+          <span class="nav-icon nav-icon-calendar"></span>
+          <span>Schedule</span>
+        </a>
+
+        <a href="#reports" class="nav-item" data-route="reports">
+          <span class="nav-icon nav-icon-document"></span>
+          <span>Reports</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-support">
+        <a href="#" class="support-link">
+          <span class="nav-icon nav-icon-help"></span>
+          <span>Support</span>
+        </a>
+      </div>
+    </aside>
+
+    <div class="main-area">
+      <!-- Static topbar -->
+      <header class="topbar">
+        <div class="search-wrapper">
+          <div class="search-inner">
+            <span class="search-icon icon-search"></span>
+            <input
+              type="text"
+              class="search-input"
+              placeholder="Search"
+              aria-label="Search"
+            />
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <button class="icon-btn" aria-label="Notifications">
+            <span class="topbar-icon icon-bell"></span>
+          </button>
+
+          <div class="profile-pill">
+            <div class="avatar-circle">
+              <span class="avatar-icon icon-user"></span>
+            </div>
+            <span class="profile-name"></span>
+            <span class="chevron-icon icon-chevron-down"></span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Dynamic content area -->
+      <main class="content">
+        <div id="page-header-container"></div>
+        <div id="page-content"></div>
+      </main>
+    </div>
+  </div>
+
+  <script src="scripts/main.js"></script>
+  <script src="scripts/schedule.js"></script>
+</body>
+</html>
+

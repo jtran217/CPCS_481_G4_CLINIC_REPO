@@ -1,8 +1,8 @@
-// Load page header component and set title/subtitle
-loadComponent('page-header-container', 'components/page-header.html', (container) => {
-  container.querySelector('[data-title]').textContent = 'Appointment Schedule';
-  container.querySelector('[data-subtitle]').textContent = 'Select a time slot to book or view appointment details.';
-});
+// ============================
+// Schedule Page Logic
+// ============================
+
+let appointments = [];
 
 // Availability color mapping
 const availabilityColors = {
@@ -34,26 +34,22 @@ const availabilityColors = {
 };
 
 // Load appointments from JSON
-let appointments = [];
-
 async function loadAppointments() {
   try {
     const response = await fetch('data/appointments.json');
     const data = await response.json();
     appointments = data.appointments;
-    return appointments;
   } catch (error) {
     console.error('Error loading appointments:', error);
-    return [];
+    appointments = [];
   }
 }
 
-// Initialize FullCalendar
-document.addEventListener('DOMContentLoaded', async function() {
+// Initialize schedule page - called by router
+async function initSchedulePage() {
   const calendarEl = document.getElementById('calendar');
   if (!calendarEl) return;
 
-  // Load appointments from JSON
   await loadAppointments();
 
   const calendar = new FullCalendar.Calendar(calendarEl, {
@@ -123,5 +119,4 @@ document.addEventListener('DOMContentLoaded', async function() {
   
   // Store calendar instance globally for filter interactions
   window.scheduleCalendar = calendar;
-});
-
+}

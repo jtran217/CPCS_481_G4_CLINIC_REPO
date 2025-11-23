@@ -46,8 +46,7 @@
                     </div>
                 </div>
 
-                <!-- change later !! -->
-                <a href="dashboard.html" class="btn-primary btn-full">Sign in</a>
+                <button type="submit" class="btn-primary btn-full">Sign in</button>
 
             </form>
             
@@ -82,6 +81,14 @@
 
             toggleBtn.style.maskImage = `url(${icon})`;
             toggleBtn.style.webkitMaskImage = `url(${icon})`;
+        });
+
+        // Handle login form submission
+        const loginForm = document.querySelector('.auth-form');
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            // TODO: validate or fake auth
+            window.location.href = 'app.html#dashboard'; // redirect after login
         });
     </script>
 </body>
