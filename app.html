@@ -91,9 +91,14 @@
     <div class="notification-modal-content">
       <div class="notification-header">
         <h3>Notifications</h3>
-        <button class="close-btn" id="close-notifications" aria-label="Close notifications">
-          <span class="close-icon">&times;</span>
-        </button>
+        <div class="notification-header-actions">
+          <button class="mark-all-read-btn" id="mark-all-read" aria-label="Mark all as read">
+            Mark All Read
+          </button>
+          <button class="close-btn" id="close-notifications" aria-label="Close notifications">
+            <span class="close-icon">&times;</span>
+          </button>
+        </div>
       </div>
       <div class="notification-list" id="notification-list">
         <!-- Notifications will be loaded dynamically -->

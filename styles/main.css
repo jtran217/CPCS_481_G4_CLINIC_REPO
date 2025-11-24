@@ -747,6 +747,44 @@ body.auth-page {
   color: var(--color-text-main);
 }
 
+.notification-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mark-all-read-btn {
+  background: none;
+  border: 1px solid var(--color-border-subtle);
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
+  color: var(--color-text-body);
+  font-size: 12px;
+  font-weight: 500;
+  transition: 
+    background var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.mark-all-read-btn:hover {
+  background: var(--color-pill-bg-hover);
+  color: var(--color-brand-700);
+  border-color: var(--color-brand-700);
+}
+
+.mark-all-read-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mark-all-read-btn:disabled:hover {
+  background: none;
+  color: var(--color-text-body);
+  border-color: var(--color-border-subtle);
+}
+
 .close-btn {
   background: none;
   border: none;
@@ -805,22 +843,58 @@ body.auth-page {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  font-size: 16px;
+  position: relative;
 }
 
 .notification-icon.appointment {
   background: #dbeafe;
-  color: #3b82f6;
 }
 
 .notification-icon.lab {
   background: #ecfdf5;
-  color: #10b981;
 }
 
 .notification-icon.reminder {
   background: #fef3c7;
+}
+
+.notification-icon-svg {
+  width: 18px;
+  height: 18px;
+  background-color: currentColor;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+}
+
+.notification-icon.appointment .notification-icon-svg {
+  color: #3b82f6;
+}
+
+.notification-icon.lab .notification-icon-svg {
+  color: #10b981;
+}
+
+.notification-icon.reminder .notification-icon-svg {
   color: #f59e0b;
+}
+
+.notification-icon-svg.icon-calendar {
+  mask-image: url('../icons/calendar.svg');
+  -webkit-mask-image: url('../icons/calendar.svg');
+}
+
+.notification-icon-svg.icon-document {
+  mask-image: url('../icons/document.svg');
+  -webkit-mask-image: url('../icons/document.svg');
+}
+
+.notification-icon-svg.icon-bell-alert {
+  mask-image: url('../icons/bell-alert.svg');
+  -webkit-mask-image: url('../icons/bell-alert.svg');
 }
 
 .notification-content {
@@ -849,10 +923,23 @@ body.auth-page {
   margin-top: 6px;
 }
 
+.notification-section-header {
+  padding: 16px 20px 8px;
+  border-bottom: none;
+}
+
+.notification-section-header .notification-time {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  font-weight: 500;
+  margin: 0;
+}
+
 .notification-footer {
   padding: 12px 20px;
   border-top: 1px solid var(--color-border-subtle);
   background: var(--color-bg-subtle);
+  display: none;
 }
 
 .notification-footer .notification-time {

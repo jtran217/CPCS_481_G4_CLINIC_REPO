@@ -137,10 +137,25 @@ function renderNotifications() {
     return;
   }
 
-  notifications.forEach(notification => {
+  const unreadNotifications = notifications.filter(n => !n.isRead);
+  const readNotifications = notifications.filter(n => n.isRead);
+
+  unreadNotifications.forEach(notification => {
     const notificationElement = createNotificationElement(notification);
     notificationList.appendChild(notificationElement);
   });
+
+  if (readNotifications.length > 0) {
+    const earlierSection = document.createElement('div');
+    earlierSection.className = 'notification-section-header';
+    earlierSection.innerHTML = '<span class="notification-time">Earlier</span>';
+    notificationList.appendChild(earlierSection);
+
+    readNotifications.forEach(notification => {
+      const notificationElement = createNotificationElement(notification);
+      notificationList.appendChild(notificationElement);
+    });
+  }
 }
 
 function createNotificationElement(notification) {
@@ -154,7 +169,7 @@ function createNotificationElement(notification) {
 
   element.innerHTML = `
     <div class="notification-icon ${iconClass}">
-      ${notification.icon}
+      <span class="notification-icon-svg icon-${notification.icon}"></span>
     </div>
     <div class="notification-content">
       <h4 class="notification-title">${notification.title}</h4>
@@ -187,6 +202,7 @@ function showNotifications() {
   const modal = document.getElementById('notification-modal');
   if (modal) {
     renderNotifications();
+    updateMarkAllReadButton();
     modal.classList.add('show');
 
     document.addEventListener('keydown', handleEscapeKey);
@@ -223,6 +239,11 @@ function initNotifications() {
     closeBtn.addEventListener('click', hideNotifications);
   }
 
+  const markAllReadBtn = document.getElementById('mark-all-read');
+  if (markAllReadBtn) {
+    markAllReadBtn.addEventListener('click', markAllAsRead);
+  }
+
   const modal = document.getElementById('notification-modal');
   if (modal) {
     modal.addEventListener('click', (e) => {
@@ -239,7 +260,7 @@ function initNotifications() {
     });
   }
 }
-// Added for possibly future use, but we prob will hard code it tbh
+
 function addNotification(notification) {
   const newNotification = {
     id: Date.now(),
@@ -256,10 +277,26 @@ function addNotification(notification) {
   }
 }
 
+function updateMarkAllReadButton() {
+  const markAllReadBtn = document.getElementById('mark-all-read');
+  if (markAllReadBtn) {
+    const hasUnreadNotifications = notifications.some(n => !n.isRead);
+    markAllReadBtn.disabled = !hasUnreadNotifications;
+  }
+}
+
 function markAllAsRead() {
+  let hasChanges = false;
   notifications.forEach(notification => {
-    notification.isRead = true;
+    if (!notification.isRead) {
+      notification.isRead = true;
+      hasChanges = true;
+    }
   });
-  updateNotificationBadge();
-  renderNotifications();
+  
+  if (hasChanges) {
+    updateNotificationBadge();
+    renderNotifications();
+    updateMarkAllReadButton();
+  }
 }

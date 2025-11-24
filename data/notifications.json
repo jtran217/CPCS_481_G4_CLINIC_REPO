@@ -7,7 +7,7 @@
       "message": "Your appointment with Dr. Lee on Nov 20 at 10:30 AM has been confirmed.",
       "time": "5 min",
       "isRead": false,
-      "icon": "📅"
+      "icon": "calendar"
     },
     {
       "id": 2,
@@ -16,7 +16,7 @@
       "message": "Blood test (Oct 16) — results available to view",
       "time": "2h",
       "isRead": false,
-      "icon": "🩺"
+      "icon": "document"
     },
     {
       "id": 3,
@@ -25,7 +25,7 @@
       "message": "Follow-up blood test for cholesterol in 2 weeks",
       "time": "1 day",
       "isRead": true,
-      "icon": "⏰"
+      "icon": "bell-alert"
     },
     {
       "id": 4,
@@ -34,7 +34,7 @@
       "message": "Your appointment with Dr. Smith has been moved to Nov 22 at 2:00 PM",
       "time": "3 days",
       "isRead": true,
-      "icon": "📅"
+      "icon": "calendar"
     }
   ]
 }
