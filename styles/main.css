@@ -793,7 +793,8 @@ body.auth-page {
 }
 
 .notification-item.unread {
-  background: var(--color-bg-page);
+  background: #eff6ff;
+  border-left: 3px solid #3b82f6;
 }
 
 .notification-icon {
