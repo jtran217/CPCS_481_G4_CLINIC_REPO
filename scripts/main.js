@@ -88,6 +88,13 @@ function handleRouteChange() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Load booking modal component
+  fetch('components/booking-modal.html')
+    .then(response => response.text())
+    .then(html => {
+      document.getElementById('booking-modal-container').innerHTML = html;
+    });
+
   // Handle initial route
   handleRouteChange();
 
