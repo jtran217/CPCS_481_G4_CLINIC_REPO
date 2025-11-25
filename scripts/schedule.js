@@ -249,6 +249,8 @@ async function initSchedulePage() {
 let currentStep = 1;
 let bookingData = {};
 let validationRules = {};
+let selectedTimeSlot = null;
+let currentAppointmentData = null;
 
 // Load validation rules from JSON
 async function loadValidationRules() {
@@ -272,6 +274,102 @@ async function loadValidationRules() {
 // Load validation rules on page load
 loadValidationRules();
 
+// Generate 30-minute time slots between start and end times
+function generateTimeSlots(startTime, endTime, slotDuration = 30) {
+  const slots = [];
+  const start = new Date(startTime);
+  const end = new Date(endTime);
+  
+  let current = new Date(start);
+  
+  while (current < end) {
+    const slotEnd = new Date(current.getTime() + slotDuration * 60000);
+    
+    const startTimeStr = current.toLocaleTimeString('en-US', { 
+      hour: 'numeric', 
+      minute: '2-digit', 
+      hour12: true 
+    });
+    const endTimeStr = slotEnd.toLocaleTimeString('en-US', { 
+      hour: 'numeric', 
+      minute: '2-digit', 
+      hour12: true 
+    });
+    
+    // Store the time in 24-hour format for comparison with takenSlots
+    const timeKey = current.toTimeString().substring(0, 5); // "HH:MM"
+    
+    slots.push({
+      start: new Date(current),
+      end: slotEnd,
+      display: `${startTimeStr} - ${endTimeStr}`,
+      timeKey: timeKey
+    });
+    
+    current = slotEnd;
+  }
+  
+  return slots;
+}
+
+// Render time slot selection for waitlist appointments
+function renderWaitlistTimeSlots(event) {
+  const container = document.getElementById('time-slot-container');
+  if (!container) return;
+  
+  const { waitlistSlots } = event.extendedProps;
+  const takenSlots = waitlistSlots?.takenSlots || [];
+  
+  // Generate time slots
+  const slots = generateTimeSlots(event.start, event.end, waitlistSlots?.slotDuration || 30);
+  
+  // Clear container
+  container.innerHTML = '';
+  
+  // Create grid container
+  const gridDiv = document.createElement('div');
+  gridDiv.className = 'time-slot-grid';
+  
+  // Create button for each slot
+  slots.forEach((slot, index) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'time-slot-button';
+    button.textContent = slot.display;
+    button.dataset.slotIndex = index;
+    button.dataset.timeKey = slot.timeKey;
+    
+    // Disable if slot is taken
+    if (takenSlots.includes(slot.timeKey)) {
+      button.disabled = true;
+      button.title = 'This slot is already taken';
+    } else {
+      button.addEventListener('click', () => selectTimeSlot(slot, button));
+    }
+    
+    gridDiv.appendChild(button);
+  });
+  
+  container.appendChild(gridDiv);
+}
+
+// Handle time slot selection
+function selectTimeSlot(slot, buttonElement) {
+  // Remove selection from all buttons
+  document.querySelectorAll('.time-slot-button').forEach(btn => {
+    btn.classList.remove('selected');
+  });
+  
+  // Mark this button as selected
+  buttonElement.classList.add('selected');
+  
+  // Store selected slot
+  selectedTimeSlot = slot;
+  
+  // Clear any error
+  clearFieldError('time-slot');
+}
+
 function openBookingModal(event) {
   const modal = document.getElementById('booking-modal');
   if (!modal) {
@@ -279,8 +377,10 @@ function openBookingModal(event) {
     return;
   }
 
-  // Reset to step 1
+  // Reset state
   currentStep = 1;
+  selectedTimeSlot = null;
+  currentAppointmentData = event;
   updateStepUI();
 
   // Set the date in the header
@@ -312,21 +412,37 @@ function openBookingModal(event) {
     doctorSelect.value = event.title;
   }
 
-  // Time slot
-  const timeSlotEl = document.getElementById('selected-time-slot');
-  if (timeSlotEl) {
-    const startTime = date.toLocaleTimeString('en-US', { 
-      hour: 'numeric', 
-      minute: '2-digit', 
-      hour12: true 
-    });
-    const endDate = new Date(event.end);
-    const endTime = endDate.toLocaleTimeString('en-US', { 
-      hour: 'numeric', 
-      minute: '2-digit', 
-      hour12: true 
-    });
-    timeSlotEl.textContent = `${startTime} - ${endTime}`;
+  // Handle time slot display
+  const isWaitlist = event.extendedProps.availability === 'waitlist';
+  
+  if (isWaitlist && event.extendedProps.waitlistSlots) {
+    // Render waitlist time slot selection
+    renderWaitlistTimeSlots(event);
+  } else {
+    // Show single time slot for non-waitlist appointments
+    const container = document.getElementById('time-slot-container');
+    if (container) {
+      const startTime = date.toLocaleTimeString('en-US', { 
+        hour: 'numeric', 
+        minute: '2-digit', 
+        hour12: true 
+      });
+      const endDate = new Date(event.end);
+      const endTime = endDate.toLocaleTimeString('en-US', { 
+        hour: 'numeric', 
+        minute: '2-digit', 
+        hour12: true 
+      });
+      
+      container.innerHTML = `<div class="time-slot-pill" id="selected-time-slot">${startTime} - ${endTime}</div>`;
+      
+      // Store the time slot for non-waitlist appointments
+      selectedTimeSlot = {
+        display: `${startTime} - ${endTime}`,
+        start: date,
+        end: new Date(event.end)
+      };
+    }
   }
 
   // Show modal
@@ -340,6 +456,8 @@ function closeBookingModal() {
   }
   currentStep = 1;
   bookingData = {}; // Reset booking data
+  selectedTimeSlot = null;
+  currentAppointmentData = null;
 }
 
 function nextStep() {
@@ -402,6 +520,31 @@ function validateCurrentStep() {
 
   if (currentStep === 1) {
     fieldsToValidate = ['appointment-type', 'appointment-doctor'];
+    
+    // Clear previous errors
+    fieldsToValidate.forEach(fieldId => clearFieldError(fieldId));
+    clearFieldError('time-slot');
+    
+    // Validate required fields
+    fieldsToValidate.forEach(fieldId => {
+      const field = document.getElementById(fieldId);
+      const value = field ? field.value : '';
+      const result = validateField(fieldId, value);
+
+      if (!result.isValid) {
+        showFieldError(fieldId, result.message);
+        isValid = false;
+      }
+    });
+    
+    // Validate time slot selection for waitlist appointments
+    if (currentAppointmentData && currentAppointmentData.extendedProps.availability === 'waitlist') {
+      if (!selectedTimeSlot) {
+        showFieldError('time-slot', 'Please select a time slot');
+        isValid = false;
+      }
+    }
+    
   } else if (currentStep === 2) {
     fieldsToValidate = [
       'patient-name',
@@ -471,21 +614,6 @@ function validateCurrentStep() {
     return isValid;
   }
 
-  // Clear errors for step 1 fields
-  fieldsToValidate.forEach(fieldId => clearFieldError(fieldId));
-
-  // Validate each field
-  fieldsToValidate.forEach(fieldId => {
-    const field = document.getElementById(fieldId);
-    const value = field ? field.value : '';
-    const result = validateField(fieldId, value);
-
-    if (!result.isValid) {
-      showFieldError(fieldId, result.message);
-      isValid = false;
-    }
-  });
-
   return isValid;
 }
 
@@ -521,12 +649,15 @@ function saveStepData() {
   if (currentStep === 1) {
     const appointmentType = document.getElementById('appointment-type');
     const doctor = document.getElementById('appointment-doctor');
-    const timeSlot = document.getElementById('selected-time-slot');
     const notes = document.getElementById('appointment-notes');
 
     bookingData.appointmentType = appointmentType ? appointmentType.value : '';
     bookingData.doctor = doctor ? doctor.value : '';
-    bookingData.timeSlot = timeSlot ? timeSlot.textContent : '';
+    
+    // Save selected time slot
+    if (selectedTimeSlot) {
+      bookingData.timeSlot = selectedTimeSlot.display;
+    }
     
     // Only add notes to data if they're not empty
     if (notes && notes.value.trim()) {

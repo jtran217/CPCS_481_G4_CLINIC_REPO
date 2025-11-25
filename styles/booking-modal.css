@@ -277,6 +277,7 @@
 .time-slot-container {
   display: flex;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .time-slot-pill {
@@ -288,6 +289,47 @@
   color: var(--color-brand-700);
   background: var(--color-bg-surface);
   cursor: default;
+}
+
+/* Waitlist Time Slot Grid */
+.time-slot-grid {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.time-slot-button {
+  padding: 10px 20px;
+  border: 2px solid var(--color-border-soft);
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-body);
+  background: var(--color-bg-surface);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.time-slot-button:hover:not(:disabled) {
+  border-color: var(--color-brand-700);
+  background: var(--color-brand-50);
+  color: var(--color-brand-700);
+}
+
+.time-slot-button.selected {
+  border-color: var(--color-brand-700);
+  background: var(--color-brand-700);
+  color: white;
+}
+
+.time-slot-button:disabled {
+  border-color: var(--color-border-subtle);
+  background: var(--color-bg-subtle);
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 /* Step 3 Summary */
