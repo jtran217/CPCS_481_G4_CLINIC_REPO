@@ -1,0 +1,49 @@
+{
+  "appointment-type": {
+    "required": true,
+    "errorMessage": "Please select an appointment type"
+  },
+  "appointment-doctor": {
+    "required": true,
+    "errorMessage": "Please select a doctor"
+  },
+  "patient-name": {
+    "required": true,
+    "errorMessage": "Please enter your full name",
+    "minLength": 2,
+    "pattern": "^[a-zA-Z\\s'-]+$",
+    "patternMessage": "Name can only contain letters, spaces, hyphens, and apostrophes"
+  },
+  "patient-health-number": {
+    "required": true,
+    "errorMessage": "Please enter your Alberta Health Number",
+    "pattern": "^\\d{5}-?\\d{4}$",
+    "patternMessage": "Health number must contain numeric values in format xxxxx-xxxx"
+  },
+  "patient-dob": {
+    "required": true,
+    "errorMessage": "Please enter your date of birth"
+  },
+  "patient-sex": {
+    "required": true,
+    "errorMessage": "Please select your sex"
+  },
+  "patient-phone": {
+    "pattern": "^[\\d\\s\\-()]+$",
+    "patternMessage": "Phone number can only contain numbers, spaces, hyphens, and parentheses",
+    "minLength": 10,
+    "lengthMessage": "Phone number must be at least 10 digits"
+  },
+  "patient-email": {
+    "pattern": "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",
+    "patternMessage": "Please enter a valid email address"
+  },
+  "preferred-contact": {
+    "required": true,
+    "errorMessage": "Please select at least one preferred contact method"
+  },
+  "contact-required": {
+    "errorMessage": "Please provide at least a phone number or email"
+  }
+}
+

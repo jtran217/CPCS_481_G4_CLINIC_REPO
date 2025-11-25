@@ -1,0 +1,196 @@
+<!-- Booking Modal Component -->
+<div class="modal-overlay" id="booking-modal" style="display: none;">
+  <div class="booking-modal">
+    <!-- Close Button -->
+    <button class="modal-close" onclick="closeBookingModal()">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <h2 class="modal-title">Book Appointment - <span id="appointment-date">Date</span></h2>
+    </div>
+
+    <!-- Step Indicator -->
+    <div class="step-indicator">
+      <div class="step-item active">
+        <div class="step-number">1</div>
+        <div class="step-label">Appointment<br>details</div>
+      </div>
+
+      <div class="step-line"></div>
+
+      <div class="step-item">
+        <div class="step-number">2</div>
+        <div class="step-label">Patient<br>details</div>
+      </div>
+
+      <div class="step-line"></div>
+
+      <div class="step-item">
+        <div class="step-number">3</div>
+        <div class="step-label">Review and<br>Confirm</div>
+      </div>
+    </div>
+
+    <!-- Modal Content -->
+    <div class="modal-content">
+      <!-- Step 1: Appointment Details -->
+      <div class="step-content active" id="step-1">
+        <div class="form-group">
+          <label class="form-label">Appointment type</label>
+          <select class="form-select" id="appointment-type">
+            <option value="">Select one</option>
+            <option value="consultation">General Consultation</option>
+            <option value="lab-test">Lab Test</option>
+            <option value="follow-up">Follow-up</option>
+          </select>
+          <div class="form-error" id="appointment-type-error"></div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Doctor</label>
+          <select class="form-select" id="appointment-doctor">
+            <option value="">Select one</option>
+            <option value="Dr. Lee">Dr. Lee</option>
+            <option value="Dr. Kaur">Dr. Kaur</option>
+            <option value="Dr. Smith">Dr. Smith</option>
+          </select>
+          <div class="form-error" id="appointment-doctor-error"></div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Time slot</label>
+          <div class="time-slot-container">
+            <div class="time-slot-pill" id="selected-time-slot">00:00 - 00:00 AM/PM</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Notes (Optional)</label>
+          <textarea class="form-textarea" id="appointment-notes" rows="3" placeholder="Add any additional notes..."></textarea>
+        </div>
+      </div>
+
+      <!-- Step 2: Patient Details -->
+      <div class="step-content" id="step-2">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input type="text" class="form-input" id="patient-name" placeholder="Enter full name">
+            <div class="form-error" id="patient-name-error"></div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Alberta Health Number</label>
+            <input type="text" class="form-input" id="patient-health-number" placeholder="xxxxx-xxxxx">
+            <div class="form-error" id="patient-health-number-error"></div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Date of Birth</label>
+            <input type="date" class="form-input" id="patient-dob">
+            <div class="form-error" id="patient-dob-error"></div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Sex</label>
+            <select class="form-select" id="patient-sex">
+              <option value="">Select one</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+            </select>
+            <div class="form-error" id="patient-sex-error"></div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Phone</label>
+          <input type="tel" class="form-input" id="patient-phone" placeholder="(xxx) - xxx - xxx">
+          <label class="checkbox-label">
+            <input type="checkbox" id="phone-preferred" checked>
+            <span>Preferred contact</span>
+          </label>
+          <div class="form-error" id="patient-phone-error"></div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-input" id="patient-email" placeholder="example@example.com">
+          <label class="checkbox-label">
+            <input type="checkbox" id="email-preferred">
+            <span>Preferred contact</span>
+          </label>
+          <div class="form-error" id="patient-email-error"></div>
+        </div>
+
+        <div class="form-error" id="preferred-contact-error"></div>
+      </div>
+
+      <!-- Step 3: Review and Confirm -->
+      <div class="step-content" id="step-3">
+        <div class="summary-box">
+          <h3 class="summary-title">Patient Summary</h3>
+          <div class="summary-grid">
+            <div>
+              <div class="summary-label">Full Name</div>
+              <div class="summary-value" id="summary-name">[Name]</div>
+            </div>
+            <div>
+              <div class="summary-label">Phone</div>
+              <div class="summary-value" id="summary-phone">[Phone number]</div>
+            </div>
+            <div>
+              <div class="summary-label">Email</div>
+              <div class="summary-value" id="summary-email">[Email]</div>
+            </div>
+            <div>
+              <div class="summary-label">Preferred Contact</div>
+              <div class="summary-value" id="summary-preferred">[Email/Phone]</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="summary-box">
+          <h3 class="summary-title">Appointment Summary</h3>
+          
+          <div class="summary-item">
+            <img src="icons/clock.svg" alt="" class="summary-icon">
+            <div>
+              <div class="summary-value" id="summary-date">[Date]</div>
+              <div class="summary-label" id="summary-time">[Time]</div>
+            </div>
+          </div>
+
+          <div class="summary-item">
+            <img src="icons/user.svg" alt="" class="summary-icon">
+            <div>
+              <div class="summary-value" id="summary-doctor">[Doctor name]</div>
+              <div class="summary-label" id="summary-type">[Appointment type]</div>
+            </div>
+          </div>
+
+          <div class="summary-item">
+            <img src="icons/map-pin.svg" alt="" class="summary-icon">
+            <div>
+              <div class="summary-value" id="summary-location">[Location]</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="modal-footer">
+      <button class="btn btn-secondary" id="back-btn" onclick="previousStep()" style="display: none;">Back</button>
+      <button class="btn btn-primary" id="next-btn" onclick="nextStep()">Next</button>
+      <button class="btn btn-success" id="confirm-btn" onclick="confirmBooking()" style="display: none;">Confirm</button>
+    </div>
+  </div>
+</div>
+
