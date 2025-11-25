@@ -200,8 +200,8 @@
   background: var(--color-warning-500);
 }
 
-.legend-dot--blocked {
-  background: var(--color-error-500);
+.legend-dot--completed {
+  background: #9ca3af;
 }
 
 .export-btn {

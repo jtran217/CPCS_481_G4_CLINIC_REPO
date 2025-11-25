@@ -89,7 +89,7 @@
       "extendedProps": {
         "doctor": "Dr. Kaur",
         "type": "follow-up",
-        "availability": "cancelled",
+        "availability": "available",
         "location": "north"
       }
     },

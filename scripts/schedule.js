@@ -22,11 +22,6 @@ const availabilityColors = {
     borderColor: 'var(--color-warning-500)',
     textColor: '#000'
   },
-  cancelled: {
-    backgroundColor: 'var(--color-error-soft)',
-    borderColor: 'var(--color-error-500)',
-    textColor: '#000'
-  },
   completed: {
     backgroundColor: '#f3f4f6',
     borderColor: '#d1d5db',
@@ -209,8 +204,8 @@ async function initSchedulePage() {
         'follow-up': 'Follow-Up'
       };
       
-      // Only show type for booked, completed, and cancelled
-      if (type && ['booked', 'completed', 'cancelled'].includes(availability)) {
+      // Only show type for booked and completed
+      if (type && ['booked', 'completed'].includes(availability)) {
         html += `<div style="font-size: 12px; color: #6b7280;">${typeDisplay[type] || type}</div>`;
       }
       
@@ -260,14 +255,14 @@ function handleEventClick(event) {
     }
   } else {
     // Normal mode: handle based on availability
-    if (availability === 'booked') {
-      // Show appointment details modal
+    if (availability === 'booked' || availability === 'completed') {
+      // Show appointment details modal (completed appointments are view-only)
       showAppointmentDetails(event);
     } else if (availability === 'available' || availability === 'waitlist') {
       // Open booking modal
       openBookingModal(event, false);
     } else {
-      // Cancelled or other non-bookable slots
+      // Other non-bookable slots
       showToast('info', 'Slot Not Available', 'This time slot is not available for booking.');
     }
   }
@@ -990,6 +985,16 @@ function showAppointmentDetails(event) {
   if (typeEl) typeEl.textContent = typeDisplay[event.extendedProps.type] || event.extendedProps.type || 'Unknown';
   if (locationEl) locationEl.textContent = event.extendedProps.location || 'Unknown';
 
+  // Hide action buttons for completed appointments
+  const actionsContainer = modal.querySelector('.appointment-details-actions');
+  if (actionsContainer) {
+    if (event.extendedProps.availability === 'completed') {
+      actionsContainer.style.display = 'none';
+    } else {
+      actionsContainer.style.display = 'flex';
+    }
+  }
+
   // Show modal
   modal.style.display = 'flex';
 }
@@ -1005,13 +1010,13 @@ function cancelAppointment() {
   if (!originalAppointment) return;
 
   if (confirm('Are you sure you want to cancel this appointment?')) {
-    // In a real app, this would update the backend
+    // In a real app, this would update the backend and convert the slot back to available
     console.log('Cancelling appointment:', originalAppointment);
     
-    showToast('success', 'Appointment Cancelled', 'Your appointment has been cancelled successfully.');
+    showToast('success', 'Appointment Cancelled', 'Your appointment has been cancelled and the time slot is now available.');
     closeAppointmentDetailsModal();
     
-    // Optionally update the calendar here
+    // Note: The cancelled slot would be converted to "available" in the backend
   }
 }
 
