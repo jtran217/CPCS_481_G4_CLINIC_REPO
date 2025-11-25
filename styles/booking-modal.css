@@ -449,6 +449,42 @@
   background: var(--color-success-600);
 }
 
+/* Reschedule Summary Boxes */
+.reschedule-box {
+  padding: 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid;
+  margin-bottom: 16px;
+}
+
+.reschedule-box:last-child {
+  margin-bottom: 0;
+}
+
+.reschedule-box-cancelled {
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+
+.reschedule-box-new {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+}
+
+.reschedule-box-title {
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+}
+
+.reschedule-box-cancelled .reschedule-box-title {
+  color: #dc2626;
+}
+
+.reschedule-box-new .reschedule-box-title {
+  color: #16a34a;
+}
+
 /* Responsive */
 @media (max-width: 640px) {
   .booking-modal {

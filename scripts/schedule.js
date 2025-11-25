@@ -224,7 +224,7 @@ async function initSchedulePage() {
     },
     
     eventClick: function(info) {
-      openBookingModal(info.event);
+      handleEventClick(info.event);
     }
   });
 
@@ -243,6 +243,37 @@ async function initSchedulePage() {
 }
 
 // ============================
+// Event Click Handler
+// ============================
+
+function handleEventClick(event) {
+  const availability = event.extendedProps.availability;
+
+  if (isRescheduleMode) {
+    // In reschedule mode: only allow clicking on available or waitlist slots
+    if (availability === 'available' || availability === 'waitlist') {
+      rescheduleNewSlot = event;
+      openBookingModal(event, true); // true = reschedule mode
+    } else {
+      // Can't select this slot for rescheduling
+      showToast('warning', 'Cannot Select', 'Please select an Available or Waitlist time slot.');
+    }
+  } else {
+    // Normal mode: handle based on availability
+    if (availability === 'booked') {
+      // Show appointment details modal
+      showAppointmentDetails(event);
+    } else if (availability === 'available' || availability === 'waitlist') {
+      // Open booking modal
+      openBookingModal(event, false);
+    } else {
+      // Cancelled or other non-bookable slots
+      showToast('info', 'Slot Not Available', 'This time slot is not available for booking.');
+    }
+  }
+}
+
+// ============================
 // Booking Modal Functions
 // ============================
 
@@ -251,6 +282,11 @@ let bookingData = {};
 let validationRules = {};
 let selectedTimeSlot = null;
 let currentAppointmentData = null;
+
+// Reschedule mode state
+let isRescheduleMode = false;
+let originalAppointment = null;
+let rescheduleNewSlot = null;
 
 // Load validation rules from JSON
 async function loadValidationRules() {
@@ -370,7 +406,7 @@ function selectTimeSlot(slot, buttonElement) {
   clearFieldError('time-slot');
 }
 
-function openBookingModal(event) {
+function openBookingModal(event, isReschedule = false) {
   const modal = document.getElementById('booking-modal');
   if (!modal) {
     console.warn('Modal not loaded yet');
@@ -393,6 +429,20 @@ function openBookingModal(event) {
   });
   
   const dateEl = document.getElementById('appointment-date');
+  const modalTitle = document.querySelector('#booking-modal .modal-title');
+  
+  if (isReschedule && originalAppointment) {
+    // Update title for reschedule
+    if (modalTitle) {
+      modalTitle.innerHTML = `Reschedule Appointment - <span id="appointment-date">${dateStr}</span>`;
+    }
+  } else {
+    // Regular booking title
+    if (modalTitle) {
+      modalTitle.innerHTML = `Book Appointment - <span id="appointment-date">${dateStr}</span>`;
+    }
+  }
+  
   if (dateEl) dateEl.textContent = dateStr;
 
   // Store appointment data for summary
@@ -445,6 +495,12 @@ function openBookingModal(event) {
     }
   }
 
+  // Update confirm button text if in reschedule mode
+  const confirmBtn = document.getElementById('confirm-btn');
+  if (confirmBtn) {
+    confirmBtn.textContent = isReschedule ? 'Confirm Reschedule' : 'Confirm';
+  }
+
   // Show modal
   modal.style.display = 'flex';
 }
@@ -458,6 +514,13 @@ function closeBookingModal() {
   bookingData = {}; // Reset booking data
   selectedTimeSlot = null;
   currentAppointmentData = null;
+  
+  // If closing during reschedule, ask if they want to cancel reschedule
+  if (isRescheduleMode) {
+    // Don't automatically cancel reschedule, user can still click other slots
+    // rescheduleNewSlot is reset but reschedule mode stays active
+    rescheduleNewSlot = null;
+  }
 }
 
 function nextStep() {
@@ -777,31 +840,346 @@ function updateSummary() {
   if (summaryEmail) summaryEmail.textContent = bookingData.email || 'Not provided';
   summaryPreferred.textContent = bookingData.preferredContact;
 
-  // Appointment Summary
-  const summaryDate = document.getElementById('summary-date');
-  const summaryTime = document.getElementById('summary-time');
-  summaryDate.textContent = bookingData.appointmentDate;
-  summaryTime.textContent = bookingData.timeSlot;
+  // Appointment Summary - Toggle between regular and reschedule modes
+  const regularSummary = document.getElementById('regular-summary');
+  const rescheduleSummary = document.getElementById('reschedule-summary');
 
-  const summaryDoctor = document.getElementById('summary-doctor');
-  summaryDoctor.textContent = bookingData.doctor;
+  if (isRescheduleMode && originalAppointment && rescheduleNewSlot) {
+    // Show reschedule boxes
+    if (regularSummary) regularSummary.style.display = 'none';
+    if (rescheduleSummary) rescheduleSummary.style.display = 'block';
 
-  const summaryType = document.getElementById('summary-type');
-  summaryType.textContent = bookingData.appointmentType;
+    // Type display mapping
+    const typeDisplay = {
+      'consultation': 'General Consultation',
+      'lab-test': 'Lab Test',
+      'follow-up': 'Follow-Up'
+    };
 
-  const summaryLocation = document.getElementById('summary-location');
-  summaryLocation.textContent = bookingData.location;
+    // Populate OLD (Previous/Cancelled) Appointment
+    const oldDate = new Date(originalAppointment.start);
+    const oldDateStr = oldDate.toLocaleDateString('en-US', { 
+      weekday: 'short', 
+      month: 'short', 
+      day: 'numeric', 
+      year: 'numeric' 
+    });
+    const oldStartTime = oldDate.toLocaleTimeString('en-US', { 
+      hour: 'numeric', 
+      minute: '2-digit', 
+      hour12: true 
+    });
+    const oldEndDate = new Date(originalAppointment.end);
+    const oldEndTime = oldEndDate.toLocaleTimeString('en-US', { 
+      hour: 'numeric', 
+      minute: '2-digit', 
+      hour12: true 
+    });
+
+    const oldSummaryDate = document.getElementById('old-summary-date');
+    const oldSummaryTime = document.getElementById('old-summary-time');
+    const oldSummaryDoctor = document.getElementById('old-summary-doctor');
+    const oldSummaryType = document.getElementById('old-summary-type');
+    const oldSummaryLocation = document.getElementById('old-summary-location');
+
+    if (oldSummaryDate) oldSummaryDate.textContent = oldDateStr;
+    if (oldSummaryTime) oldSummaryTime.textContent = `${oldStartTime} - ${oldEndTime}`;
+    if (oldSummaryDoctor) oldSummaryDoctor.textContent = originalAppointment.title;
+    if (oldSummaryType) oldSummaryType.textContent = typeDisplay[originalAppointment.extendedProps.type] || originalAppointment.extendedProps.type;
+    if (oldSummaryLocation) oldSummaryLocation.textContent = originalAppointment.extendedProps.location;
+
+    // Populate NEW Appointment
+    const newSummaryDate = document.getElementById('new-summary-date');
+    const newSummaryTime = document.getElementById('new-summary-time');
+    const newSummaryDoctor = document.getElementById('new-summary-doctor');
+    const newSummaryType = document.getElementById('new-summary-type');
+    const newSummaryLocation = document.getElementById('new-summary-location');
+
+    if (newSummaryDate) newSummaryDate.textContent = bookingData.appointmentDate;
+    if (newSummaryTime) newSummaryTime.textContent = bookingData.timeSlot;
+    if (newSummaryDoctor) newSummaryDoctor.textContent = bookingData.doctor;
+    if (newSummaryType) newSummaryType.textContent = typeDisplay[bookingData.appointmentType] || bookingData.appointmentType;
+    if (newSummaryLocation) newSummaryLocation.textContent = bookingData.location;
+
+  } else {
+    // Show regular summary
+    if (regularSummary) regularSummary.style.display = 'block';
+    if (rescheduleSummary) rescheduleSummary.style.display = 'none';
+
+    const summaryDate = document.getElementById('summary-date');
+    const summaryTime = document.getElementById('summary-time');
+    summaryDate.textContent = bookingData.appointmentDate;
+    summaryTime.textContent = bookingData.timeSlot;
+
+    const summaryDoctor = document.getElementById('summary-doctor');
+    summaryDoctor.textContent = bookingData.doctor;
+
+    const summaryType = document.getElementById('summary-type');
+    const typeDisplay = {
+      'consultation': 'General Consultation',
+      'lab-test': 'Lab Test',
+      'follow-up': 'Follow-Up'
+    };
+    summaryType.textContent = typeDisplay[bookingData.appointmentType] || bookingData.appointmentType;
+
+    const summaryLocation = document.getElementById('summary-location');
+    summaryLocation.textContent = bookingData.location;
+  }
 }
 
 function confirmBooking() {
-  console.log('Final booking data:', bookingData);
-  alert('Appointment confirmed!\n\nBooking data logged to console.');
+  if (isRescheduleMode && originalAppointment) {
+    // Handle reschedule confirmation
+    handleRescheduleConfirmation();
+  } else {
+    // Normal booking
+    console.log('Final booking data:', bookingData);
+    showToast('success', 'Appointment Confirmed', 
+      `Your appointment has been booked for ${bookingData.appointmentDate}, ${bookingData.timeSlot}.`);
+    closeBookingModal();
+  }
+}
+
+// ============================
+// Appointment Details Modal Functions
+// ============================
+
+function showAppointmentDetails(event) {
+  const modal = document.getElementById('appointment-details-modal');
+  if (!modal) {
+    console.warn('Appointment details modal not loaded yet');
+    return;
+  }
+
+  // Store appointment for later use
+  originalAppointment = event;
+
+  // Populate modal with appointment details
+  const doctorEl = document.getElementById('details-doctor');
+  const datetimeEl = document.getElementById('details-datetime');
+  const typeEl = document.getElementById('details-type');
+  const locationEl = document.getElementById('details-location');
+
+  const date = new Date(event.start);
+  const dateStr = date.toLocaleDateString('en-US', { 
+    weekday: 'short', 
+    month: 'short', 
+    day: 'numeric', 
+    year: 'numeric' 
+  });
+  const startTime = date.toLocaleTimeString('en-US', { 
+    hour: 'numeric', 
+    minute: '2-digit', 
+    hour12: true 
+  });
+  const endDate = new Date(event.end);
+  const endTime = endDate.toLocaleTimeString('en-US', { 
+    hour: 'numeric', 
+    minute: '2-digit', 
+    hour12: true 
+  });
+
+  const typeDisplay = {
+    'consultation': 'General Consultation',
+    'lab-test': 'Lab Test',
+    'follow-up': 'Follow-Up'
+  };
+
+  if (doctorEl) doctorEl.textContent = event.title || 'Unknown';
+  if (datetimeEl) datetimeEl.textContent = `${dateStr}, ${startTime} - ${endTime}`;
+  if (typeEl) typeEl.textContent = typeDisplay[event.extendedProps.type] || event.extendedProps.type || 'Unknown';
+  if (locationEl) locationEl.textContent = event.extendedProps.location || 'Unknown';
+
+  // Show modal
+  modal.style.display = 'flex';
+}
+
+function closeAppointmentDetailsModal() {
+  const modal = document.getElementById('appointment-details-modal');
+  if (modal) {
+    modal.style.display = 'none';
+  }
+}
+
+function cancelAppointment() {
+  if (!originalAppointment) return;
+
+  if (confirm('Are you sure you want to cancel this appointment?')) {
+    // In a real app, this would update the backend
+    console.log('Cancelling appointment:', originalAppointment);
+    
+    showToast('success', 'Appointment Cancelled', 'Your appointment has been cancelled successfully.');
+    closeAppointmentDetailsModal();
+    
+    // Optionally update the calendar here
+  }
+}
+
+// ============================
+// Reschedule Functions
+// ============================
+
+function startReschedule() {
+  if (!originalAppointment) return;
+
+  // Close appointment details modal
+  closeAppointmentDetailsModal();
+
+  // Enter reschedule mode
+  isRescheduleMode = true;
+
+  // Load and show reschedule banner
+  loadRescheduleBanner();
+
+  // Highlight the current appointment on the calendar
+  highlightCurrentAppointment();
+
+  // Update calendar to only allow clicking on available/waitlist slots
+  updateCalendarForReschedule();
+}
+
+function loadRescheduleBanner() {
+  fetch('components/reschedule-banner.html')
+    .then(response => response.text())
+    .then(html => {
+      const container = document.getElementById('reschedule-banner-container');
+      if (container) {
+        container.innerHTML = html;
+        const banner = document.getElementById('reschedule-banner');
+        if (banner) {
+          banner.style.display = 'block';
+          
+          // Update doctor name in banner
+          const doctorNameEl = document.getElementById('reschedule-doctor-name');
+          if (doctorNameEl && originalAppointment) {
+            doctorNameEl.textContent = originalAppointment.title || 'Doctor';
+          }
+        }
+      }
+    });
+}
+
+function highlightCurrentAppointment() {
+  if (!calendar || !originalAppointment) return;
+
+  // Add class to highlight the current appointment
+  setTimeout(() => {
+    const eventEl = calendar.getEventById(originalAppointment.id)?.el;
+    if (eventEl) {
+      eventEl.classList.add('fc-event-reschedule-current');
+    }
+  }, 100);
+}
+
+function updateCalendarForReschedule() {
+  if (!calendar) return;
+
+  // Force re-render of events to apply reschedule styling
+  calendar.render();
+}
+
+function cancelReschedule() {
+  // Exit reschedule mode
+  isRescheduleMode = false;
+  originalAppointment = null;
+  rescheduleNewSlot = null;
+
+  // Hide banner
+  const banner = document.getElementById('reschedule-banner');
+  if (banner) {
+    banner.style.display = 'none';
+  }
+
+  // Remove highlight from current appointment
+  const highlightedEvents = document.querySelectorAll('.fc-event-reschedule-current');
+  highlightedEvents.forEach(el => el.classList.remove('fc-event-reschedule-current'));
+
+  // Re-render calendar
+  if (calendar) {
+    calendar.render();
+  }
+}
+
+function handleRescheduleConfirmation() {
+  if (!originalAppointment || !rescheduleNewSlot) return;
+
+  // In a real app, this would update the backend
+  console.log('Rescheduling from:', originalAppointment);
+  console.log('Rescheduling to:', rescheduleNewSlot);
+  console.log('Booking data:', bookingData);
+
+  const newDate = new Date(rescheduleNewSlot.start);
+  const dateStr = newDate.toLocaleDateString('en-US', { 
+    weekday: 'short', 
+    month: 'short', 
+    day: 'numeric', 
+    year: 'numeric' 
+  });
+  const startTime = newDate.toLocaleTimeString('en-US', { 
+    hour: 'numeric', 
+    minute: '2-digit', 
+    hour12: true 
+  });
+  const endDate = new Date(rescheduleNewSlot.end);
+  const endTime = endDate.toLocaleTimeString('en-US', { 
+    hour: 'numeric', 
+    minute: '2-digit', 
+    hour12: true 
+  });
+
+  showToast('success', 'Appointment Rescheduled', 
+    `Your appointment has been rescheduled to ${dateStr}, ${startTime} - ${endTime}.`);
+
+  // Close modal and exit reschedule mode
   closeBookingModal();
+  cancelReschedule();
+}
+
+// ============================
+// Toast Notification Functions
+// ============================
+
+function showToast(type, title, message, duration = 5000) {
+  const container = document.getElementById('toast-container');
+  if (!container) return;
+
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  
+  const iconMap = {
+    success: `<img src="icons/check-circle.svg" alt="" width="24" height="24">`,
+    error: `<img src="icons/x-circle.svg" alt="" width="24" height="24">`,
+    warning: `<img src="icons/exclamation-circle.svg" alt="" width="24" height="24">`,
+    info: `<img src="icons/information-circle.svg" alt="" width="24" height="24">`
+  };
+
+  toast.innerHTML = `
+    <div class="toast-icon">${iconMap[type] || iconMap.info}</div>
+    <div class="toast-content">
+      <div class="toast-title">${title}</div>
+      ${message ? `<div class="toast-message">${message}</div>` : ''}
+    </div>
+    <button class="toast-close" onclick="this.parentElement.remove()">
+      <img src="icons/x-mark.svg" alt="" width="20" height="20">
+    </button>
+  `;
+
+  container.appendChild(toast);
+
+  // Auto-remove after duration
+  if (duration > 0) {
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateX(100px)';
+      setTimeout(() => toast.remove(), 300);
+    }, duration);
+  }
 }
 
 // Close modal on Escape key
 document.addEventListener('keydown', function(event) {
   if (event.key === 'Escape') {
     closeBookingModal();
+    closeAppointmentDetailsModal();
   }
 });

@@ -95,6 +95,20 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('booking-modal-container').innerHTML = html;
     });
 
+  // Load appointment details modal component
+  fetch('components/appointment-details-modal.html')
+    .then(response => response.text())
+    .then(html => {
+      document.getElementById('appointment-details-modal-container').innerHTML = html;
+    });
+
+  // Load toast component
+  fetch('components/toast.html')
+    .then(response => response.text())
+    .then(html => {
+      document.getElementById('toast-container-wrapper').innerHTML = html;
+    });
+
   // Handle initial route
   handleRouteChange();
 
