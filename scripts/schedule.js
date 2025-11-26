@@ -2,8 +2,19 @@
 // Schedule Page Logic
 // ============================
 
-let appointments = [];
+/**
+ * DATA MODEL:
+ * - BASE_SLOTS = Hardcoded base schedule (from baseSchedule.js)
+ * - localStorage overrides = Runtime bookings/changes
+ * 
+ * FLOW:
+ * 1. User books → Store override in localStorage with booking data
+ * 2. User cancels → Remove override from localStorage (reverts to base)
+ * 3. User reschedules → Update overrides (old slot reverts, new slot booked)
+ */
+
 let calendar = null;
+const STORAGE_KEY = "bellhartBookings";
 
 // Availability color mapping
 const availabilityColors = {
@@ -29,17 +40,107 @@ const availabilityColors = {
   }
 };
 
-// Load appointments from JSON
-async function loadAppointments() {
+// Load overrides from localStorage
+function loadOverrides() {
   try {
-    const response = await fetch('data/appointments.json');
-    const data = await response.json();
-    appointments = data.appointments;
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
   } catch (error) {
-    console.error('Error loading appointments:', error);
-    appointments = [];
+    console.error('Error loading overrides:', error);
+    return {};
   }
 }
+
+// Save overrides to localStorage
+function saveOverrides(overrides) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(overrides));
+  } catch (error) {
+    console.error('Error saving overrides:', error);
+  }
+}
+
+// Merge base slots with runtime overrides
+function getCurrentSchedule() {
+  if (typeof BASE_SLOTS === 'undefined') {
+    console.error('BASE_SLOTS is not defined! Make sure baseSchedule.js is loaded first.');
+    return [];
+  }
+  
+  const overrides = loadOverrides();
+  
+  return BASE_SLOTS.map((slot) => {
+    const override = overrides[slot.id];
+    
+    if (!override) {
+      // No override → use baseStatus
+      return {
+        ...slot,
+        extendedProps: {
+          ...slot.extendedProps,
+          availability: slot.extendedProps.baseStatus
+        }
+      };
+    }
+    
+    // Override exists → merge with base slot
+    return {
+      ...slot,
+      extendedProps: {
+        ...slot.extendedProps,
+        availability: override.status,
+        bookingId: override.bookingId,
+        type: override.booking?.type || slot.extendedProps.type, // Use booking type for filtering
+        ...override
+      }
+    };
+  });
+}
+
+// Generate sequential booking ID
+function generateBookingId() {
+  const overrides = loadOverrides();
+  const maxId = Object.values(overrides).reduce((max, override) => {
+    if (override.bookingId) {
+      const match = override.bookingId.match(/booking-(\d+)/);
+      if (match) {
+        const num = parseInt(match[1], 10);
+        return num > max ? num : max;
+      }
+    }
+    return max;
+  }, 0);
+  
+  const nextId = maxId + 1;
+  return `booking-${String(nextId).padStart(3, '0')}`;
+}
+
+// Developer tools - view data in console
+window.viewBookings = function() {
+  const overrides = loadOverrides();
+  const bookings = Object.entries(overrides)
+    .filter(([_, override]) => override.status === 'booked')
+    .map(([slotId, override]) => ({
+      slotId,
+      ...override.booking
+    }));
+  console.table(bookings);
+  return bookings;
+};
+
+window.viewOverrides = function() {
+  const overrides = loadOverrides();
+  console.log('All overrides:', overrides);
+  return overrides;
+};
+
+window.clearBookings = function() {
+  if (confirm('Clear all bookings?')) {
+    localStorage.removeItem(STORAGE_KEY);
+    location.reload();
+  }
+};
+
 
 // Get current filter state
 function getActiveFilters() {
@@ -66,8 +167,11 @@ function getActiveFilters() {
 // Filter appointments based on current filter state
 function getFilteredAppointments() {
   const filters = getActiveFilters();
+  
+  // Get current schedule (base + overrides)
+  const currentSchedule = getCurrentSchedule();
 
-  return appointments.filter(appointment => {
+  return currentSchedule.filter(appointment => {
     const props = appointment.extendedProps;
 
     // Filter by doctor (only if not "all")
@@ -157,8 +261,6 @@ async function initSchedulePage() {
   const calendarEl = document.getElementById('calendar');
   if (!calendarEl) return;
 
-  await loadAppointments();
-
   calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: 'timeGridWeek',
     headerToolbar: {
@@ -173,7 +275,7 @@ async function initSchedulePage() {
     expandRows: true,
     slotDuration: '00:30:00',
     slotLabelInterval: '01:00',
-    events: appointments, // Start with ALL appointments visible
+    events: getCurrentSchedule(), // Load base schedule + overrides
     
     // Custom event rendering
     eventContent: function(arg) {
@@ -408,6 +510,14 @@ function openBookingModal(event, isReschedule = false) {
     return;
   }
 
+  // Set max date for DOB (must be 18+ years old)
+  const dobInput = document.getElementById('patient-dob');
+  if (dobInput) {
+    const today = new Date();
+    const maxDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+    dobInput.max = maxDate.toISOString().split('T')[0];
+  }
+
   // Reset state
   currentStep = 1;
   selectedTimeSlot = null;
@@ -445,16 +555,16 @@ function openBookingModal(event, isReschedule = false) {
   bookingData.location = event.extendedProps.location || 'Unknown';
 
   // Prefill form fields
-  // Appointment type
-  const typeSelect = document.getElementById('appointment-type');
-  if (typeSelect && event.extendedProps.type) {
-    typeSelect.value = event.extendedProps.type;
+  // Doctor (readonly field)
+  const doctorInput = document.getElementById('appointment-doctor');
+  if (doctorInput && event.title) {
+    doctorInput.value = event.title;
   }
 
-  // Doctor
-  const doctorSelect = document.getElementById('appointment-doctor');
-  if (doctorSelect && event.title) {
-    doctorSelect.value = event.title;
+  // Reset appointment type selection
+  const typeSelect = document.getElementById('appointment-type');
+  if (typeSelect) {
+    typeSelect.value = '';
   }
 
   // Handle time slot display
@@ -577,7 +687,7 @@ function validateCurrentStep() {
   let fieldsToValidate = [];
 
   if (currentStep === 1) {
-    fieldsToValidate = ['appointment-type', 'appointment-doctor'];
+    fieldsToValidate = ['appointment-type'];
     
     // Clear previous errors
     fieldsToValidate.forEach(fieldId => clearFieldError(fieldId));
@@ -773,6 +883,35 @@ function previousStep() {
   }
 }
 
+function prefillPatientDetails() {
+  // Pre-fill form fields with existing patient data
+  const fields = {
+    'patient-name': bookingData.patientName,
+    'health-number': bookingData.healthNumber,
+    'dob': bookingData.dateOfBirth,
+    'sex': bookingData.sex,
+    'phone': bookingData.phone,
+    'email': bookingData.email
+  };
+
+  Object.keys(fields).forEach(fieldId => {
+    const field = document.getElementById(fieldId);
+    if (field && fields[fieldId]) {
+      field.value = fields[fieldId];
+    }
+  });
+
+  // Handle preferred contact (checkboxes)
+  if (bookingData.preferredContact) {
+    const preferredContacts = bookingData.preferredContact.split(', ');
+    const phoneCheckbox = document.getElementById('preferred-phone');
+    const emailCheckbox = document.getElementById('preferred-email');
+    
+    if (phoneCheckbox) phoneCheckbox.checked = preferredContacts.includes('Phone');
+    if (emailCheckbox) emailCheckbox.checked = preferredContacts.includes('Email');
+  }
+}
+
 function updateStepUI() {
   // Update step indicators
   const stepItems = document.querySelectorAll('.step-item');
@@ -793,6 +932,11 @@ function updateStepUI() {
       content.classList.remove('active');
     }
   });
+
+  // If moving to step 2 in reschedule mode, pre-fill patient details
+  if (currentStep === 2 && isRescheduleMode && bookingData.patientName) {
+    prefillPatientDetails();
+  }
 
   // If moving to step 3, populate summary
   if (currentStep === 3) {
@@ -924,16 +1068,44 @@ function updateSummary() {
 
 function confirmBooking() {
   if (isRescheduleMode && originalAppointment) {
-    // Handle reschedule confirmation
     handleRescheduleConfirmation();
   } else {
-    // Normal booking
-    console.log('Final booking data:', bookingData);
+    const bookingId = generateBookingId();
+    const slotId = currentAppointmentData.id;
+    
+    const overrides = loadOverrides();
+    overrides[slotId] = {
+      status: 'booked',
+      bookingId: bookingId,
+      booking: {
+        bookingId: bookingId,
+        doctor: bookingData.doctor,
+        date: bookingData.appointmentDate,
+        timeSlot: bookingData.timeSlot,
+        type: bookingData.appointmentType,
+        location: bookingData.location,
+        notes: bookingData.notes || null,
+        patient: {
+          name: bookingData.patientName,
+          healthNumber: bookingData.healthNumber,
+          dateOfBirth: bookingData.dateOfBirth,
+          sex: bookingData.sex,
+          phone: bookingData.phone || null,
+          email: bookingData.email || null,
+          preferredContact: bookingData.preferredContact
+        }
+      }
+    };
+    
+    saveOverrides(overrides);
+    updateCalendar();
+    
     showToast('success', 'Appointment Confirmed', 
       `Your appointment has been booked for ${bookingData.appointmentDate}, ${bookingData.timeSlot}.`);
     closeBookingModal();
   }
 }
+
 
 // ============================
 // Appointment Details Modal Functions
@@ -949,30 +1121,44 @@ function showAppointmentDetails(event) {
   // Store appointment for later use
   originalAppointment = event;
 
+  // Get booking data from override if this is a booked appointment
+  const overrides = loadOverrides();
+  const override = event.id ? overrides[event.id] : null;
+  const booking = override?.booking;
+
   // Populate modal with appointment details
   const doctorEl = document.getElementById('details-doctor');
   const datetimeEl = document.getElementById('details-datetime');
   const typeEl = document.getElementById('details-type');
   const locationEl = document.getElementById('details-location');
 
-  const date = new Date(event.start);
-  const dateStr = date.toLocaleDateString('en-US', { 
-    weekday: 'short', 
-    month: 'short', 
-    day: 'numeric', 
-    year: 'numeric' 
-  });
-  const startTime = date.toLocaleTimeString('en-US', { 
-    hour: 'numeric', 
-    minute: '2-digit', 
-    hour12: true 
-  });
-  const endDate = new Date(event.end);
-  const endTime = endDate.toLocaleTimeString('en-US', { 
-    hour: 'numeric', 
-    minute: '2-digit', 
-    hour12: true 
-  });
+  // If we have booking data, use it; otherwise use event data
+  let dateStr, timeStr;
+  
+  if (booking) {
+    dateStr = booking.date;
+    timeStr = booking.timeSlot;
+  } else {
+    const date = new Date(event.start);
+    dateStr = date.toLocaleDateString('en-US', { 
+      weekday: 'short', 
+      month: 'short', 
+      day: 'numeric', 
+      year: 'numeric' 
+    });
+    const startTime = date.toLocaleTimeString('en-US', { 
+      hour: 'numeric', 
+      minute: '2-digit', 
+      hour12: true 
+    });
+    const endDate = new Date(event.end);
+    const endTime = endDate.toLocaleTimeString('en-US', { 
+      hour: 'numeric', 
+      minute: '2-digit', 
+      hour12: true 
+    });
+    timeStr = `${startTime} - ${endTime}`;
+  }
 
   const typeDisplay = {
     'consultation': 'General Consultation',
@@ -980,18 +1166,49 @@ function showAppointmentDetails(event) {
     'follow-up': 'Follow-Up'
   };
 
-  if (doctorEl) doctorEl.textContent = event.title || 'Unknown';
-  if (datetimeEl) datetimeEl.textContent = `${dateStr}, ${startTime} - ${endTime}`;
-  if (typeEl) typeEl.textContent = typeDisplay[event.extendedProps.type] || event.extendedProps.type || 'Unknown';
-  if (locationEl) locationEl.textContent = event.extendedProps.location || 'Unknown';
+  const doctor = booking ? booking.doctor : (event.title || 'Unknown');
+  const type = booking ? booking.type : (event.extendedProps.type || 'Unknown');
+  const location = booking ? booking.location : (event.extendedProps.location || 'Unknown');
 
-  // Hide action buttons for completed appointments
+  if (doctorEl) doctorEl.textContent = doctor;
+  if (datetimeEl) datetimeEl.textContent = `${dateStr}, ${timeStr}`;
+  if (typeEl) typeEl.textContent = typeDisplay[type] || type;
+  if (locationEl) locationEl.textContent = location;
+
+  // Check if appointment is in the past
+  const appointmentDateTime = new Date(event.start);
+  const now = new Date();
+  const isPast = appointmentDateTime < now;
+
+  // Handle action buttons based on appointment status
   const actionsContainer = modal.querySelector('.appointment-details-actions');
+  
   if (actionsContainer) {
     if (event.extendedProps.availability === 'completed') {
+      // Hide all buttons for completed appointments
       actionsContainer.style.display = 'none';
     } else {
       actionsContainer.style.display = 'flex';
+      
+      // Always get fresh button reference
+      const cancelBtn = actionsContainer.querySelector('button:first-child');
+      
+      if (cancelBtn) {
+        // Reset button completely
+        cancelBtn.onclick = null;
+        
+        if (isPast) {
+          // Change to "Mark as Complete" button
+          cancelBtn.innerHTML = '<img src="icons/check-circle.svg" alt="" width="16" height="16" style="margin-right: 8px;"> Mark as Complete';
+          cancelBtn.className = 'btn btn-secondary'; // Neutral styling
+          cancelBtn.onclick = function() { markAsComplete(); };
+        } else {
+          // Keep as "Cancel Appointment" button
+          cancelBtn.textContent = 'Cancel Appointment';
+          cancelBtn.className = 'btn btn-warning';
+          cancelBtn.onclick = function() { cancelAppointment(); };
+        }
+      }
     }
   }
 
@@ -1009,16 +1226,44 @@ function closeAppointmentDetailsModal() {
 function cancelAppointment() {
   if (!originalAppointment) return;
 
+  const slotId = originalAppointment.id;
+  if (!slotId) return;
+
   if (confirm('Are you sure you want to cancel this appointment?')) {
-    // In a real app, this would update the backend and convert the slot back to available
-    console.log('Cancelling appointment:', originalAppointment);
+    const overrides = loadOverrides();
+    
+    // Delete override → slot reverts to baseStatus
+    delete overrides[slotId];
+    
+    saveOverrides(overrides);
+    updateCalendar();
     
     showToast('success', 'Appointment Cancelled', 'Your appointment has been cancelled and the time slot is now available.');
     closeAppointmentDetailsModal();
-    
-    // Note: The cancelled slot would be converted to "available" in the backend
   }
 }
+
+function markAsComplete() {
+  if (!originalAppointment) return;
+
+  const slotId = originalAppointment.id;
+  if (!slotId) return;
+
+  const overrides = loadOverrides();
+  const override = overrides[slotId];
+  
+  if (override) {
+    // Update status to completed
+    override.status = 'completed';
+    
+    saveOverrides(overrides);
+    updateCalendar();
+    
+    showToast('success', 'Appointment Completed', 'This appointment has been marked as completed.');
+    closeAppointmentDetailsModal();
+  }
+}
+
 
 // ============================
 // Reschedule Functions
@@ -1026,6 +1271,24 @@ function cancelAppointment() {
 
 function startReschedule() {
   if (!originalAppointment) return;
+
+  // Get booking data from override to pre-populate patient details
+  const overrides = loadOverrides();
+  const override = originalAppointment.id ? overrides[originalAppointment.id] : null;
+  const booking = override?.booking;
+  
+  if (booking && booking.patient) {
+    // Pre-populate booking data with existing patient info
+    bookingData = {
+      patientName: booking.patient.name,
+      healthNumber: booking.patient.healthNumber,
+      dateOfBirth: booking.patient.dateOfBirth,
+      sex: booking.patient.sex,
+      phone: booking.patient.phone || '',
+      email: booking.patient.email || '',
+      preferredContact: booking.patient.preferredContact
+    };
+  }
 
   // Close appointment details modal
   closeAppointmentDetailsModal();
@@ -1108,10 +1371,43 @@ function cancelReschedule() {
 function handleRescheduleConfirmation() {
   if (!originalAppointment || !rescheduleNewSlot) return;
 
-  // In a real app, this would update the backend
-  console.log('Rescheduling from:', originalAppointment);
-  console.log('Rescheduling to:', rescheduleNewSlot);
-  console.log('Booking data:', bookingData);
+  const oldSlotId = originalAppointment.id;
+  const newSlotId = rescheduleNewSlot.id;
+  
+  if (!oldSlotId || !newSlotId) return;
+
+  const overrides = loadOverrides();
+  const oldOverride = overrides[oldSlotId];
+  const bookingId = oldOverride?.bookingId || generateBookingId();
+  
+  // Delete old slot override → reverts to baseStatus
+  delete overrides[oldSlotId];
+  
+  // Create new slot override with booking data
+  overrides[newSlotId] = {
+    status: 'booked',
+    bookingId: bookingId,
+    booking: {
+      bookingId: bookingId,
+      doctor: bookingData.doctor,
+      date: bookingData.appointmentDate,
+      timeSlot: bookingData.timeSlot,
+      type: bookingData.appointmentType,
+      location: bookingData.location,
+      notes: bookingData.notes || null,
+      patient: {
+        name: bookingData.patientName,
+        healthNumber: bookingData.healthNumber,
+        dateOfBirth: bookingData.dateOfBirth,
+        sex: bookingData.sex,
+        phone: bookingData.phone || null,
+        email: bookingData.email || null,
+        preferredContact: bookingData.preferredContact
+      }
+    }
+  };
+  
+  saveOverrides(overrides);
 
   const newDate = new Date(rescheduleNewSlot.start);
   const dateStr = newDate.toLocaleDateString('en-US', { 
@@ -1132,10 +1428,11 @@ function handleRescheduleConfirmation() {
     hour12: true 
   });
 
+  updateCalendar();
+
   showToast('success', 'Appointment Rescheduled', 
     `Your appointment has been rescheduled to ${dateStr}, ${startTime} - ${endTime}.`);
 
-  // Close modal and exit reschedule mode
   closeBookingModal();
   cancelReschedule();
 }
