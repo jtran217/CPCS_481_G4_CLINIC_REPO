@@ -492,11 +492,23 @@ let bookingData = {};
 let validationRules = {};
 let selectedTimeSlot = null;
 let currentAppointmentData = null;
+let currentUser = null;
 
 // Reschedule mode state
 let isRescheduleMode = false;
 let originalAppointment = null;
 let rescheduleNewSlot = null;
+
+// Load user data from JSON
+async function loadUserData() {
+  try {
+    const response = await fetch('data/users.json');
+    const data = await response.json();
+    currentUser = data.users[0]; // Get the first (and only) user
+  } catch (error) {
+    console.error('Error loading user data:', error);
+  }
+}
 
 // Load validation rules from JSON
 async function loadValidationRules() {
@@ -517,8 +529,9 @@ async function loadValidationRules() {
   }
 }
 
-// Load validation rules on page load
+// Load validation rules and user data on page load
 loadValidationRules();
+loadUserData();
 
 // Generate 30-minute time slots between start and end times
 function generateTimeSlots(startTime, endTime, slotDuration = 30) {
@@ -635,6 +648,12 @@ function openBookingModal(event, isReschedule = false) {
   currentStep = 1;
   selectedTimeSlot = null;
   currentAppointmentData = event;
+  
+  // Always prefill user data if available
+  if (currentUser) {
+    prefillUserData();
+  }
+  
   updateStepUI();
 
   // Set the date in the header
@@ -996,8 +1015,36 @@ function previousStep() {
   }
 }
 
+// Prefill patient data from current user
+function prefillUserData() {
+  if (!currentUser) return;
+
+  const profile = currentUser.profile;
+  
+  // Prefill form fields
+  const nameField = document.getElementById('patient-name');
+  const healthField = document.getElementById('patient-health-number');
+  const dobField = document.getElementById('patient-dob');
+  const sexField = document.getElementById('patient-sex');
+  const phoneField = document.getElementById('patient-phone');
+  const emailField = document.getElementById('patient-email');
+  
+  if (nameField) nameField.value = profile.name;
+  if (healthField) healthField.value = profile.healthNumber;
+  if (dobField) dobField.value = profile.dateOfBirth;
+  if (sexField) sexField.value = profile.sex;
+  if (phoneField) phoneField.value = profile.phone;
+  if (emailField) emailField.value = currentUser.email;
+  
+  // Check both preferred contact checkboxes by default
+  const phoneCheckbox = document.getElementById('phone-preferred');
+  const emailCheckbox = document.getElementById('email-preferred');
+  if (phoneCheckbox) phoneCheckbox.checked = true;
+  if (emailCheckbox) emailCheckbox.checked = true;
+}
+
 function prefillPatientDetails() {
-  // Pre-fill form fields with existing patient data
+  // Pre-fill form fields with existing patient data from reschedule
   const fields = {
     'patient-name': bookingData.patientName,
     'patient-health-number': bookingData.healthNumber,
@@ -1046,9 +1093,9 @@ function updateStepUI() {
     }
   });
 
-  // If moving to step 2 in reschedule mode, pre-fill patient details
-  if (currentStep === 2 && isRescheduleMode && bookingData.patientName) {
-    prefillPatientDetails();
+  // If moving to step 2, prefill user data
+  if (currentStep === 2 && currentUser) {
+    prefillUserData();
   }
 
   // If moving to step 3, populate summary
@@ -1384,24 +1431,6 @@ function markAsComplete() {
 
 function startReschedule() {
   if (!originalAppointment) return;
-
-  // Get booking data from override to pre-populate patient details
-  const overrides = loadOverrides();
-  const override = originalAppointment.id ? overrides[originalAppointment.id] : null;
-  const booking = override?.booking;
-  
-  if (booking && booking.patient) {
-    // Pre-populate booking data with existing patient info
-    bookingData = {
-      patientName: booking.patient.name,
-      healthNumber: booking.patient.healthNumber,
-      dateOfBirth: booking.patient.dateOfBirth,
-      sex: booking.patient.sex,
-      phone: booking.patient.phone || '',
-      email: booking.patient.email || '',
-      preferredContact: booking.patient.preferredContact
-    };
-  }
 
   // Close appointment details modal
   closeAppointmentDetailsModal();
