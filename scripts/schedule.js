@@ -97,22 +97,25 @@ function getCurrentSchedule() {
   });
 }
 
-// Generate sequential booking ID
+// Generate sequential booking ID (gapless)
 function generateBookingId() {
   const overrides = loadOverrides();
-  const maxId = Object.values(overrides).reduce((max, override) => {
+  // Collect all used booking numbers
+  const usedNumbers = new Set();
+  Object.values(overrides).forEach((override) => {
     if (override.bookingId) {
       const match = override.bookingId.match(/booking-(\d+)/);
       if (match) {
-        const num = parseInt(match[1], 10);
-        return num > max ? num : max;
+        usedNumbers.add(parseInt(match[1], 10));
       }
     }
-    return max;
-  }, 0);
-  
-  const nextId = maxId + 1;
-  return `booking-${String(nextId).padStart(3, '0')}`;
+  });
+  // Find the lowest unused positive integer
+  let nextIdNum = 1;
+  while (usedNumbers.has(nextIdNum)) {
+    nextIdNum++;
+  }
+  return `booking-${String(nextIdNum).padStart(3, '0')}`;
 }
 
 // Developer tools - view data in console
@@ -997,11 +1000,11 @@ function prefillPatientDetails() {
   // Pre-fill form fields with existing patient data
   const fields = {
     'patient-name': bookingData.patientName,
-    'health-number': bookingData.healthNumber,
-    'dob': bookingData.dateOfBirth,
-    'sex': bookingData.sex,
-    'phone': bookingData.phone,
-    'email': bookingData.email
+    'patient-health-number': bookingData.healthNumber,
+    'patient-dob': bookingData.dateOfBirth,
+    'patient-sex': bookingData.sex,
+    'patient-phone': bookingData.phone,
+    'patient-email': bookingData.email
   };
 
   Object.keys(fields).forEach(fieldId => {
@@ -1014,8 +1017,8 @@ function prefillPatientDetails() {
   // Handle preferred contact (checkboxes)
   if (bookingData.preferredContact) {
     const preferredContacts = bookingData.preferredContact.split(', ');
-    const phoneCheckbox = document.getElementById('preferred-phone');
-    const emailCheckbox = document.getElementById('preferred-email');
+    const phoneCheckbox = document.getElementById('phone-preferred');
+    const emailCheckbox = document.getElementById('email-preferred');
     
     if (phoneCheckbox) phoneCheckbox.checked = preferredContacts.includes('Phone');
     if (emailCheckbox) emailCheckbox.checked = preferredContacts.includes('Email');
