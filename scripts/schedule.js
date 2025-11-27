@@ -256,8 +256,102 @@ function setupFilters() {
   }
 }
 
+// Load tooltip component
+async function loadTooltipComponent() {
+  try {
+    const response = await fetch('components/tooltip.html');
+    const html = await response.text();
+    const container = document.getElementById('tooltip-container');
+    if (container) {
+      container.innerHTML = html;
+    }
+  } catch (error) {
+    console.error('Error loading tooltip component:', error);
+  }
+}
+
+// Tooltip management
+let tooltipElement = null;
+
+function showTooltip(eventEl, eventData) {
+  // Get or initialize tooltip element
+  if (!tooltipElement) {
+    tooltipElement = document.getElementById('tooltip');
+  }
+  
+  if (!tooltipElement) return;
+
+  // Get event details
+  const { availability } = eventData.extendedProps;
+  
+  // Format time range
+  const startTime = new Date(eventData.start).toLocaleTimeString('en-US', { 
+    hour: 'numeric', 
+    minute: '2-digit', 
+    hour12: true 
+  });
+  const endTime = new Date(eventData.end).toLocaleTimeString('en-US', { 
+    hour: 'numeric', 
+    minute: '2-digit', 
+    hour12: true 
+  });
+
+  // Create tooltip text based on availability status
+  let statusText = '';
+  switch(availability) {
+    case 'available':
+      statusText = 'Open';
+      break;
+    case 'booked':
+      statusText = 'Booked';
+      break;
+    case 'waitlist':
+      statusText = 'Waitlist';
+      break;
+    case 'completed':
+      statusText = 'Completed';
+      break;
+    default:
+      statusText = 'Slot';
+  }
+
+  // Set simple text content
+  const tooltipContent = tooltipElement.querySelector('[data-tooltip-content]');
+  if (tooltipContent) {
+    tooltipContent.textContent = `${statusText}: ${startTime} - ${endTime}`;
+  }
+
+  // Temporarily show to measure
+  tooltipElement.style.visibility = 'hidden';
+  tooltipElement.style.opacity = '0';
+  tooltipElement.classList.add('visible');
+  
+  // Position tooltip above the event element
+  const rect = eventEl.getBoundingClientRect();
+  const tooltipRect = tooltipElement.getBoundingClientRect();
+  
+  // Center horizontally above the element
+  const left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+  const top = rect.top - tooltipRect.height - 8; // 8px gap above element
+
+  tooltipElement.style.left = `${left}px`;
+  tooltipElement.style.top = `${top}px`;
+
+  // Now make it properly visible
+  tooltipElement.style.visibility = '';
+  tooltipElement.style.opacity = '';
+}
+
+function hideTooltip() {
+  if (!tooltipElement) return;
+  tooltipElement.classList.remove('visible');
+}
+
 // Initialize schedule page - called by router
 async function initSchedulePage() {
+  // Load tooltip component first
+  await loadTooltipComponent();
+  
   const calendarEl = document.getElementById('calendar');
   if (!calendarEl) return;
 
@@ -322,6 +416,22 @@ async function initSchedulePage() {
     
     eventClick: function(info) {
       handleEventClick(info.event);
+    },
+    
+    // Add hover events for tooltip
+    eventDidMount: function(info) {
+      const eventEl = info.el;
+      const eventData = info.event;
+      
+      // Mouse enter - show tooltip
+      eventEl.addEventListener('mouseenter', function() {
+        showTooltip(eventEl, eventData);
+      });
+      
+      // Mouse leave - hide tooltip
+      eventEl.addEventListener('mouseleave', function() {
+        hideTooltip();
+      });
     }
   });
 
