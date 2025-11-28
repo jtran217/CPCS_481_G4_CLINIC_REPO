@@ -1,0 +1,27 @@
+{
+  "users": [
+    {
+      "id": "user-001",
+      "email": "sarah.jones@gmail.com",
+      "password": "password123",
+      "profile": {
+        "name": "Sarah Jones",
+        "dateOfBirth": "2002-03-15",
+        "sex": "female",
+        "phone": "(403) 555-0142",
+        "healthNumber": "12345-6789",
+        "address": {
+          "street": "2500 University Drive NW",
+          "city": "Calgary",
+          "state": "AB",
+          "postalCode": "T2N 1N4"
+        }
+      },
+      "notifications": {
+        "email": true,
+        "sms": true
+      }
+    }
+  ]
+}
+

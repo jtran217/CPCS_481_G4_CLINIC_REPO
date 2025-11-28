@@ -1,0 +1,63 @@
+<!-- Appointment Details Modal Component -->
+<div class="modal-overlay" id="appointment-details-modal" style="display: none;">
+  <div class="appointment-details-modal">
+    <!-- Close Button -->
+    <button class="modal-close" onclick="closeAppointmentDetailsModal()">
+      <img src="icons/x-mark.svg" alt="" width="20" height="20">
+    </button>
+
+    <!-- Modal Content -->
+    <div class="appointment-details-content">
+      <h2 class="appointment-details-title">Appointment Details</h2>
+      
+      <div class="appointment-details-info">
+        <div class="details-item">
+          <div class="details-icon">
+            <img src="icons/user.svg" alt="" width="20" height="20">
+          </div>
+          <div>
+            <div class="details-label">Doctor</div>
+            <div class="details-value" id="details-doctor">Dr. Name</div>
+          </div>
+        </div>
+
+        <div class="details-item">
+          <div class="details-icon">
+            <img src="icons/clock.svg" alt="" width="20" height="20">
+          </div>
+          <div>
+            <div class="details-label">Date & Time</div>
+            <div class="details-value" id="details-datetime">Date, Time</div>
+          </div>
+        </div>
+
+        <div class="details-item">
+          <div class="details-icon">
+            <img src="icons/calendar.svg" alt="" width="20" height="20">
+          </div>
+          <div>
+            <div class="details-label">Appointment Type</div>
+            <div class="details-value" id="details-type">Type</div>
+          </div>
+        </div>
+
+        <div class="details-item">
+          <div class="details-icon">
+            <img src="icons/map-pin.svg" alt="" width="20" height="20">
+          </div>
+          <div>
+            <div class="details-label">Location</div>
+            <div class="details-value" id="details-location">Location</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="appointment-details-actions">
+        <button class="btn btn-warning" onclick="cancelAppointment()">Cancel Appointment</button>
+        <button class="btn btn-primary" onclick="startReschedule()">Reschedule</button>
+      </div>
+    </div>
+  </div>
+</div>
+
