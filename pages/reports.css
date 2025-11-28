@@ -211,4 +211,11 @@ body {
     background: #2A3647;
   }
 
+  .user-block .chevron {
+    width: 16px !important;
+    height: 16px !important;
+    object-fit: contain;
+    display: inline-block;
+}
+
   

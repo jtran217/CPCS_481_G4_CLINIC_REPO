@@ -1,0 +1,72 @@
+.imaging-layout {
+    display: flex;
+    gap: 40px;
+    margin-top: 20px;
+  }
+  
+  .imaging-list {
+    width: 380px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .scan-card {
+    background: white;
+    border: 2px solid #dedede;
+    padding: 18px 20px;
+    border-radius: 14px;
+    transition: 0.25s ease;
+  }
+  
+  .scan-card:hover {
+    background: #E3FFD9;        
+    border-color: #8BCF64;
+  }
+  
+  .scan-card.selected {
+    background: #CFFFC4;
+    border-color: #73C653;
+  }
+  
+  .scan-card .date {
+    font-size: 17px;
+    font-weight: 600;
+  }
+  
+  .scan-card .type {
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .imaging-btn {
+    margin-top: 10px;
+    display: inline-block;
+    background: #36475C;
+    color: white;
+    padding: 8px 22px;
+    border-radius: 8px;
+    text-decoration: none;
+  }
+  
+  .image-display {
+    flex: 1;
+    background: white;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .image-display.blank {
+    color: #777;
+    font-size: 15px;
+  }
+  
+  .scan-image {
+    width: 100%;
+    max-height: 900px;
+    object-fit: contain;
+  }
