@@ -1267,7 +1267,7 @@ function confirmBooking() {
         window.addNotification({
           type: 'appointment',
           title: 'Appointment Booked',
-          message: `Your appointment with Dr. ${bookingData.doctor} on ${bookingData.appointmentDate} at ${bookingData.timeSlot} has been booked.`,
+          message: `Your appointment with ${bookingData.doctor.startsWith('Dr.') ? bookingData.doctor : 'Dr. ' + bookingData.doctor} on ${bookingData.appointmentDate} at ${bookingData.timeSlot} has been booked.`,
           icon: 'calendar'
         });
         // Optionally show the modal immediately:
@@ -1410,6 +1410,14 @@ function cancelAppointment() {
     updateCalendar();
     
     showToast('success', 'Appointment Cancelled', 'Your appointment has been cancelled and the time slot is now available.');
+    if (window.addNotification) {
+      window.addNotification({
+        type: 'appointment',
+        title: 'Appointment Cancelled',
+        message: `Your appointment with ${originalAppointment.extendedProps?.doctor?.startsWith('Dr.') ? originalAppointment.extendedProps.doctor : 'Dr. ' + (originalAppointment.extendedProps?.doctor || '')} on ${originalAppointment.start} has been cancelled.`,
+        icon: 'calendar'
+      });
+    }
     closeAppointmentDetailsModal();
   }
 }
@@ -1585,7 +1593,14 @@ function handleRescheduleConfirmation() {
 
   showToast('success', 'Appointment Rescheduled', 
     `Your appointment has been rescheduled to ${dateStr}, ${startTime} - ${endTime}.`);
-
+  if (window.addNotification) {
+    window.addNotification({
+      type: 'appointment',
+      title: 'Appointment Rescheduled',
+      message: `Your appointment with ${bookingData.doctor.startsWith('Dr.') ? bookingData.doctor : 'Dr. ' + bookingData.doctor} has been rescheduled to ${dateStr}, ${startTime} - ${endTime}.`,
+      icon: 'calendar'
+    });
+  }
   closeBookingModal();
   cancelReschedule();
 }
