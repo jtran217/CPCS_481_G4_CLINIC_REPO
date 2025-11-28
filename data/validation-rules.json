@@ -44,6 +44,33 @@
   },
   "contact-required": {
     "errorMessage": "Please provide at least a phone number or email"
+  },
+  
+  "first-name": {
+    "required": true,
+    "errorMessage": "Please enter your first name",
+    "minLength": 2
+  },
+  "last-name": {
+    "required": true,
+    "errorMessage": "Please enter your last name",
+    "minLength": 2
+  },
+  "email": {
+    "required": true,
+    "errorMessage": "Please enter your email address",
+    "pattern": "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",
+    "patternMessage": "Enter a valid email address"
+  },
+  "password": {
+    "required": true,
+    "errorMessage": "Please enter a password",
+    "minLength": 8,
+    "lengthMessage": "Password must be at least 8 characters"
+  },
+  "captcha-check": {
+    "required": true,
+    "errorMessage": "Please verify that you are not a robot"
   }
 }
 

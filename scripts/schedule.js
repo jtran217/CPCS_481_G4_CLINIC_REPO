@@ -489,7 +489,6 @@ function handleEventClick(event) {
 
 let currentStep = 1;
 let bookingData = {};
-let validationRules = {};
 let selectedTimeSlot = null;
 let currentAppointmentData = null;
 let currentUser = null;
@@ -510,27 +509,7 @@ async function loadUserData() {
   }
 }
 
-// Load validation rules from JSON
-async function loadValidationRules() {
-  try {
-    const response = await fetch('data/validation-rules.json');
-    const rules = await response.json();
-    
-    // Convert string patterns to RegExp objects
-    Object.keys(rules).forEach(fieldId => {
-      if (rules[fieldId].pattern) {
-        rules[fieldId].pattern = new RegExp(rules[fieldId].pattern);
-      }
-    });
-    
-    validationRules = rules;
-  } catch (error) {
-    console.error('Error loading validation rules:', error);
-  }
-}
-
-// Load validation rules and user data on page load
-loadValidationRules();
+// Load user data on page load
 loadUserData();
 
 // Generate 30-minute time slots between start and end times
@@ -760,9 +739,9 @@ function closeBookingModal() {
   }
 }
 
-function nextStep() {
+async function nextStep() {
   // Validate current step before proceeding
-  if (!validateCurrentStep()) {
+  if (!(await validateCurrentStep())) {
     return;
   }
 
@@ -775,48 +754,53 @@ function nextStep() {
   }
 }
 
-function validateField(fieldId, value) {
-  const rules = validationRules[fieldId];
-  if (!rules) return { isValid: true };
+async function validateField(fieldId, value) {
+  const rules = await loadValidationRules();
+  const rule = rules[fieldId];
+  if (!rule) return { isValid: true };
 
   // Required validation
-  if (rules.required && (!value || !value.trim())) {
+  if (rule.required && (!value || (typeof value === 'string' && !value.trim()))) {
     return {
       isValid: false,
-      message: rules.errorMessage
+      message: rule.errorMessage
     };
   }
 
   // Skip other validations if field is empty and not required
-  if (!value || !value.trim()) {
+  if (!value || (typeof value === 'string' && !value.trim())) {
     return { isValid: true };
   }
 
   // Min length validation
-  if (rules.minLength) {
+  if (rule.minLength && typeof value === 'string') {
     const cleanValue = value.replace(/[\s\-()]/g, ''); // Remove spaces, hyphens, parentheses for length check
-    if (cleanValue.length < rules.minLength) {
+    if (cleanValue.length < rule.minLength) {
       return {
         isValid: false,
-        message: rules.lengthMessage || `Must be at least ${rules.minLength} characters`
+        message: rule.lengthMessage || `Must be at least ${rule.minLength} characters`
       };
     }
   }
 
   // Pattern validation
-  if (rules.pattern && !rules.pattern.test(value.trim())) {
-    return {
-      isValid: false,
-      message: rules.patternMessage || 'Invalid format'
-    };
+  if (rule.pattern && typeof value === 'string') {
+    const reg = new RegExp(rule.pattern);
+    if (!reg.test(value.trim())) {
+      return {
+        isValid: false,
+        message: rule.patternMessage || 'Invalid format'
+      };
+    }
   }
 
   return { isValid: true };
 }
 
-function validateCurrentStep() {
+async function validateCurrentStep() {
   let isValid = true;
   let fieldsToValidate = [];
+  const rules = await loadValidationRules();
 
   if (currentStep === 1) {
     fieldsToValidate = ['appointment-type'];
@@ -826,16 +810,16 @@ function validateCurrentStep() {
     clearFieldError('time-slot');
     
     // Validate required fields
-    fieldsToValidate.forEach(fieldId => {
+    for (const fieldId of fieldsToValidate) {
       const field = document.getElementById(fieldId);
       const value = field ? field.value : '';
-      const result = validateField(fieldId, value);
+      const result = await validateField(fieldId, value);
 
       if (!result.isValid) {
         showFieldError(fieldId, result.message);
         isValid = false;
       }
-    });
+    }
     
     // Validate time slot selection for waitlist appointments
     if (currentAppointmentData && currentAppointmentData.extendedProps.availability === 'waitlist') {
@@ -860,16 +844,16 @@ function validateCurrentStep() {
     clearFieldError('preferred-contact');
 
     // Validate required fields first
-    fieldsToValidate.forEach(fieldId => {
+    for (const fieldId of fieldsToValidate) {
       const field = document.getElementById(fieldId);
       const value = field ? field.value : '';
-      const result = validateField(fieldId, value);
+      const result = await validateField(fieldId, value);
 
       if (!result.isValid) {
         showFieldError(fieldId, result.message);
         isValid = false;
       }
-    });
+    }
 
     // Validate contact methods - at least one required
     const phone = document.getElementById('patient-phone');
@@ -878,14 +862,14 @@ function validateCurrentStep() {
     const emailValue = email ? email.value.trim() : '';
 
     if (!phoneValue && !emailValue) {
-      const errorMessage = validationRules['contact-required'].errorMessage;
+      const errorMessage = rules['contact-required']?.errorMessage || 'Please provide at least a phone number or email';
       showFieldError('patient-phone', errorMessage);
       showFieldError('patient-email', errorMessage);
       isValid = false;
     } else {
       // Validate phone format if provided
       if (phoneValue) {
-        const phoneResult = validateField('patient-phone', phoneValue);
+        const phoneResult = await validateField('patient-phone', phoneValue);
         if (!phoneResult.isValid) {
           showFieldError('patient-phone', phoneResult.message);
           isValid = false;
@@ -894,7 +878,7 @@ function validateCurrentStep() {
 
       // Validate email format if provided
       if (emailValue) {
-        const emailResult = validateField('patient-email', emailValue);
+        const emailResult = await validateField('patient-email', emailValue);
         if (!emailResult.isValid) {
           showFieldError('patient-email', emailResult.message);
           isValid = false;
@@ -906,7 +890,8 @@ function validateCurrentStep() {
       const emailPreferred = document.getElementById('email-preferred');
       
       if (!phonePreferred.checked && !emailPreferred.checked) {
-        showFieldError('preferred-contact', validationRules['preferred-contact'].errorMessage);
+        const errorMessage = rules['preferred-contact']?.errorMessage || 'Please select at least one preferred contact method';
+        showFieldError('preferred-contact', errorMessage);
         isValid = false;
       }
     }
@@ -917,31 +902,16 @@ function validateCurrentStep() {
   return isValid;
 }
 
+// Use setFieldError from validation.js instead of custom functions
 function showFieldError(fieldId, message) {
-  const field = document.getElementById(fieldId);
-  const errorEl = document.getElementById(`${fieldId}-error`);
-  
-  if (field) {
-    field.classList.add('error');
-  }
-  
-  if (errorEl) {
-    errorEl.textContent = message;
-    errorEl.classList.add('visible');
+  if (window.setFieldError) {
+    window.setFieldError(fieldId, message);
   }
 }
 
 function clearFieldError(fieldId) {
-  const field = document.getElementById(fieldId);
-  const errorEl = document.getElementById(`${fieldId}-error`);
-  
-  if (field) {
-    field.classList.remove('error');
-  }
-  
-  if (errorEl) {
-    errorEl.textContent = '';
-    errorEl.classList.remove('visible');
+  if (window.setFieldError) {
+    window.setFieldError(fieldId, '');
   }
 }
 

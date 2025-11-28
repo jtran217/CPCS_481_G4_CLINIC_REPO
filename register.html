@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <title>Bellhart Clinic - Register</title>
-
   <link rel="stylesheet" href="styles/main.css" />
 </head>
 
@@ -11,129 +10,124 @@
   <div class="auth-shell">
     <div class="auth-card">
 
-      <!-- Header -->
       <header class="auth-header">
-        <img src="icons/BellhartLogo.png" alt="Bellhart Clinic logo" class="auth-logo"/>
+        <img src="icons/BellhartLogo.png" class="auth-logo" />
         <span class="auth-brand">Bellhart Clinic</span>
       </header>
 
-      <!-- Form -->
-      <form class="auth-form" action="#" method="post">
-        <!-- First / Last name row -->
+      <form class="auth-form" id="register-form" novalidate>
+        <!-- GLOBAL ALERTS (banner-style) -->
+        <div id="alert-container"></div>
+
+        <!-- FORM FIELDS -->
         <div class="auth-row">
           <div class="auth-field auth-field-half">
             <label for="first-name">First Name</label>
-            <input
-              id="first-name"
-              name="firstName"
-              type="text"
-              class="input"
-              placeholder="First Name"
-            />
+            <input id="first-name" type="text" class="input" />
+            <p class="input-error" data-error-for="first-name"></p>
           </div>
 
           <div class="auth-field auth-field-half">
             <label for="last-name">Last Name</label>
-            <input
-              id="last-name"
-              name="lastName"
-              type="text"
-              class="input"
-              placeholder="Last Name"
-            />
+            <input id="last-name" type="text" class="input" />
+            <p class="input-error" data-error-for="last-name"></p>
           </div>
         </div>
 
-        <!-- Email -->
         <div class="auth-field">
           <label for="email">Email</label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            class="input"
-            placeholder="Enter your email"
-            autocomplete="email"
-          />
+          <input id="email" type="email" class="input" />
+          <p class="input-error" data-error-for="email"></p>
         </div>
 
-        <!-- Password -->
         <div class="auth-field">
           <label for="password">Password</label>
           <div class="password-input">
-            <input
-                id="password"
-                name="password"
-                type="password"
-                class="input password-input-field"
-                placeholder="Enter your password"
-                autocomplete="new-password"
-            />
-            <button
-                type="button"
-                class="password-toggle"
-                aria-label="Toggle password visibility"
-            >
-            </button>
+            <input id="password" type="password" class="input password-input-field" />
+            <button type="button" class="password-toggle"></button>
           </div>
+          <p class="input-error" data-error-for="password"></p>
           <p class="auth-helper-text">Must be at least 8 characters</p>
         </div>
 
-        <!-- Fake reCAPTCHA -->
         <div class="captcha-container">
           <div class="captcha-box">
             <div class="captcha-left">
-                <input type="checkbox" id="captcha-check" />
-                <label for="captcha-check">I'm not a robot</label>
+              <input type="checkbox" id="captcha-check" />
+              <label for="captcha-check">I'm not a robot</label>
             </div>
-            <div class="captcha-right">
-                <img src="icons/recaptcha.svg" alt="reCAPTCHA" class="captcha-logo" />
-            </div>
+            <img src="icons/recaptcha.svg" class="captcha-logo" />
           </div>
+          <p class="input-error" data-error-for="captcha-check"></p>
         </div>
 
-        <!-- Sign up button -->
         <button type="submit" class="btn-primary btn-full">Sign up</button>
       </form>
 
-      <!-- Footer -->
       <footer class="auth-footer">
         <p>Already have an account?</p>
-        <p>
-            <a href="login.html" class="auth-link-underline">Login</a> instead
-        </p>
+        <p><a href="login.html" class="auth-link-underline">Login</a> instead</p>
       </footer>
+
     </div>
   </div>
 
-  <!-- Password eye toggle -->
+  <script src="scripts/alerts.js"></script>
+  <script src="scripts/validation.js"></script>
+
   <script>
+    // Password toggle
     const toggleBtn = document.querySelector('.password-toggle');
     const pwd = document.querySelector('#password');
 
     const eyeOpen = 'icons/eye.svg';
     const eyeSlash = 'icons/eye-slash.svg';
 
-    if(toggleBtn && pwd) {
-        toggleBtn.style.maskImage = `url(${eyeOpen})`;
-        toggleBtn.style.webkitMaskImage = `url(${eyeOpen})`;
+    toggleBtn.style.maskImage = `url(${eyeOpen})`;
+    toggleBtn.style.webkitMaskImage = `url(${eyeOpen})`;
 
-        toggleBtn.addEventListener('click', () => {
-            const isHidden = pwd.type === 'password';
-            pwd.type = isHidden ? 'text' : 'password';
-            const icon = isHidden ? eyeSlash : eyeOpen;
-            toggleBtn.style.maskImage = `url(${icon})`;
-            toggleBtn.style.webkitMaskImage = `url(${icon})`;
-        });
-    }
+    toggleBtn.addEventListener('click', () => {
+      const hidden = pwd.type === 'password';
+      pwd.type = hidden ? 'text' : 'password';
+      const icon = hidden ? eyeSlash : eyeOpen;
+      toggleBtn.style.maskImage = `url(${icon})`;
+      toggleBtn.style.webkitMaskImage = `url(${icon})`;
+    });
 
-    // Handle registration form submission
-    const registerForm = document.querySelector('.auth-form');
-    registerForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        // TODO: validate or create account
-        window.location.href = 'app.html#dashboard'; // redirect after registration
+    // REGISTER FORM SUBMIT HANDLER
+    const form = document.getElementById("register-form");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      // Validate fields using validation.js
+      const valid = await validateForm("register-form");
+      if (!valid) return;
+
+      const email = document.getElementById("email").value.trim();
+
+      // Check if email exists
+      try {
+        const res = await fetch("data/users.json");
+        const data = await res.json();
+
+        const exists = data.users.some(
+          u => u.email.toLowerCase() === email.toLowerCase()
+        );
+
+        if (exists) {
+          showAlert("error", "An account with this email already exists.");
+          return;
+        }
+      } catch {
+        showAlert("error", "Something went wrong. Please try again.");
+        return;
+      }
+
+      // Success
+      showAlert("success", "Account created successfully! You can now login.");
     });
   </script>
+
 </body>
 </html>

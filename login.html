@@ -3,93 +3,143 @@
 <head>
   <meta charset="UTF-8" />
   <title>Bellhart Clinic - Login</title>
-
   <link rel="stylesheet" href="styles/main.css" />
 </head>
 
 <body class="auth-page">
-    <div class="auth-shell">
-        <div class="auth-card">
+  <div class="auth-shell">
+    <div class="auth-card">
 
-            <header class="auth-header">
-                <img src="icons/BellhartLogo.png" class="auth-logo" />
-                <span class="auth-brand">Bellhart Clinic</span>
-            </header>
+      <header class="auth-header">
+        <img src="icons/BellhartLogo.png" class="auth-logo" />
+        <span class="auth-brand">Bellhart Clinic</span>
+      </header>
 
-            <form class="auth-form">
-                
-                <div class="auth-field">
-                    <label for="email">Email</label>
-                    <input
-                        id="email"
-                        type="email"
-                        class="input input-pill"
-                        placeholder="Enter your email"
-                    />
-                </div>
+      <form class="auth-form" novalidate>
+        <div id="alert-container"></div>
 
-                <div class="auth-field">
-                    <label for="password">Password</label>
-
-                    <div class="password-input">
-                        <input
-                            id="password"
-                            type="password"
-                            class="input password-input-field"
-                            placeholder="Enter your password"
-                        />
-                        <button type="button" class="password-toggle" aria-label="Toggle password visibility"></button>
-                    </div>
-
-                    <div class="auth-links">
-                        <a href="#" class="auth-link-small">Forgot password?</a>
-                    </div>
-                </div>
-
-                <button type="submit" class="btn-primary btn-full">Sign in</button>
-
-            </form>
-            
-            <footer class="auth-footer">
-                <p>Don't have an account?</p>
-                <p>
-                    <a href="register.html" class="auth-link-underline">Sign up</a>
-                    or
-                    <a href="#" class="auth-link-underline">Continue as guest</a>
-                </p>
-            </footer>
-
+        <div class="auth-field">
+          <label for="email">Email</label>
+          <input
+            id="email"
+            type="email"
+            class="input"
+            placeholder="Enter your email"
+          />
+          <p class="input-error" data-error-for="email"></p>
         </div>
+
+        <div class="auth-field">
+          <label for="password">Password</label>
+
+          <div class="password-input">
+            <input
+              id="password"
+              type="password"
+              class="input password-input-field"
+              placeholder="Enter your password"
+            />
+            <button type="button" class="password-toggle" aria-label="Toggle password visibility"></button>
+          </div>
+
+          <div class="auth-links">
+            <a href="#" class="auth-link-small">Forgot password?</a>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary btn-full">Sign in</button>
+      </form>
+
+      <footer class="auth-footer">
+        <p>Don't have an account?</p>
+        <p>
+          <a href="register.html" class="auth-link-underline">Sign up</a>
+          or
+          <a href="#" class="auth-link-underline">Continue as guest</a>
+        </p>
+      </footer>
+
     </div>
+  </div>
 
-    <script>
-        const toggleBtn = document.querySelector('.password-toggle');
-        const pwd = document.querySelector('#password');
+  <script src="scripts/alerts.js"></script>
+  <script src="scripts/validation.js"></script>
 
-        const eyeOpen = 'icons/eye.svg';
-        const eyeSlash = 'icons/eye-slash.svg'
+  <script>
+    const toggleBtn = document.querySelector('.password-toggle');
+    const pwd = document.querySelector('#password');
 
-        toggleBtn.style.maskImage = `url(${eyeOpen})`;
-        toggleBtn.style.webkitMaskImage = `url(${eyeOpen})`;
+    const eyeOpen = 'icons/eye.svg';
+    const eyeSlash = 'icons/eye-slash.svg';
 
-        toggleBtn.addEventListener('click', () => {
-            const isHidden = pwd.type === 'password';
-            
-            pwd.type = isHidden ? 'text' : 'password';
+    if (toggleBtn && pwd) {
+      toggleBtn.style.maskImage = `url(${eyeOpen})`;
+      toggleBtn.style.webkitMaskImage = `url(${eyeOpen})`;
 
-            const icon = isHidden ? eyeSlash : eyeOpen;
+      toggleBtn.addEventListener('click', () => {
+        const isHidden = pwd.type === 'password';
+        pwd.type = isHidden ? 'text' : 'password';
+        const icon = isHidden ? eyeSlash : eyeOpen;
+        toggleBtn.style.maskImage = `url(${icon})`;
+        toggleBtn.style.webkitMaskImage = `url(${icon})`;
+      });
+    }
 
-            toggleBtn.style.maskImage = `url(${icon})`;
-            toggleBtn.style.webkitMaskImage = `url(${icon})`;
-        });
+    async function validateLogin(email, password) {
+      try {
+        const response = await fetch('data/users.json');
+        const data = await response.json();
 
-        // Handle login form submission
-        const loginForm = document.querySelector('.auth-form');
-        loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            // TODO: validate or fake auth
-            window.location.href = 'app.html#dashboard'; // redirect after login
-        });
-    </script>
+        const user = data.users.find(u =>
+          u.email.toLowerCase() === email.toLowerCase() &&
+          u.password === password
+        );
+        return !!user;
+      } catch (error) {
+        console.error('Error validating login:', error);
+        return false;
+      }
+    }
+
+    document.querySelector('.auth-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      setFieldError('email', '');
+      
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      const rules = await loadValidationRules();
+      const emailRule = rules.email;
+      
+      if (!email) {
+        setFieldError('email', emailRule.errorMessage);
+        return;
+      }
+      
+      // Check email pattern
+      if (emailRule.pattern) {
+        const emailPattern = new RegExp(emailRule.pattern);
+        if (!emailPattern.test(email)) {
+          setFieldError('email', emailRule.patternMessage);
+          return;
+        }
+      }
+      
+      if (!password) {
+        showAlert('error', 'Please enter your password.');
+        return;
+      }
+
+      const isValid = await validateLogin(email, password);
+
+      if (!isValid) {
+        showAlert('error', 'Invalid email or password. Please sign up or try again.');
+        return;
+      }
+
+      window.location.href = 'app.html#dashboard';
+    });
+  </script>
 </body>
 </html>
