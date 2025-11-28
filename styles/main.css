@@ -976,18 +976,6 @@ body.auth-page {
   display: none;
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
-  .notification-modal {
-    padding: 60px 10px 10px;
-  }
-  
-  .notification-modal-content {
-    max-width: none;
-    width: 100%;
-  }
-   
-
 .tooltip {
   position: fixed;
   z-index: 10000;
@@ -1013,4 +1001,15 @@ body.auth-page {
   color: var(--color-text-main);
   font-weight: 400;
 }
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .notification-modal {
+    padding: 60px 10px 10px;
+  }
+  
+  .notification-modal-content {
+    max-width: none;
+    width: 100%;
+  }
 }
