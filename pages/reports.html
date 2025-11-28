@@ -1,4 +1,113 @@
-<div class="reports-content">
-  <!-- TODO: Implement reports content -->
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Reports – Bellhart Clinic</title>
+  <link rel="stylesheet" href="reports.css" />
+</head>
 
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <img src="../icons/BellhartLogo.png" class="auth-logo" />
+      <span class="logo-text">Bellhart Clinic</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item">
+        <img src="../icons/dashboard.svg" />
+        <span>Dashboard</span>
+      </a>
+
+      <a href="#" class="nav-item">
+        <img src="../icons/calendar.svg" />
+        <span>Schedule</span>
+      </a>
+
+      <a href="#" class="nav-item active">
+        <img src="../icons/document.svg" />
+        <span>Reports</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <img src="../icons/question-mark-circle.svg" />
+      <span>Support</span>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="main-area">
+
+    <!-- Top bar -->
+    <header class="topbar">
+      <div class="search-container">
+        <input type="text" placeholder="Search" />
+        <img src="../icons/magnify.svg" class="search-icon" />
+      </div>
+
+      <button class="notif-btn">
+        <img src="../icons/bell.svg" />
+      </button>
+
+      <div class="user-block">
+        <img src="public/user.png" class="user-avatar" />
+        <span>[First] [Last]</span>
+        <img src="public/chevron-down.svg" class="chevron" />
+      </div>
+    </header>
+
+    <!-- Main content area -->
+    <section class="content">
+      <h1>My Reports</h1>
+
+      <!-- Grid of Cards -->
+      <div class="reports-grid">
+
+        <!-- Card Layouts -->
+        <div class="report-card">
+          <h2>Lab Test Results</h2>
+          <img src="../icons/syringe.svg" class="report-icon" />
+          <button class="view-btn">View All</button>
+        </div>
+
+        <div class="report-card">
+          <h2>Prescriptions and Medications</h2>
+          <img src="../icons/medication.svg" class="report-icon" />
+          <button class="view-btn">View All</button>
+        </div>
+
+        <div class="report-card">
+          <h2>Physical Test Results</h2>
+          <img src="../icons/stethoscope.svg" class="report-icon" />
+          <button class="view-btn">View All</button>
+        </div>
+
+        <div class="report-card">
+          <h2>Imaging and Scans</h2>
+          <img src="../icons/heart-graph.svg" class="report-icon" />
+          <button class="view-btn">View All</button>
+        </div>
+
+        <div class="report-card">
+          <h2>Immunization Records</h2>
+          <img src="../icons/cross-calendar.svg" class="report-icon" />
+          <button class="view-btn">View All</button>
+        </div>
+
+        <div class="report-card">
+          <h2>Insurance Documents</h2>
+          <img src="../icons/clipboard.svg" class="report-icon" />
+          <button class="view-btn">View All</button>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+</body>
+</html>
