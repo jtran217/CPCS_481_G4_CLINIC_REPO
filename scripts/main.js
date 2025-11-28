@@ -329,3 +329,6 @@ function markAllAsRead() {
     updateMarkAllReadButton();
   }
 }
+// Expose notification functions globally
+window.addNotification = addNotification;
+window.showNotifications = showNotifications;

@@ -1262,7 +1262,18 @@ function confirmBooking() {
     
     showToast('success', 'Appointment Confirmed', 
       `Your appointment has been booked for ${bookingData.appointmentDate}, ${bookingData.timeSlot}.`);
-    closeBookingModal();
+      // Trigger notification
+      if (window.addNotification) {
+        window.addNotification({
+          type: 'appointment',
+          title: 'Appointment Booked',
+          message: `Your appointment with Dr. ${bookingData.doctor} on ${bookingData.appointmentDate} at ${bookingData.timeSlot} has been booked.`,
+          icon: 'calendar'
+        });
+        // Optionally show the modal immediately:
+        // window.showNotifications();
+      }
+      closeBookingModal();
   }
 }
 
