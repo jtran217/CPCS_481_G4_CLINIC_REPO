@@ -3,31 +3,31 @@
 // ============================
 const routes = {
   dashboard: {
-    path: 'pages/dashboard.html',
-    title: 'Welcome [User]!', //TODO: Get user name logic
-    subtitle: 'Here\'s your healthcare at a glance!'
+    path: "pages/dashboard.html",
+    title: "Welcome [User]!",
+    subtitle: "Here's your healthcare at a glance!",
   },
   schedule: {
-    path: 'pages/schedule.html',
-    title: 'Appointment Schedule',
-    subtitle: 'Select a time slot to book or view appointment details.'
+    path: "pages/schedule.html",
+    title: "Appointment Schedule",
+    subtitle: "Select a time slot to book or view appointment details.",
   },
   labtest: {
-    path: 'pages/labtest.html',
-    title: 'Lab Tests',
-    subtitle: 'View and track your lab results.'
+    path: "pages/labtest.html",
+    title: "Lab Tests",
+    subtitle: "View and track your lab results.",
   },
   reports: {
-    path: 'pages/reports.html',
-    title: 'My Reports',
-    subtitle: 'View and manage your medical reports.'
-  }
+    path: "pages/reports.html",
+    title: "My Reports",
+    subtitle: "View and manage your medical reports.",
+  },
 };
 
 async function loadPage(routeName) {
   const route = routes[routeName] || routes.dashboard;
-  const pageContentEl = document.getElementById('page-content');
-  const headerContainer = document.getElementById('page-header-container');
+  const pageContentEl = document.getElementById("page-content");
+  const headerContainer = document.getElementById("page-header-container");
 
   if (!pageContentEl) return;
 
@@ -36,7 +36,6 @@ async function loadPage(routeName) {
     const html = await response.text();
     pageContentEl.innerHTML = html;
 
-    // Update header
     if (headerContainer) {
       headerContainer.innerHTML = `
         <div class="page-header">
@@ -46,40 +45,36 @@ async function loadPage(routeName) {
       `;
     }
 
-    // Update active nav item
     updateActiveNav(routeName);
 
-    // If this page needs JS (e.g. schedule calendar), init it now
-    if (routeName === 'schedule') {
-      // Wait a tick for DOM to be ready
+    if (routeName === "schedule") {
       setTimeout(() => {
-        if (typeof initSchedulePage === 'function') {
+        if (typeof initSchedulePage === "function") {
           initSchedulePage();
         }
       }, 0);
     }
   } catch (err) {
-    console.error('Error loading page:', err);
-    pageContentEl.innerHTML = '<p>Failed to load page.</p>';
+    console.error("Error loading page:", err);
+    pageContentEl.innerHTML = "<p>Failed to load page.</p>";
   }
 }
 
 function updateActiveNav(routeName) {
-  // Clear all active states
-  document.querySelectorAll('.nav-item').forEach((item) => {
-    item.classList.remove('nav-item--active');
+  document.querySelectorAll(".nav-item").forEach((item) => {
+    item.classList.remove("nav-item--active");
   });
-
-  // Set active for current route
-  const activeLink = document.querySelector(`.nav-item[data-route="${routeName}"]`);
+  const activeLink = document.querySelector(
+    `.nav-item[data-route="${routeName}"]`
+  );
   if (activeLink) {
-    activeLink.classList.add('nav-item--active');
+    activeLink.classList.add("nav-item--active");
   }
 }
 
 function getRouteFromHash() {
-  const hash = window.location.hash.replace('#', '');
-  return hash || 'dashboard';
+  const hash = window.location.hash.replace("#", "");
+  return hash || "dashboard";
 }
 
 function handleRouteChange() {
@@ -87,40 +82,253 @@ function handleRouteChange() {
   loadPage(routeName);
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
   // Load booking modal component
-  fetch('components/booking-modal.html')
-    .then(response => response.text())
-    .then(html => {
-      document.getElementById('booking-modal-container').innerHTML = html;
+  fetch("components/booking-modal.html")
+    .then((response) => response.text())
+    .then((html) => {
+      document.getElementById("booking-modal-container").innerHTML = html;
     });
 
   // Load appointment details modal component
-  fetch('components/appointment-details-modal.html')
-    .then(response => response.text())
-    .then(html => {
-      document.getElementById('appointment-details-modal-container').innerHTML = html;
+  fetch("components/appointment-details-modal.html")
+    .then((response) => response.text())
+    .then((html) => {
+      document.getElementById("appointment-details-modal-container").innerHTML =
+        html;
     });
 
   // Load toast component
-  fetch('components/toast.html')
-    .then(response => response.text())
-    .then(html => {
-      document.getElementById('toast-container-wrapper').innerHTML = html;
+  fetch("components/toast.html")
+    .then((response) => response.text())
+    .then((html) => {
+      document.getElementById("toast-container-wrapper").innerHTML = html;
     });
 
   // Handle initial route
   handleRouteChange();
-
-  // Handle back/forward
-  window.addEventListener('hashchange', handleRouteChange);
-
-  // Handle nav link clicks (optional – hash already does most of it)
-  document.body.addEventListener('click', (e) => {
-    const link = e.target.closest('[data-route]');
+  window.addEventListener("hashchange", handleRouteChange);
+  document.body.addEventListener("click", (e) => {
+    const link = e.target.closest("[data-route]");
     if (!link) return;
     e.preventDefault();
-    const routeName = link.getAttribute('data-route');
-    window.location.hash = routeName; // triggers hashchange → loadPage
+    const routeName = link.getAttribute("data-route");
+    window.location.hash = routeName;
   });
+
+  initNotifications();
 });
+
+let notifications = [];
+
+async function loadNotifications() {
+  try {
+    const response = await fetch("data/notifications.json");
+    const data = await response.json();
+    notifications = data.notifications || [];
+    updateNotificationBadge();
+  } catch (error) {
+    console.error("Error loading notifications:", error);
+    notifications = [];
+  }
+}
+
+function updateNotificationBadge() {
+  const badge = document.getElementById("notification-badge");
+  const unreadCount = notifications.filter((n) => !n.isRead).length;
+  if (badge) {
+    badge.textContent = unreadCount > 0 ? unreadCount : "";
+    badge.style.display = unreadCount > 0 ? "flex" : "none";
+  }
+}
+
+function renderNotifications() {
+  const notificationList = document.getElementById("notification-list");
+  if (!notificationList) return;
+
+  notificationList.innerHTML = "";
+
+  if (notifications.length === 0) {
+    notificationList.innerHTML = `
+      <div class="notification-item">
+        <div class="notification-content">
+          <p class="notification-title">No notifications</p>
+          <p class="notification-message">You're all caught up!</p>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  const unreadNotifications = notifications.filter((n) => !n.isRead);
+  const readNotifications = notifications.filter((n) => n.isRead);
+
+  unreadNotifications.forEach((notification) => {
+    const notificationElement = createNotificationElement(notification);
+    notificationList.appendChild(notificationElement);
+  });
+
+  if (readNotifications.length > 0) {
+    const earlierSection = document.createElement("div");
+    earlierSection.className = "notification-section-header";
+    earlierSection.innerHTML = '<span class="notification-time">Earlier</span>';
+    notificationList.appendChild(earlierSection);
+
+    readNotifications.forEach((notification) => {
+      const notificationElement = createNotificationElement(notification);
+      notificationList.appendChild(notificationElement);
+    });
+  }
+}
+
+function createNotificationElement(notification) {
+  const element = document.createElement("div");
+  element.className = `notification-item ${
+    notification.isRead ? "" : "unread"
+  }`;
+  element.dataset.id = notification.id;
+
+  let iconClass = "appointment";
+  if (notification.type === "lab") iconClass = "lab";
+  if (notification.type === "reminder") iconClass = "reminder";
+
+  element.innerHTML = `
+    <div class="notification-icon ${iconClass}">
+      <span class="notification-icon-svg icon-${notification.icon}"></span>
+    </div>
+    <div class="notification-content">
+      <h4 class="notification-title">${notification.title}</h4>
+      <p class="notification-message">${notification.message}</p>
+      <div class="notification-time">${notification.time}</div>
+    </div>
+  `;
+
+  element.addEventListener("click", () => {
+    markNotificationAsRead(notification.id);
+  });
+
+  return element;
+}
+
+function markNotificationAsRead(notificationId) {
+  const notification = notifications.find((n) => n.id === notificationId);
+  if (notification && !notification.isRead) {
+    notification.isRead = true;
+    updateNotificationBadge();
+
+    const notificationElement = document.querySelector(
+      `[data-id="${notificationId}"]`
+    );
+    if (notificationElement) {
+      notificationElement.classList.remove("unread");
+    }
+  }
+}
+
+function showNotifications() {
+  const modal = document.getElementById("notification-modal");
+  if (modal) {
+    renderNotifications();
+    updateMarkAllReadButton();
+    modal.classList.add("show");
+
+    document.addEventListener("keydown", handleEscapeKey);
+  }
+}
+
+function hideNotifications() {
+  const modal = document.getElementById("notification-modal");
+  if (modal) {
+    modal.classList.remove("show");
+    document.removeEventListener("keydown", handleEscapeKey);
+  }
+}
+
+function handleEscapeKey(e) {
+  if (e.key === "Escape") {
+    hideNotifications();
+  }
+}
+
+function initNotifications() {
+  loadNotifications();
+
+  const notificationBtn = document.getElementById("notifications-btn");
+  if (notificationBtn) {
+    notificationBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      showNotifications();
+    });
+  }
+
+  const closeBtn = document.getElementById("close-notifications");
+  if (closeBtn) {
+    closeBtn.addEventListener("click", hideNotifications);
+  }
+
+  const markAllReadBtn = document.getElementById("mark-all-read");
+  if (markAllReadBtn) {
+    markAllReadBtn.addEventListener("click", markAllAsRead);
+  }
+
+  const modal = document.getElementById("notification-modal");
+  if (modal) {
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        hideNotifications();
+      }
+    });
+  }
+
+  const modalContent = document.querySelector(".notification-modal-content");
+  if (modalContent) {
+    modalContent.addEventListener("click", (e) => {
+      e.stopPropagation();
+    });
+  }
+}
+
+function addNotification(notification) {
+  const newNotification = {
+    id: Date.now(),
+    isRead: false,
+    time: "now",
+    ...notification,
+  };
+
+  notifications.unshift(newNotification);
+  updateNotificationBadge();
+
+  if (
+    document.getElementById("notification-modal").classList.contains("show")
+  ) {
+    renderNotifications();
+  }
+}
+
+function updateMarkAllReadButton() {
+  const markAllReadBtn = document.getElementById("mark-all-read");
+  if (markAllReadBtn) {
+    const hasUnreadNotifications = notifications.some((n) => !n.isRead);
+    markAllReadBtn.disabled = !hasUnreadNotifications;
+  }
+}
+
+function markAllAsRead() {
+  let hasChanges = false;
+  notifications.forEach((notification) => {
+    if (!notification.isRead) {
+      notification.isRead = true;
+      hasChanges = true;
+    }
+  });
+
+  if (hasChanges) {
+    updateNotificationBadge();
+    renderNotifications();
+    updateMarkAllReadButton();
+  }
+}
+// Expose notification functions globally
+window.addNotification = addNotification;
+window.showNotifications = showNotifications;
