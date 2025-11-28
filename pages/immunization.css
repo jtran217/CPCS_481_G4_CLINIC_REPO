@@ -8,7 +8,6 @@ body {
     height: 100vh;
     overflow: hidden;
   }
-  
 
   .sidebar {
     width: 240px;
@@ -16,28 +15,32 @@ body {
     padding: 24px 20px;
     display: flex;
     flex-direction: column;
+    gap: 32px; 
   }
   
   .sidebar-header {
     display: flex;
     align-items: center;
     gap: 12px;
+    margin-bottom: 24px; 
   }
   
   .auth-logo {
     width: 40px;
+    height: auto;
   }
   
   .logo-text {
-    font-size: 18px;
     font-weight: 700;
+    font-size: 18px;
   }
   
+ 
   .sidebar-nav {
     display: flex;
     flex-direction: column;
-    margin-top: 24px;
-    gap: 10px;
+    gap: 4px;
+    margin-top: 0;
   }
   
   .nav-item {
@@ -46,15 +49,15 @@ body {
     gap: 12px;
     padding: 10px 14px;
     border-radius: 8px;
-    color: black;
+    color: #000;
     text-decoration: none;
-    font-size: 15px;
     font-weight: 500;
+    font-size: 15px;
   }
   
   .nav-item img {
-    width: 26px;
-    height: 26px;
+    width: 24px;
+    height: 24px;
   }
   
   .nav-item.active {
@@ -66,31 +69,32 @@ body {
     filter: brightness(0) invert(1);
   }
   
+ 
   .sidebar-footer {
-    margin-top: auto;
     display: flex;
     align-items: center;
     gap: 10px;
+    margin-top: auto;
     padding-top: 20px;
   }
   
   .sidebar-footer img {
-    width: 26px;
-    height: 26px;
+    width: 28px;
+    height: 28px;
   }
-  
 
   .main-area {
     flex: 1;
     padding: 24px 40px;
     overflow-y: auto;
+    max-width: 1500px;
+    margin: 0 auto;
   }
   
-
   .topbar {
     display: flex;
-    justify-content: flex-end;
     align-items: center;
+    justify-content: flex-end;
     gap: 16px;
     height: 72px;
   }
@@ -100,20 +104,32 @@ body {
   }
   
   .search-container input {
-    width: 360px;
+    width: 360px; 
     padding: 12px 16px;
     padding-right: 40px;
-    border-radius: 8px;
     border: 1px solid #D9D9D9;
+    border-radius: 8px;
+    font-size: 15px;
   }
   
   .search-icon {
-    width: 18px;
-    opacity: 0.5;
+    width: 20px;             
     position: absolute;
-    right: 12px;
+    right: 14px;
     top: 50%;
     transform: translateY(-50%);
+    opacity: 0.5;
+  }
+
+  .notif-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    border: none;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   
   .notif-btn img {
@@ -130,7 +146,7 @@ body {
   .user-avatar {
     width: 40px;
     height: 40px;
-    border-radius: 50%;
+    border-radius: 100px;
   }
   
   .chevron {
@@ -139,9 +155,8 @@ body {
     opacity: 0.6;
   }
   
-  
   .content {
-    margin-top: 12px;
+    margin-top: 8px;
   }
   
   .back-link {
@@ -151,8 +166,9 @@ body {
   }
   
   h1 {
-    font-size: 32px;
     margin-top: 12px;
+    font-size: 32px;
+    font-weight: 700;
   }
   
   .year-label {
@@ -169,12 +185,12 @@ body {
     border: 1px solid #ccc;
   }
   
-
   .record-card {
     background: white;
     border-radius: 16px;
     padding: 32px;
     box-shadow: 0px 2px 8px rgba(0,0,0,0.08);
+    margin-top: 28px;
   }
   
   .table-title {
@@ -183,12 +199,11 @@ body {
     margin-bottom: 20px;
   }
   
-  /* TABLE */
   .records-table {
     width: 100%;
     border-collapse: collapse;
-    border-radius: 12px;
     overflow: hidden;
+    border-radius: 12px;
   }
   
   .records-table thead {
