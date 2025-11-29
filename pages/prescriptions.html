@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prescriptions – Bellhart Clinic</title>
+
+  <link rel="stylesheet" href="prescriptions.css" />
+  <link rel="stylesheet" href="reports.css" /> 
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <img src="../icons/BellhartLogo.png" class="auth-logo" />
+      <span class="logo-text">Bellhart Clinic</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item">
+        <img src="../icons/dashboard.svg" />
+        <span>Dashboard</span>
+      </a>
+
+      <a href="#" class="nav-item">
+        <img src="../icons/calendar.svg" />
+        <span>Schedule</span>
+      </a>
+
+      <a href="reports.html" class="nav-item active">
+        <img src="../icons/document.svg" />
+        <span>Reports</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <img src="../icons/question-mark-circle.svg" />
+      <span>Support</span>
+    </div>
+  </aside>
+
+  <!-- MAIN AREA -->
+  <main class="main-area">
+
+    <!-- TOP BAR -->
+    <header class="topbar">
+      <div class="search-container">
+        <input type="text" placeholder="Search" />
+        <img src="../icons/magnify.svg" class="search-icon" />
+      </div>
+
+      <button class="notif-btn">
+        <img src="../icons/bell.svg" />
+      </button>
+
+      <div class="user-block">
+        <img src="../icons/user.png" class="user-avatar" />
+        <span>[First] [Last]</span>
+        <img src="../icons/chevron-down.svg" class="chevron" />
+      </div>
+    </header>
+
+    <!-- CONTENT -->
+    <section class="content">
+
+      <a href="reports.html" class="back-link">← Back to My Reports</a>
+      <h1>Prescriptions</h1>
+
+      <label class="year-label">
+        Viewing prescriptions for
+        <select class="year-select">
+          <option>2025</option>
+          <option>2024</option>
+          <option>2023</option>
+        </select>
+      </label>
+
+      <!-- RENEW PRESCRIPTIONS SECTION -->
+      <div class="renew-box">
+
+        <div class="renew-header">
+          <h2>Renew Prescriptions</h2>
+
+          <div class="renew-badge">
+            2 items need attention
+          </div>
+        </div>
+
+        <!-- ITEM 1 -->
+        <div class="renew-item">
+          <div class="col med">Creatine 10 mg</div>
+          <div class="col dosage">1 scoop [daily]</div>
+          <div class="col start">18-09-2025</div>
+          <div class="col end">28-04-2026</div>
+          <div class="col qty">0</div>
+          <img class="flag-icon" src="../icons/red-flag.svg" />
+        </div>
+
+        <!-- ITEM 2 -->
+        <div class="renew-item">
+          <div class="col med">Methadone 30 mg</div>
+          <div class="col dosage">1 tablet every 3 days</div>
+          <div class="col start">18-09-2025</div>
+          <div class="col end">28-04-2026</div>
+          <div class="col qty">0</div>
+          <img class="flag-icon" src="../icons/red-flag.svg" />
+        </div>
+
+      </div>
+
+      <!-- ACTIVE PRESCRIPTIONS -->
+      <div class="active-box">
+
+        <h2>Active Prescriptions</h2>
+
+        <table class="active-table">
+          <thead>
+            <tr>
+              <th>Medication</th>
+              <th>Dosage</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Prescription Quantity</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>Acetaminophen 10mg</td>
+              <td>1 tablet [daily]</td>
+              <td>14-05-2025</td>
+              <td>End Date</td>
+              <td>12</td>
+            </tr>
+
+            <tr>
+              <td>Melatonin 5 mg</td>
+              <td>2 tablets [daily]</td>
+              <td>04-07-2025</td>
+              <td>End Date</td>
+              <td>14</td>
+            </tr>
+
+            <!-- Two highlighted rows -->
+            <tr class="highlight">
+              <td>Creatine 10 mg</td>
+              <td>1 scoop [daily]</td>
+              <td>18-09-2025</td>
+              <td>28-04-2026</td>
+              <td>0</td>
+            </tr>
+
+            <tr class="highlight">
+              <td>Methadone 30 mg</td>
+              <td>1 tablet every 3 days</td>
+              <td>18-09-2025</td>
+              <td>28-04-2026</td>
+              <td>0</td>
+            </tr>
+
+          </tbody>
+        </table>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</body>
+</html>

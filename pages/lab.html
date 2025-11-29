@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lab Test Results – Bellhart Clinic</title>
+
+  <link rel="stylesheet" href="lab.css" />
+  <link rel="stylesheet" href="reports.css" /> <!-- we r just going to reuse reports.css im too lazy -->
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <img src="../icons/BellhartLogo.png" class="auth-logo" />
+      <span class="logo-text">Bellhart Clinic</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item">
+        <img src="../icons/dashboard.svg" />
+        <span>Dashboard</span>
+      </a>
+
+      <a href="#" class="nav-item">
+        <img src="../icons/calendar.svg" />
+        <span>Schedule</span>
+      </a>
+
+      <a href="reports.html" class="nav-item active">
+        <img src="../icons/document.svg" />
+        <span>Reports</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <img src="../icons/question-mark-circle.svg" />
+      <span>Support</span>
+    </div>
+  </aside>
+
+  <!-- MAIN AREA -->
+  <main class="main-area">
+
+    <!-- TOP BAR -->
+    <header class="topbar">
+      <div class="search-container">
+        <input type="text" placeholder="Search" />
+        <img src="../icons/magnify.svg" class="search-icon" />
+      </div>
+
+      <button class="notif-btn">
+        <img src="../icons/bell.svg" />
+      </button>
+
+      <div class="user-block">
+        <img src="../icons/user.png" class="user-avatar" />
+        <span>[First] [Last]</span>
+        <img src="../icons/chevron-down.svg" class="chevron" />
+      </div>
+    </header>
+
+    <!-- CONTENT -->
+    <section class="content">
+
+      <a href="reports.html" class="back-link">← Back to My Reports</a>
+      <h1>Lab Test Results</h1>
+
+      <label class="year-label">
+        Viewing records for
+        <select class="year-select">
+          <option>2025</option>
+          <option>2024</option>
+          <option>2023</option>
+        </select>
+      </label>
+
+      <!-- FLAGGED SECTION -->
+      <div class="flagged-box">
+
+        <div class="flagged-header">
+          <h2>Flagged Lab Tests</h2>
+
+          <div class="attention-badge tooltip-parent">
+            2 items need attention
+            <div class="tooltip">This item requires your attention</div>
+          </div>
+        </div>
+
+        <!-- FLAGGED ITEM 1 -->
+        <div class="result-card flagged">
+          <div class="result-info">
+            <div class="date">September 15, 2025</div>
+            <div class="type">Blood Test</div>
+          </div>
+
+          <div class="doctor-info">
+            <div class="label">Doctor</div>
+            <div class="name">Jason Lee</div>
+          </div>
+
+          <div class="flag-reason">
+            <span class="label">Flag Reason</span>
+            <span class="reason">Elevated Cholesterol Levels</span>
+          </div>
+
+          <div class="action-icons">
+            <div class="icon-btn tooltip-parent">
+              <img src="../icons/maximize.svg" />
+              <div class="tooltip">View</div>
+            </div>
+            <div class="icon-btn tooltip-parent">
+              <img src="../icons/print.svg" />
+              <div class="tooltip">Print</div>
+            </div>
+
+            <img class="flag-icon" src="../icons/red-flag.svg" />
+          </div>
+        </div>
+
+        <!-- FLAGGED ITEM 2 -->
+        <div class="result-card flagged">
+          <div class="result-info">
+            <div class="date">September 13, 2025</div>
+            <div class="type">Blood Test</div>
+          </div>
+
+          <div class="doctor-info">
+            <div class="label">Doctor</div>
+            <div class="name">Jason Lee</div>
+          </div>
+
+          <div class="flag-reason">
+            <span class="label">Flag Reason</span>
+            <span class="reason">Low Vitamin D and C Levels</span>
+          </div>
+
+          <div class="action-icons">
+            <div class="icon-btn tooltip-parent">
+              <img src="../icons/maximize.svg" />
+              <div class="tooltip">View</div>
+            </div>
+            <div class="icon-btn tooltip-parent">
+              <img src="../icons/print.svg" />
+              <div class="tooltip">Print</div>
+            </div>
+
+            <img class="flag-icon" src="../icons/red-flag.svg" />
+          </div>
+        </div>
+
+      </div>
+
+      <!-- NORMAL RESULTS -->
+      <div class="normal-box">
+
+        <div class="result-card normal">
+          <div class="result-info">
+            <div class="date">September 1, 2025</div>
+            <div class="type">Blood Test</div>
+          </div>
+
+          <div class="doctor-info">
+            <div class="label">Doctor</div>
+            <div class="name">Jason Lee</div>
+          </div>
+
+          <div class="action-icons">
+            <div class="icon-btn tooltip-parent">
+              <img src="../icons/maximize.svg" />
+              <div class="tooltip">View</div>
+            </div>
+            <div class="icon-btn tooltip-parent">
+              <img src="../icons/print.svg" />
+              <div class="tooltip">Print</div>
+            </div>
+          </div>
+
+          <img class="flag-icon light" src="../icons/flag.svg" />
+        </div>
+
+        <div class="result-card normal">
+          <div class="result-info">
+            <div class="date">September 9, 2025</div>
+            <div class="type">Blood Test</div>
+          </div>
+
+          <div class="doctor-info">
+            <div class="label">Doctor</div>
+            <div class="name">Jason Lee</div>
+          </div>
+
+          <div class="action-icons">
+            <div class="icon-btn tooltip-parent">
+              <img src="../icons/maximize.svg" />
+              <div class="tooltip">View</div>
+            </div>
+            <div class="icon-btn tooltip-parent">
+              <img src="../icons/print.svg" />
+              <div class="tooltip">Print</div>
+            </div>
+          </div>
+
+          <img class="flag-icon light" src="../icons/flag.svg" />
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</body>
+</html>

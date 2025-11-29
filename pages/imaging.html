@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Imaging Results – Bellhart Clinic</title>
+
+  <link rel="stylesheet" href="reports.css" />
+  <link rel="stylesheet" href="imaging.css" />
+</head>
+
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <img src="../icons/BellhartLogo.png" class="auth-logo" />
+      <span class="logo-text">Bellhart Clinic</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item">
+        <img src="../icons/dashboard.svg" />
+        <span>Dashboard</span>
+      </a>
+
+      <a href="#" class="nav-item">
+        <img src="../icons/calendar.svg" />
+        <span>Schedule</span>
+      </a>
+
+      <a href="reports.html" class="nav-item active">
+        <img src="../icons/document.svg" />
+        <span>Reports</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <img src="../icons/question-mark-circle.svg" />
+      <span>Support</span>
+    </div>
+  </aside>
+
+  <!-- MAIN AREA -->
+  <main class="main-area">
+    <header class="topbar">
+      <div class="search-container">
+        <input type="text" placeholder="Search" />
+        <img src="../icons/magnify.svg" class="search-icon" />
+      </div>
+
+      <button class="notif-btn"><img src="../icons/bell.svg" /></button>
+
+      <div class="user-block">
+        <img src="../icons/user.png" class="user-avatar" />
+        <span>[First] [Last]</span>
+        <img src="../icons/chevron-down.svg" class="chevron" />
+      </div>
+    </header>
+
+    <section class="content">
+
+      <a href="reports.html" class="back-link">← Back to My Reports</a>
+      <h1>Imaging Results</h1>
+
+      <label class="year-label">
+        Viewing imaging for
+        <select class="year-select">
+          <option>2025</option>
+          <option>2024</option>
+          <option>2023</option>
+        </select>
+      </label>
+
+      <div class="imaging-layout">
+
+        <div class="imaging-list">
+
+          <div class="scan-card">
+            <div class="date">September 15, 2025</div>
+            <div class="type">Lung X-Ray Scan</div>
+            <a href="xray.html" class="view-btn imaging-btn">View</a>
+          </div>
+
+          <div class="scan-card">
+            <div class="date">September 15, 2025</div>
+            <div class="type">Femur X-Ray Scan</div>
+            <a href="imaging_femur.html" class="view-btn imaging-btn">View</a>
+          </div>
+
+          <div class="scan-card">
+            <div class="date">September 15, 2025</div>
+            <div class="type">Brain CT Scan</div>
+            <a href="imaging_brain.html" class="view-btn imaging-btn">View</a>
+          </div>
+
+          <div class="scan-card">
+            <div class="date">September 15, 2025</div>
+            <div class="type">Thumb X-Ray</div>
+            <a href="imaging-thumb.html" class="view-btn imaging-btn">View</a>
+          </div>
+        
+          <div class="scan-card">
+            <div class="date">September 15, 2025</div>
+            <div class="type">Skin Blemish</div>
+            <a href="imaging-skin.html" class="imaging-btn">View</a>
+          </div>
+
+        </div>
+
+        <!-- RIGHT PANEL (empty) -->
+        <div class="image-display blank">
+          <p>Select a scan from the left to view the image.</p>
+        </div>
+
+      </div>
+    </section>
+  </main>
+</body>
+</html>

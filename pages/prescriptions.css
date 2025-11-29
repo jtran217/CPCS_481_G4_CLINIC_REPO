@@ -1,0 +1,118 @@
+
+.back-link {
+    text-decoration: none;
+    font-size: 15px;
+    color: #36475C;
+  }
+  
+  .year-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+  
+  .year-select {
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+  
+  /* ---- Renew Prescriptions ---- */
+  
+  .renew-box {
+    background: #FFF7E5;
+    padding: 28px;
+    border-radius: 16px;
+    margin-top: 20px;
+  }
+  
+  .renew-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .renew-header h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+  }
+  
+  .renew-badge {
+    background: #F4D59E;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+  }
+  
+  .renew-item {
+    display: grid;
+    grid-template-columns: 180px 220px 150px 150px 60px auto;
+    column-gap: 24px;
+    align-items: center;
+    background: #ffffff;
+    border: 2px solid #E6A740;
+    border-radius: 10px;
+    padding: 14px 24px;    
+    margin-top: 14px;
+  }
+  
+  .col {
+    font-size: 15px;
+  }
+  
+  .flag-icon {
+    width: 20px;
+    justify-self: end;
+  }
+  
+  /* ---- Active prescriptions ---- */
+  
+  .active-box {
+    background: white;
+    padding: 28px;
+    border-radius: 16px;
+    margin-top: 34px;
+    box-shadow: 0 1px 3px rgba(16, 24, 40, 0.1);
+  }
+  
+  .active-box h2 {
+    margin: 0 0 16px 0;
+    font-size: 22px;
+    font-weight: 700;
+  }
+  
+  .active-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+  }
+  
+  .active-table thead {
+    background: #D9D9D9;
+  }
+  
+  .active-table th {
+    text-align: left;
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  
+  .active-table td {
+    padding: 14px;
+    border-bottom: 1px solid #E0E0E0;
+  }
+  
+  .active-table tr.highlight td {
+    color: #D27A00;
+    font-weight: 600;
+  }
+
+  .chevron {
+    width: 16px !important;
+    height: 16px !important;
+    opacity: 0.6;
+  }
