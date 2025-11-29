@@ -260,7 +260,7 @@ function setupFilters() {
 }
 
 // Load tooltip component
-async function loadTooltipComponent() {
+async function loadScheduleTooltip() {
   try {
     const response = await fetch('components/tooltip.html');
     const html = await response.text();
@@ -352,8 +352,18 @@ function hideTooltip() {
 
 // Initialize schedule page - called by router
 async function initSchedulePage() {
-  // Load tooltip component first
-  await loadTooltipComponent();
+  // Load tooltip component AND WAIT FOR IT
+  await loadScheduleTooltip();
+  
+  // Wait 50ms for HTML to render
+  await new Promise(r => setTimeout(r, 50));
+  
+  tooltipElement = document.getElementById("tooltip");
+  
+  if (!tooltipElement) {
+    console.error("Tooltip element missing");
+    return;
+  }
   
   const calendarEl = document.getElementById('calendar');
   if (!calendarEl) return;

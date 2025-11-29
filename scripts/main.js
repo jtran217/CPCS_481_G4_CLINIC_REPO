@@ -94,6 +94,16 @@ async function loadPage(routeName) {
         }
       }, 0);
     }
+
+    // Initialize records pages (reports and all sub-pages)
+    const recordsRoutes = ["reports", "lab", "prescriptions", "physical", "imaging", "immunization", "insurance", "xray", "bluecross"];
+    if (recordsRoutes.includes(routeName)) {
+      setTimeout(() => {
+        if (typeof initRecordsPage === "function") {
+          initRecordsPage();
+        }
+      }, 0);
+    }
   } catch (err) {
     console.error("Error loading page:", err);
     pageContentEl.innerHTML = "<p>Failed to load page.</p>";

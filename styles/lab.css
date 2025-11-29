@@ -51,29 +51,10 @@
   font-weight: 600;
 }
 
-/* Tooltip */
-#lab-results-page .tooltip-parent { position: relative; }
-
-#lab-results-page .tooltip {
-  display: none;
-  position: absolute;
-  top: -32px;
-  right: 0;
-  background: #222;
-  padding: 6px 10px;
-  border-radius: 6px;
-  color: white;
-  font-size: 12px;
-  white-space: nowrap;
-  z-index: 20;
-}
-
-#lab-results-page .tooltip-parent:hover .tooltip {
-  display: block;
-}
-
-#lab-results-page .attention-badge .tooltip {
-  top: 40px;
+/* Tooltip - now handled by records.js */
+#lab-results-page .tooltip-parent { 
+  position: relative; 
+  cursor: pointer;
 }
 
 /* Result Cards */
