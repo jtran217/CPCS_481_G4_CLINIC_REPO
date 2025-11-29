@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Imaging Results – Bellhart Clinic</title>
+  <title>Lung X-Ray – Bellhart Clinic</title>
 
   <link rel="stylesheet" href="reports.css" />
   <link rel="stylesheet" href="imaging.css" />
@@ -72,12 +72,13 @@
 
       <div class="imaging-layout">
 
+        <!-- LEFT LIST (same as blank page) -->
         <div class="imaging-list">
 
-          <div class="scan-card">
+          <div class="scan-card selected">
             <div class="date">September 15, 2025</div>
             <div class="type">Lung X-Ray Scan</div>
-            <a href="xray.html" class="view-btn imaging-btn">View</a>
+            <a href="imaging_lung.html" class="view-btn imaging-btn">View</a>
           </div>
 
           <div class="scan-card">
@@ -101,14 +102,14 @@
           <div class="scan-card">
             <div class="date">September 15, 2025</div>
             <div class="type">Skin Blemish</div>
-            <a href="imaging-skin.html" class="imaging-btn">View</a>
+            <a href="imaging-skin.html" class="view-btn imaging-btn">View</a>
           </div>
 
         </div>
 
-        <!-- RIGHT PANEL (empty) -->
-        <div class="image-display blank">
-          <p>Select a scan from the left to view the image.</p>
+        <!-- RIGHT PANEL — NOW SHOWING THE PNG -->
+        <div class="image-display">
+          <img src="../icons/lungxray.png" class="scan-image" alt="Lung X-Ray Image" />
         </div>
 
       </div>
