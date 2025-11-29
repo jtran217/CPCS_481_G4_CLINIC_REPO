@@ -22,6 +22,46 @@ const routes = {
     title: "My Reports",
     subtitle: "View and manage your medical reports.",
   },
+  lab: {
+    path: "pages/lab.html",
+    title: "Lab Test Results",
+    subtitle: "View and track your lab results.",
+  },
+  prescriptions: {
+    path: "pages/prescriptions.html",
+    title: "Prescriptions and Medications",
+    subtitle: "Manage your prescriptions and medications.",
+  },
+  physical: {
+    path: "pages/physical.html",
+    title: "Physical Test Results",
+    subtitle: "View your physical examination results.",
+  },
+  imaging: {
+    path: "pages/imaging.html",
+    title: "Imaging and Scans",
+    subtitle: "View your medical imaging and scan results.",
+  },
+  immunization: {
+    path: "pages/immunization.html",
+    title: "Immunization Records",
+    subtitle: "View your vaccination and immunization history.",
+  },
+  insurance: {
+    path: "pages/insurance.html",
+    title: "Insurance Documents",
+    subtitle: "Access your insurance documents and policies.",
+  },
+  xray: {
+    path: "pages/xray.html",
+    title: "Lung X-Ray",
+    subtitle: "View your lung X-Ray scan results.",
+  },
+  bluecross: {
+    path: "pages/bluecross.html",
+    title: "Alberta Blue Cross",
+    subtitle: "View your Alberta Blue Cross insurance document.",
+  },
 };
 
 async function loadPage(routeName) {

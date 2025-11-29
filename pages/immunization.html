@@ -1,133 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Immunization Records – Bellhart Clinic</title>
+<a href="#reports" class="back-link">← Back to My Reports</a>
 
-  <link rel="stylesheet" href="immunization.css" />
+<label class="year-label">
+  Viewing records for
+  <select class="year-select">
+    <option>2025</option>
+    <option>2024</option>
+    <option>2023</option>
+  </select>
+</label>
 
-</head>
+<!-- Large card container -->
+<div class="record-card">
+  <h2 class="table-title">Immunization Records As of September 15, 2025</h2>
 
-<body>
+  <table class="records-table">
+    <thead>
+      <tr>
+        <th>Administration Date</th>
+        <th>Vaccine Type</th>
+        <th>Site</th>
+        <th>Dose</th>
+      </tr>
+    </thead>
 
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    <div class="sidebar-header">
-      <img src="../icons/BellhartLogo.png" class="auth-logo" />
-      <span class="logo-text">Bellhart Clinic</span>
-    </div>
-
-    <nav class="sidebar-nav">
-      <a href="#" class="nav-item">
-        <img src="../icons/dashboard.svg" />
-        <span>Dashboard</span>
-      </a>
-
-      <a href="#" class="nav-item">
-        <img src="../icons/calendar.svg" />
-        <span>Schedule</span>
-      </a>
-
-      <a href="reports.html" class="nav-item active">
-        <img src="../icons/document.svg" />
-        <span>Reports</span>
-      </a>
-    </nav>
-
-    <div class="sidebar-footer">
-      <img src="../icons/question-mark-circle.svg" />
-      <span>Support</span>
-    </div>
-  </aside>
-
-  <!-- Main area -->
-  <main class="main-area">
-
-    <!-- Top bar -->
-    <header class="topbar">
-      <div class="search-container">
-        <input type="text" placeholder="Search" />
-        <img src="../icons/magnify.svg" class="search-icon" />
-      </div>
-
-      <button class="notif-btn">
-        <img src="../icons/bell.svg" />
-      </button>
-
-      <div class="user-block">
-        <img src="../icons/user.png" class="user-avatar" />
-        <span>[First] [Last]</span>
-        <img src="../icons/chevron-down.svg" class="chevron" />
-      </div>
-    </header>
-
-    <!-- Page content -->
-    <section class="content">
-
-      <a href="reports.html" class="back-link">← Back to My Reports</a>
-
-      <h1>Immunization Records</h1>
-
-      <label class="year-label">
-        Viewing records for
-        <select class="year-select">
-          <option>2025</option>
-          <option>2024</option>
-          <option>2023</option>
-        </select>
-      </label>
-
-      <!-- Large card container -->
-      <div class="record-card">
-
-        <h2 class="table-title">Immunization Records As of September 15, 2025</h2>
-
-        <table class="records-table">
-          <thead>
-            <tr>
-              <th>Administration Date</th>
-              <th>Vaccine Type</th>
-              <th>Site</th>
-              <th>Dose</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr>
-              <td>14-07-2025</td><td>Hepatitis A (HepA)</td><td>Upper Arm</td><td>2nd dose</td>
-            </tr>
-            <tr>
-              <td>13-07-2025</td><td>Hepatitis B (HepB)</td><td>Upper Arm</td><td>2nd dose</td>
-            </tr>
-            <tr>
-              <td>03-03-2025</td><td>Polio (IPV)</td><td>Thigh</td><td>2nd dose</td>
-            </tr>
-            <tr>
-              <td>15-01-2025</td><td>Hepatitis B (HepB)</td><td>Upper Arm</td><td>1st dose</td>
-            </tr>
-            <tr>
-              <td>14-01-2025</td><td>Hepatitis A (HepA)</td><td>Upper Arm</td><td>1st dose</td>
-            </tr>
-            <tr>
-              <td>07-01-2025</td><td>Human Papillomavirus (HPV)</td><td>Upper Arm</td><td>1st dose</td>
-            </tr>
-            <tr>
-              <td>03-01-2025</td><td>Polio (IPV)</td><td>Thigh</td><td>1st dose</td>
-            </tr>
-            <tr>
-              <td>01-01-2025</td><td>Rotavirus (RV5)</td><td>Oral</td><td>1st dose</td>
-            </tr>
-            <tr>
-              <td>01-01-2025</td><td>Rotavirus (RV1)</td><td>Oral</td><td>1st dose</td>
-            </tr>
-          </tbody>
-        </table>
-
-      </div>
-    </section>
-
-  </main>
-
-</body>
-</html>
+    <tbody>
+      <tr>
+        <td>14-07-2025</td><td>Hepatitis A (HepA)</td><td>Upper Arm</td><td>2nd dose</td>
+      </tr>
+      <tr>
+        <td>13-07-2025</td><td>Hepatitis B (HepB)</td><td>Upper Arm</td><td>2nd dose</td>
+      </tr>
+      <tr>
+        <td>03-03-2025</td><td>Polio (IPV)</td><td>Thigh</td><td>2nd dose</td>
+      </tr>
+      <tr>
+        <td>15-01-2025</td><td>Hepatitis B (HepB)</td><td>Upper Arm</td><td>1st dose</td>
+      </tr>
+      <tr>
+        <td>14-01-2025</td><td>Hepatitis A (HepA)</td><td>Upper Arm</td><td>1st dose</td>
+      </tr>
+      <tr>
+        <td>07-01-2025</td><td>Human Papillomavirus (HPV)</td><td>Upper Arm</td><td>1st dose</td>
+      </tr>
+      <tr>
+        <td>03-01-2025</td><td>Polio (IPV)</td><td>Thigh</td><td>1st dose</td>
+      </tr>
+      <tr>
+        <td>01-01-2025</td><td>Rotavirus (RV5)</td><td>Oral</td><td>1st dose</td>
+      </tr>
+      <tr>
+        <td>01-01-2025</td><td>Rotavirus (RV1)</td><td>Oral</td><td>1st dose</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

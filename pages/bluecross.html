@@ -1,118 +1,50 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Imaging Results – Bellhart Clinic</title>
+<a href="#insurance" class="back-link">← Back to Insurance Documents</a>
 
-  <link rel="stylesheet" href="reports.css" />
-  <link rel="stylesheet" href="imaging.css" /> <!-- we are just going to use the same css i cant be bothered anymore. -->
-</head>
+<label class="year-label">
+  Viewing imaging for
+  <select class="year-select">
+    <option>2025</option>
+    <option>2024</option>
+    <option>2023</option>
+  </select>
+</label>
 
-<body>
-  <aside class="sidebar">
-    <div class="sidebar-header">
-      <img src="../icons/BellhartLogo.png" class="auth-logo" />
-      <span class="logo-text">Bellhart Clinic</span>
+<div class="imaging-layout">
+  <!-- LEFT LIST -->
+  <div class="imaging-list">
+    <div class="scan-card selected">
+      <div class="date">September 15, 2025</div>
+      <div class="type">Alberta Blue Cross</div>
+      <a href="#bluecross" class="view-btn imaging-btn">View</a>
     </div>
 
-    <nav class="sidebar-nav">
-      <a href="#" class="nav-item">
-        <img src="../icons/dashboard.svg" />
-        <span>Dashboard</span>
-      </a>
-
-      <a href="#" class="nav-item">
-        <img src="../icons/calendar.svg" />
-        <span>Schedule</span>
-      </a>
-
-      <a href="reports.html" class="nav-item active">
-        <img src="../icons/document.svg" />
-        <span>Reports</span>
-      </a>
-    </nav>
-
-    <div class="sidebar-footer">
-      <img src="../icons/question-mark-circle.svg" />
-      <span>Support</span>
+    <div class="scan-card">
+      <div class="date">September 14, 2025</div>
+      <div class="type">Insurance Inc.</div>
+      <a href="#insurance-inc" class="view-btn imaging-btn">View</a>
     </div>
-  </aside>
 
-  <!-- MAIN AREA -->
-  <main class="main-area">
-    <header class="topbar">
-      <div class="search-container">
-        <input type="text" placeholder="Search" />
-        <img src="../icons/magnify.svg" class="search-icon" />
-      </div>
+    <div class="scan-card">
+      <div class="date">September 9, 2025</div>
+      <div class="type">Insurance Policy YYC</div>
+      <a href="#insurance-yyc" class="view-btn imaging-btn">View</a>
+    </div>
 
-      <button class="notif-btn"><img src="../icons/bell.svg" /></button>
+    <div class="scan-card">
+      <div class="date">September 8, 2025</div>
+      <div class="type">Insurance Policy #9</div>
+      <a href="#insurance-policy9" class="view-btn imaging-btn">View</a>
+    </div>
+    
+    <div class="scan-card">
+      <div class="date">September 1, 2025</div>
+      <div class="type">Too many jobs</div>
+      <a href="#insurance-jobs" class="view-btn imaging-btn">View</a>
+    </div>
+  </div>
 
-      <div class="user-block">
-        <img src="../icons/user.png" class="user-avatar" />
-        <span>[First] [Last]</span>
-        <img src="../icons/chevron-down.svg" class="chevron" />
-      </div>
-    </header>
-
-    <section class="content">
-
-      <a href="reports.html" class="back-link">← Back to My Reports</a>
-      <h1>Insurance Documents</h1>
-
-      <label class="year-label">
-        Viewing imaging for
-        <select class="year-select">
-          <option>2025</option>
-          <option>2024</option>
-          <option>2023</option>
-        </select>
-      </label>
-
-      <div class="imaging-layout">
-
-        <div class="imaging-list">
-
-          <div class="scan-card">
-            <div class="date">September 15, 2025</div>
-            <div class="type">Alberta Blue Cross</div>
-            <a href="bluecross.html" class="view-btn imaging-btn">View</a>
-          </div>
-
-          <div class="scan-card">
-            <div class="date">September 14, 2025</div>
-            <div class="type">Insurance Inc.</div>
-            <a href="imaging_femur.html" class="view-btn imaging-btn">View</a>
-          </div>
-
-          <div class="scan-card">
-            <div class="date">September 9, 2025</div>
-            <div class="type">Insurance Policy YYC</div>
-            <a href="imaging_brain.html" class="view-btn imaging-btn">View</a>
-          </div>
-
-          <div class="scan-card">
-            <div class="date">September 8, 2025</div>
-            <div class="type">Insurance Policy #9</div>
-            <a href="imaging-thumb.html" class="view-btn imaging-btn">View</a>
-          </div>
-        
-          <div class="scan-card">
-            <div class="date">September 1, 2025</div>
-            <div class="type">Too many jobs</div>
-            <a href="imaging-skin.html" class="imaging-btn">View</a>
-          </div>
-
-        </div>
-
-        <!-- RIGHT PANEL — NOW SHOWING THE PNG -->
-        <div class="image-display">
-            <img src="../icons/bluecross.png" class="scan-image" alt="Blue Cross Image" />
-        </div>
-
-      </div>
-    </section>
-  </main>
-</body>
-</html>
+  <!-- RIGHT PANEL — NOW SHOWING THE PNG -->
+  <div class="image-display">
+    <img src="icons/bluecross.png" class="scan-image" alt="Blue Cross Image" />
+  </div>
+</div>

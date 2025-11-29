@@ -26,6 +26,7 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
+  min-height: 0;
 }
 
 .content {
@@ -33,12 +34,12 @@ body {
   padding: 0 32px;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow-y: auto;       /* 👈 scroll vertically when needed */
+  overflow-x: hidden;
 }
 
 #page-content {
-  display: flex;
-  overflow: hidden;
+  display: block;
 }
 
 /* =========================================================
