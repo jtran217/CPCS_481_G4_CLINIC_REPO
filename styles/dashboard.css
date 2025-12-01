@@ -36,21 +36,37 @@
   text-align: left;
 }
 
-.appt-card {
-  text-align: center;
+.appt-icon {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 8px;
+
+  background-color: #36475C;
+  mask-image: url('../icons/calendar.svg');
+  -webkit-mask-image: url('../icons/calendar.svg');
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  align-self: center;
 }
 
 .appt-prompt {
-  margin: 4px 0;
+  text-align: center;
+  margin: 8px 0;
 }
 
-.appt-prompt p {
-  margin: 0;
-  padding: 0;
+.appt-message {
+  margin: 8px 0;
+  text-align: center;
+  font-weight: 700;
+  font-size: 19px;
 }
 
 .appt-card .button-container {
-  margin-top: 16px;
+  margin-top: 8px;
   justify-content: center;
   display: flex;
 }
