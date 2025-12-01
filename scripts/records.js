@@ -61,7 +61,8 @@ async function initRecordsPage() {
   recordsTooltipElement = document.getElementById("tooltip");
 
   setupRecordsTooltips();
-  setupLabSummaryModal(); // <-- NEW
+  setupLabSummaryModal(); 
+  setupPhysicalSummaryModal();// <-- NEW
 }
 
 // Attach listeners to tooltip-parent elements
@@ -127,6 +128,35 @@ function setupLabSummaryModal() {
   }
 
   // Clicking grey background closes modal
+  overlay.addEventListener("click", () => {
+    overlay.classList.add("hidden");
+    modal.classList.add("hidden");
+  });
+}
+
+function setupPhysicalSummaryModal() {
+  const overlay = document.getElementById("physical-overlay");
+  const modal = document.getElementById("physical-summary-modal");
+  const closeBtn = modal ? modal.querySelector(".lab-close-btn") : null;
+
+  if (!overlay || !modal) return;
+
+  const openBtns = document.querySelectorAll(".open-physical-summary");
+
+  openBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      overlay.classList.remove("hidden");
+      modal.classList.remove("hidden");
+    });
+  });
+
+  if (closeBtn) {
+    closeBtn.addEventListener("click", () => {
+      overlay.classList.add("hidden");
+      modal.classList.add("hidden");
+    });
+  }
+
   overlay.addEventListener("click", () => {
     overlay.classList.add("hidden");
     modal.classList.add("hidden");
