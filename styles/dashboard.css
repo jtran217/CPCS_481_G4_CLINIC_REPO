@@ -73,22 +73,24 @@
   margin-bottom: 12px;
 }
 
-.primary-btn {
-  background: #2d6cdf;
-  color: white;
-  padding: 10px 14px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
+.button-container {
+  text-align: right;
 }
 
-.secondary-btn {
-  margin-top: 12px;
-  padding: 8px 12px;
-  background: #eee;
-  border-radius: 6px;
+.primary-btn {
+  background: #36475C;
+  color: white;
   border: none;
+  padding: 10px 26px;
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 8px;
   cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.primary-btn:hover {
+  background: #2A3647;
 }
 
 .last-updated {
