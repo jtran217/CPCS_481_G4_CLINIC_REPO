@@ -5,7 +5,8 @@
 .reports-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 32px;
+  gap: 24px;
+  margin-top: 24px;
 }
 
 /* -----------------------------
