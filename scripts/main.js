@@ -4,7 +4,7 @@
 const routes = {
   dashboard: {
     path: "pages/dashboard.html",
-    title: "Welcome [User]!",
+    title: "Welcome Sarah",
     subtitle: "Here's your healthcare at a glance!",
   },
   schedule: {
