@@ -1,127 +1,169 @@
 <div id="lab-results-page">
-<a href="#reports" class="back-link">← Back to My Reports</a>
 
-<label class="year-label">
-  Viewing records for
-  <select class="year-select">
-    <option>2025</option>
-    <option>2024</option>
-    <option>2023</option>
-  </select>
-</label>
+  <a href="#reports" class="back-link">← Back to My Reports</a>
 
-<!-- FLAGGED SECTION -->
-<div class="flagged-box">
-  <div class="flagged-header">
-    <h2>Flagged Lab Tests</h2>
-    <div class="attention-badge tooltip-parent" data-tooltip="This item requires your attention">
-      2 items need attention
+  <label class="year-label">
+    Viewing records for
+    <select class="year-select">
+      <option>2025</option>
+      <option>2024</option>
+      <option>2023</option>
+    </select>
+  </label>
+
+  <!-- FLAGGED SECTION -->
+  <div class="flagged-box">
+    <div class="flagged-header">
+      <h2>Flagged Lab Tests</h2>
+      <div class="attention-badge tooltip-parent" data-tooltip="This item requires your attention">
+        2 items need attention
+      </div>
+    </div>
+
+    <!-- FLAGGED ITEM 1 -->
+    <div class="result-card flagged">
+      <div class="result-info">
+        <div class="date">September 15, 2025</div>
+        <div class="type">Blood Test</div>
+      </div>
+
+      <div class="doctor-info">
+        <div class="label">Doctor</div>
+        <div class="name">Jason Lee</div>
+      </div>
+
+      <div class="flag-reason">
+        <span class="label">Flag Reason</span>
+        <span class="reason">Elevated Cholesterol Levels</span>
+      </div>
+
+      <div class="action-icons">
+        <div class="icon-btn tooltip-parent open-lab-summary" data-tooltip="View">
+          <img src="icons/maximize.svg" />
+        </div>
+        <div class="icon-btn tooltip-parent" data-tooltip="Print">
+          <img src="icons/print.svg" />
+        </div>
+        <img class="flag-icon" src="icons/red-flag.svg" />
+      </div>
+    </div>
+
+    <!-- FLAGGED ITEM 2 -->
+    <div class="result-card flagged">
+      <div class="result-info">
+        <div class="date">September 13, 2025</div>
+        <div class="type">Blood Test</div>
+      </div>
+
+      <div class="doctor-info">
+        <div class="label">Doctor</div>
+        <div class="name">Jason Lee</div>
+      </div>
+
+      <div class="flag-reason">
+        <span class="label">Flag Reason</span>
+        <span class="reason">Low Vitamin D and C Levels</span>
+      </div>
+
+      <div class="action-icons">
+        <div class="icon-btn tooltip-parent open-lab-summary" data-tooltip="View">
+          <img src="icons/maximize.svg" />
+        </div>
+        <div class="icon-btn tooltip-parent" data-tooltip="Print">
+          <img src="icons/print.svg" />
+        </div>
+        <img class="flag-icon" src="icons/red-flag.svg" />
+      </div>
     </div>
   </div>
 
-  <!-- FLAGGED ITEM 1 -->
-  <div class="result-card flagged">
-    <div class="result-info">
-      <div class="date">September 15, 2025</div>
-      <div class="type">Blood Test</div>
-    </div>
+  <!-- NORMAL RESULTS -->
+  <div class="normal-box">
 
-    <div class="doctor-info">
-      <div class="label">Doctor</div>
-      <div class="name">Jason Lee</div>
-    </div>
-
-    <div class="flag-reason">
-      <span class="label">Flag Reason</span>
-      <span class="reason">Elevated Cholesterol Levels</span>
-    </div>
-
-    <div class="action-icons">
-      <div class="icon-btn tooltip-parent" data-tooltip="View">
-        <img src="icons/maximize.svg" />
+    <div class="result-card normal">
+      <div class="result-info">
+        <div class="date">September 1, 2025</div>
+        <div class="type">Blood Test</div>
       </div>
-      <div class="icon-btn tooltip-parent" data-tooltip="Print">
-        <img src="icons/print.svg" />
+
+      <div class="doctor-info">
+        <div class="label">Doctor</div>
+        <div class="name">Jason Lee</div>
       </div>
-      <img class="flag-icon" src="icons/red-flag.svg" />
+
+      <div class="action-icons">
+        <div class="icon-btn tooltip-parent open-lab-summary" data-tooltip="View">
+          <img src="icons/maximize.svg" />
+        </div>
+        <div class="icon-btn tooltip-parent" data-tooltip="Print">
+          <img src="icons/print.svg" />
+        </div>
+      </div>
+
+      <img class="flag-icon light" src="icons/flag.svg" />
+    </div>
+
+    <div class="result-card normal">
+      <div class="result-info">
+        <div class="date">September 9, 2025</div>
+        <div class="type">Blood Test</div>
+      </div>
+
+      <div class="doctor-info">
+        <div class="label">Doctor</div>
+        <div class="name">Jason Lee</div>
+      </div>
+
+      <div class="action-icons">
+        <div class="icon-btn tooltip-parent open-lab-summary" data-tooltip="View">
+          <img src="icons/maximize.svg" />
+        </div>
+        <div class="icon-btn tooltip-parent" data-tooltip="Print">
+          <img src="icons/print.svg" />
+        </div>
+      </div>
+
+      <img class="flag-icon light" src="icons/flag.svg" />
     </div>
   </div>
 
-  <!-- FLAGGED ITEM 2 -->
-  <div class="result-card flagged">
-    <div class="result-info">
-      <div class="date">September 13, 2025</div>
-      <div class="type">Blood Test</div>
-    </div>
-
-    <div class="doctor-info">
-      <div class="label">Doctor</div>
-      <div class="name">Jason Lee</div>
-    </div>
-
-    <div class="flag-reason">
-      <span class="label">Flag Reason</span>
-      <span class="reason">Low Vitamin D and C Levels</span>
-    </div>
-
-    <div class="action-icons">
-      <div class="icon-btn tooltip-parent" data-tooltip="View">
-        <img src="icons/maximize.svg" />
-      </div>
-      <div class="icon-btn tooltip-parent" data-tooltip="Print">
-        <img src="icons/print.svg" />
-      </div>
-      <img class="flag-icon" src="icons/red-flag.svg" />
-    </div>
-  </div>
 </div>
 
-<!-- NORMAL RESULTS -->
-<div class="normal-box">
-  <div class="result-card normal">
-    <div class="result-info">
-      <div class="date">September 1, 2025</div>
-      <div class="type">Blood Test</div>
-    </div>
+<!-- ============================================================
+     🔥 OVERLAY + MODAL (ALWAYS AT END OF FILE)
+============================================================ -->
 
-    <div class="doctor-info">
-      <div class="label">Doctor</div>
-      <div class="name">Jason Lee</div>
-    </div>
+<div id="lab-overlay" class="lab-overlay hidden"></div>
 
-    <div class="action-icons">
-      <div class="icon-btn tooltip-parent" data-tooltip="View">
-        <img src="icons/maximize.svg" />
-      </div>
-      <div class="icon-btn tooltip-parent" data-tooltip="Print">
-        <img src="icons/print.svg" />
-      </div>
-    </div>
+<div id="lab-summary-modal" class="lab-summary-modal hidden">
 
-    <img class="flag-icon light" src="icons/flag.svg" />
-  </div>
+  <button class="lab-close-btn">✕</button>
 
-  <div class="result-card normal">
-    <div class="result-info">
-      <div class="date">September 9, 2025</div>
-      <div class="type">Blood Test</div>
-    </div>
+  <h2>2025 Blood Test – Summary</h2>
+  <p class="summary-date">September 15, 2025</p>
+  <p class="summary-provided">Results provided by: Dr. Jason Lee</p>
 
-    <div class="doctor-info">
-      <div class="label">Doctor</div>
-      <div class="name">Jason Lee</div>
-    </div>
+  <h3>Patient Info</h3>
+  <p>Name: [Patient name]</p>
+  <p>Date of Birth: [Patient DOB]</p>
+  <p>Patient ID: [Patient ID]</p>
 
-    <div class="action-icons">
-      <div class="icon-btn tooltip-parent" data-tooltip="View">
-        <img src="icons/maximize.svg" />
-      </div>
-      <div class="icon-btn tooltip-parent" data-tooltip="Print">
-        <img src="icons/print.svg" />
-      </div>
-    </div>
+  <h3>Key Results</h3>
 
-    <img class="flag-icon light" src="icons/flag.svg" />
-  </div>
-</div>
+  <table class="summary-table">
+    <tr>
+      <th>Test Component</th>
+      <th>Result</th>
+      <th>Range</th>
+      <th>Flag</th>
+    </tr>
+
+    <tr><td>Cholesterol (Total)</td><td>12/24</td><td>3/24–9/24</td><td class="flag high">High</td></tr>
+    <tr><td>HDL</td><td>13/31</td><td>15/31–24/31</td><td class="flag low">Low</td></tr>
+    <tr><td>LDL</td><td>42/43</td><td>15/31–24/31</td><td class="flag high">High</td></tr>
+    <tr><td>Glucose</td><td>11/12</td><td>8/12–11/12</td><td></td></tr>
+    <tr><td>Testosterone</td><td>22/33</td><td>11/33–22/33</td><td></td></tr>
+    <tr><td>Cellulose</td><td>1/31</td><td>15/31–24/31</td><td class="flag low">Low</td></tr>
+  </table>
+
 </div>

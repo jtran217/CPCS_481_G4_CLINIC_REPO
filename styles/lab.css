@@ -1,4 +1,7 @@
-/* SCOPED LAB RESULTS PAGE STYLES */
+/* =========================================================
+   SCOPED LAB RESULTS PAGE STYLES
+========================================================= */
+
 #lab-results-page .back-link {
   text-decoration: none;
   font-size: 15px;
@@ -51,9 +54,9 @@
   font-weight: 600;
 }
 
-/* Tooltip - now handled by records.js */
-#lab-results-page .tooltip-parent { 
-  position: relative; 
+/* Tooltip - handled by records.js */
+#lab-results-page .tooltip-parent {
+  position: relative;
   cursor: pointer;
 }
 
@@ -130,4 +133,100 @@
 
 #lab-results-page .flag-icon.light {
   opacity: 0.4;
+}
+
+
+/* =========================================================
+   🔥 LAB SUMMARY MODAL + OVERLAY (New Section)
+========================================================= */
+
+/* Dim overlay */
+.lab-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(2px);
+  z-index: 999;
+}
+
+/* Hidden utility class */
+.hidden {
+  display: none !important;
+}
+
+/* Popup modal */
+.lab-summary-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 720px;
+  max-height: 85vh;
+  overflow-y: auto;
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.25);
+  z-index: 1000;
+  animation: modalFadeIn 0.25s ease-out;
+}
+
+/* Close button */
+.lab-close-btn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+.lab-close-btn:hover {
+  opacity: 1;
+}
+
+/* Modal table */
+.summary-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+  font-size: 15px;
+}
+
+.summary-table th {
+  text-align: left;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 8px;
+}
+
+.summary-table td {
+  border-bottom: 1px solid #eee;
+  padding: 10px 5px;
+}
+
+.flag.high {
+  color: #D27A00;
+  font-weight: 600;
+}
+
+.flag.low {
+  color: #0066cc;
+  font-weight: 600;
+}
+
+/* Animation */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -46%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
 }
