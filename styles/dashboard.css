@@ -1,15 +1,5 @@
 .dashboard-container {
-  padding: 24px 0px 24px 0px;
-}
-
-.dashboard-header h1 {
-  font-size: 1.8rem;
-  margin-bottom: 4px;
-}
-
-.subheader {
-  margin-bottom: 20px;
-  opacity: 0.8;
+  padding: 24px 0;
 }
 
 .dashboard-grid {
@@ -97,9 +87,4 @@
   margin-top: 10px;
   font-size: 0.85rem;
   opacity: 0.7;
-}
-
-.appt-card {
-  flex-grow: 1;
-  height: 100%;
 }
