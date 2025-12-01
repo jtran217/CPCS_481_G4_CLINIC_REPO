@@ -25,6 +25,14 @@
   box-shadow: 0 2px 10px rgba(0,0,0,0.08);
 }
 
+.dashboard-card .page-header-title + * {
+  margin-top: 16px;
+}
+
+.dashboard-card .summary-list + .page-header-title {
+  margin-top: 24px;
+}
+
 .summary-list {
   list-style: none;
   padding: 0;
