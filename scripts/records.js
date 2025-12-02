@@ -53,7 +53,6 @@ async function initRecordsPage() {
 // Attach listeners to tooltip-parent elements
 function setupRecordsTooltips() {
   const tooltipParents = document.querySelectorAll(".tooltip-parent");
-  console.log(`Records: found ${tooltipParents.length} tooltip-parent elements`);
 
   tooltipParents.forEach((parentEl) => {
     if (parentEl.dataset.tooltipInitialized === "true") return;

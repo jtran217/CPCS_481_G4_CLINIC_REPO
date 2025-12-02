@@ -133,7 +133,6 @@ window.viewBookings = function() {
 
 window.viewOverrides = function() {
   const overrides = loadOverrides();
-  console.log('All overrides:', overrides);
   return overrides;
 };
 
