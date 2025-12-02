@@ -425,6 +425,28 @@ body {
 }
 
 /* =========================================================
+   BREADCRUMB
+   ========================================================= */
+
+#breadcrumb-container {
+  flex-shrink: 0;
+  margin-bottom: 16px;
+  padding-top: 8px;
+}
+
+#breadcrumb-container .back-link {
+  text-decoration: underline;
+  font-size: 14px;
+  color: var(--color-text-body);
+  display: inline-block;
+  transition: color var(--transition-fast);
+}
+
+#breadcrumb-container .back-link:hover {
+  color: var(--color-link);
+}
+
+/* =========================================================
    PAGE HEADER
    ========================================================= */
 

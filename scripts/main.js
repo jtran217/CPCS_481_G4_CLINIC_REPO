@@ -127,6 +127,7 @@ async function loadPage(routeName) {
   const route = routes[routeName] || routes.dashboard;
   const pageContentEl = document.getElementById("page-content");
   const headerContainer = document.getElementById("page-header-container");
+  const breadcrumbContainer = document.getElementById("breadcrumb-container");
 
   if (!pageContentEl) return;
 
@@ -134,6 +135,29 @@ async function loadPage(routeName) {
     const response = await fetch(route.path);
     const html = await response.text();
     pageContentEl.innerHTML = html;
+
+    // Extract breadcrumb links from page content
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = html;
+    const backLink = tempDiv.querySelector(".back-link");
+    
+    // Clear breadcrumb container
+    if (breadcrumbContainer) {
+      breadcrumbContainer.innerHTML = "";
+      breadcrumbContainer.style.display = "none";
+    }
+
+    // If breadcrumb exists, move it above the header
+    if (backLink && breadcrumbContainer) {
+      breadcrumbContainer.innerHTML = backLink.outerHTML;
+      breadcrumbContainer.style.display = "block";
+      
+      // Remove breadcrumb from page content
+      const backLinkInContent = pageContentEl.querySelector(".back-link");
+      if (backLinkInContent) {
+        backLinkInContent.remove();
+      }
+    }
 
     if (headerContainer) {
       headerContainer.innerHTML = `
