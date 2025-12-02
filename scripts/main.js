@@ -216,8 +216,13 @@ function updateActiveNav(routeName) {
   document.querySelectorAll(".nav-item").forEach((item) => {
     item.classList.remove("nav-item--active");
   });
+  
+  // If it's a records page, highlight "reports" instead
+  const recordsRoutes = ["reports", "lab", "prescriptions", "physical", "imaging", "immunization", "insurance", "xray", "bluecross"];
+  const navRouteName = recordsRoutes.includes(routeName) ? "reports" : routeName;
+  
   const activeLink = document.querySelector(
-    `.nav-item[data-route="${routeName}"]`
+    `.nav-item[data-route="${navRouteName}"]`
   );
   if (activeLink) {
     activeLink.classList.add("nav-item--active");
