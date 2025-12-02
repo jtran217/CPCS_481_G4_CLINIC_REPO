@@ -1701,7 +1701,7 @@ function showToast(type, title, message, duration = 5000) {
   if (duration > 0) {
     setTimeout(() => {
       toast.style.opacity = '0';
-      toast.style.transform = 'translateX(100px)';
+      toast.style.transform = 'translateY(-100px)';
       setTimeout(() => toast.remove(), 300);
     }, duration);
   }
