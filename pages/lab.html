@@ -136,19 +136,25 @@
 <div id="lab-overlay" class="lab-overlay hidden"></div>
 
 <div id="lab-summary-modal" class="lab-summary-modal hidden">
+  <!-- Modal Header -->
+  <div class="lab-modal-header">
+    <h2 class="lab-modal-title">2025 Blood Test – Summary</h2>
+    <button class="lab-close-btn">
+      <img src="icons/x-mark.svg" alt="" width="20" height="20">
+    </button>
+  </div>
 
-  <button class="lab-close-btn">✕</button>
+  <!-- Modal Content -->
+  <div class="lab-modal-content">
+    <p class="summary-date">September 15, 2025</p>
+    <p class="summary-provided">Results provided by: Dr. Jason Lee</p>
 
-  <h2>2025 Blood Test – Summary</h2>
-  <p class="summary-date">September 15, 2025</p>
-  <p class="summary-provided">Results provided by: Dr. Jason Lee</p>
+    <h3>Patient Info</h3>
+    <p>Name: Sarah Jones</p>
+    <p>Date of Birth: March 15, 2002</p>
+    <p>Patient ID: 12345-6789</p>
 
-  <h3>Patient Info</h3>
-  <p>Name: [Patient name]</p>
-  <p>Date of Birth: [Patient DOB]</p>
-  <p>Patient ID: [Patient ID]</p>
-
-  <h3>Key Results</h3>
+    <h3>Key Results</h3>
 
   <table class="summary-table">
     <tr>
@@ -165,5 +171,5 @@
     <tr><td>Testosterone</td><td>22/33</td><td>11/33–22/33</td><td></td></tr>
     <tr><td>Cellulose</td><td>1/31</td><td>15/31–24/31</td><td class="flag low">Low</td></tr>
   </table>
-
+  </div>
 </div>
