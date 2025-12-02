@@ -43,7 +43,7 @@
           </div>
 
           <div class="auth-links">
-            <a href="#" class="auth-link-small">Forgot password?</a>
+            <a href="#" class="auth-link-small tooltip-parent" data-tooltip="Feature is under development">Forgot password?</a>
           </div>
         </div>
 
@@ -55,7 +55,7 @@
         <p>
           <a href="register.html" class="auth-link-underline">Sign up</a>
           or
-          <a href="#" class="auth-link-underline">Continue as guest</a>
+          <a href="#" class="auth-link-underline tooltip-parent" data-tooltip="Feature is under development">Continue as guest</a>
         </p>
       </footer>
 
@@ -64,6 +64,8 @@
 
   <script src="scripts/alerts.js"></script>
   <script src="scripts/validation.js"></script>
+  
+  <div id="tooltip-container"></div>
 
   <script>
     const toggleBtn = document.querySelector('.password-toggle');
@@ -140,6 +142,49 @@
 
       window.location.href = 'app.html#dashboard';
     });
+
+    // Tooltip functionality for login page
+    async function initLoginTooltips() {
+      const response = await fetch('components/tooltip.html');
+      const html = await response.text();
+      const container = document.getElementById('tooltip-container');
+      if (container) {
+        container.innerHTML = html;
+      }
+
+      const tooltipElement = document.getElementById('tooltip');
+      if (!tooltipElement) return;
+
+      const tooltipParents = document.querySelectorAll('.tooltip-parent');
+      tooltipParents.forEach((parentEl) => {
+        const tooltipText = parentEl.getAttribute('data-tooltip');
+        if (!tooltipText) return;
+
+        parentEl.addEventListener('mouseenter', (e) => {
+          const tooltipContent = tooltipElement.querySelector('[data-tooltip-content]');
+          if (tooltipContent) tooltipContent.textContent = tooltipText;
+
+          tooltipElement.style.left = '-9999px';
+          tooltipElement.style.top = '-9999px';
+          tooltipElement.classList.add('visible');
+          void tooltipElement.offsetWidth;
+
+          const rect = parentEl.getBoundingClientRect();
+          const tooltipRect = tooltipElement.getBoundingClientRect();
+          const left = rect.right + 8; // Position to the right
+          const top = rect.top + (rect.height / 2) - (tooltipRect.height / 2); // Center vertically
+
+          tooltipElement.style.left = `${left}px`;
+          tooltipElement.style.top = `${top}px`;
+        });
+
+        parentEl.addEventListener('mouseleave', () => {
+          tooltipElement.classList.remove('visible');
+        });
+      });
+    }
+
+    initLoginTooltips();
   </script>
 </body>
 </html>

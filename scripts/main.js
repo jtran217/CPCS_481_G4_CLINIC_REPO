@@ -179,6 +179,10 @@ async function loadPage(routeName) {
         if (typeof initSchedulePage === "function") {
           initSchedulePage();
         }
+        // Re-initialize tooltips after schedule page loads
+        setTimeout(() => {
+          setupAppTooltips();
+        }, 200);
       }, 0);
     }
 
@@ -261,6 +265,9 @@ document.addEventListener("DOMContentLoaded", () => {
     .then((html) => {
       document.getElementById("toast-container-wrapper").innerHTML = html;
     });
+
+  // Initialize tooltips for app
+  initAppTooltips();
 
   // Handle initial route
   handleRouteChange();
