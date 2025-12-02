@@ -4,7 +4,7 @@
 
 .dashboard-grid {
   display: grid;
-  grid-template-columns: 2fr 360px;
+  grid-template-columns: 2fr 420px;
   gap: 24px;
 }
 
@@ -34,6 +34,7 @@
 
 .right-column .dashboard-card {
   height: 550px;
+  width: 100%;
 }
 
 .appt-card {
@@ -195,6 +196,7 @@
 .appointment-info {
   display: flex;
   flex-direction: column;
+  text-align: left !important;
   gap: 6px;
 }
 
@@ -202,11 +204,13 @@
   font-size: 17px;
   font-weight: 600;
   color: #36475C;
+  text-align: left !important;
 }
 
 .appointment-type {
   font-size: 14px;
   color: #36475C;
+  text-align: left !important;
 }
 
 .appointment-datetime {
