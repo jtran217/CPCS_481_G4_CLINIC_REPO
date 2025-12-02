@@ -259,20 +259,6 @@ function setupFilters() {
   }
 }
 
-// Load tooltip component
-async function loadScheduleTooltip() {
-  try {
-    const response = await fetch('components/tooltip.html');
-    const html = await response.text();
-    const container = document.getElementById('tooltip-container');
-    if (container) {
-      container.innerHTML = html;
-    }
-  } catch (error) {
-    console.error('Error loading tooltip component:', error);
-  }
-}
-
 // Tooltip management
 let tooltipElement = null;
 
@@ -352,12 +338,7 @@ function hideTooltip() {
 
 // Initialize schedule page - called by router
 async function initSchedulePage() {
-  // Load tooltip component AND WAIT FOR IT
-  await loadScheduleTooltip();
-  
-  // Wait 50ms for HTML to render
-  await new Promise(r => setTimeout(r, 50));
-  
+  // Reuse global tooltip element (loaded once by main.js)
   tooltipElement = document.getElementById("tooltip");
   
   if (!tooltipElement) {

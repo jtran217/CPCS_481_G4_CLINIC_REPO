@@ -2,19 +2,7 @@
 // Records Pages Tooltip Logic
 // =======================================================
 
-// Load tooltip component for records pages
-async function loadRecordsTooltip() {
-  try {
-    const response = await fetch("components/tooltip.html");
-    const html = await response.text();
-    const container = document.getElementById("tooltip-container");
-    if (container) container.innerHTML = html;
-  } catch (error) {
-    console.error("Error loading records tooltip:", error);
-  }
-}
-
-// SEPARATE tooltip element (avoid conflict with schedule page)
+// Reuse global tooltip element (loaded once by main.js)
 let recordsTooltipElement = null;
 
 // Show tooltip on hover
@@ -54,10 +42,7 @@ function hideRecordsTooltip() {
 // =======================================================
 
 async function initRecordsPage() {
-  // --- Load tooltip component ---
-  await loadRecordsTooltip();
-
-  await new Promise((r) => setTimeout(r, 50)); // wait for DOM render
+  // Reuse global tooltip element (loaded once by main.js)
   recordsTooltipElement = document.getElementById("tooltip");
 
   setupRecordsTooltips();
