@@ -804,21 +804,26 @@ body.auth-page {
 
 .notification-modal {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background: rgba(0, 0, 0, 0.5);
-  display: none;
+  display: flex;
   align-items: flex-start;
   justify-content: flex-end;
   z-index: 1000;
   padding: 70px 20px 20px;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(-10px);
+  transition: opacity 160ms ease, transform 160ms ease, visibility 160ms ease;
 }
 
 .notification-modal.show {
-  display: flex;
-  animation: modalFadeIn 0.2s ease-out;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
 }
 
 .notification-modal-content {
