@@ -1,0 +1,244 @@
+.dashboard-container {
+  padding: 24px 0;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 2fr 420px;
+  gap: 24px;
+}
+
+.left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.left-column .dashboard-card {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.left-column .dashboard-card > *:not(.footer-actions) {
+  flex-shrink: 0;
+}
+
+.left-column .dashboard-card .footer-actions {
+  margin-top: auto;
+  flex-shrink: 0;
+}
+
+.right-column {
+  display: flex;
+}
+
+.right-column .dashboard-card {
+  height: 550px;
+  width: 100%;
+}
+
+.appt-card {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+#appt-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  padding-top: 8px;
+}
+
+#appt-container.empty {
+  justify-content: center;
+  align-items: center;
+  gap: 0;
+}
+
+.appt-card .page-header-title {
+  text-align: left;
+}
+
+.appt-icon {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 8px;
+  background-color: #36475C;
+  mask-image: url('../icons/calendar.svg');
+  -webkit-mask-image: url('../icons/calendar.svg');
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-position: center;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  align-self: center;
+}
+
+.appt-prompt {
+  text-align: center;
+  margin: 0 0 8px 0;
+}
+
+.appt-message {
+  margin: 8px 0 4px 0;
+  text-align: center;
+  font-weight: 700;
+  font-size: 19px;
+}
+
+.appt-card .button-container {
+  margin-top: 8px;
+  justify-content: center;
+  display: flex;
+}
+
+.dashboard-card {
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+}
+
+.dashboard-card .page-header-title {
+  padding: 5px 5px 10px 5px;
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+
+.dashboard-card .summary-list + .page-header-title {
+  margin-top: 24px;
+}
+
+.summary-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.summary-item {
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.summary-item.good {
+  background-color: #e8f7ec;
+  color: #1e6a30;
+  border-left: 4px solid #2a7a39;
+}
+
+.summary-item.bad {
+  background-color: #fdeaea;
+  color: #8e1e1e;
+  border-left: 4px solid #b02a2a;
+}
+
+.reminder {
+  padding: 10px;
+  border-radius: 6px;
+  background: #f6f6f6;
+  margin-bottom: 10px;
+}
+
+.button-container {
+  text-align: right;
+}
+
+.primary-btn {
+  background: #36475C;
+  color: white;
+  border: none;
+  padding: 10px 26px;
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.primary-btn:hover {
+  background: #2A3647;
+}
+
+.last-updated {
+  margin-top: 10px;
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+.footer-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+}
+
+/* Appointment Card Styles */
+.appointment-card {
+  background: white;
+  border: 2px solid #dedede;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.appointment-info {
+  display: flex;
+  flex-direction: column;
+  text-align: left !important;
+  gap: 6px;
+}
+
+.appointment-doctor {
+  font-size: 17px;
+  font-weight: 600;
+  color: #36475C;
+  text-align: left !important;
+}
+
+.appointment-type {
+  font-size: 14px;
+  color: #36475C;
+  text-align: left !important;
+}
+
+.appointment-datetime {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #666;
+  margin-top: 2px;
+}
+
+.datetime-icon {
+  opacity: 0.7;
+}
+
+.appointment-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+/* Appointment card buttons use modal button classes */
+.appointment-actions .btn {
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+}
