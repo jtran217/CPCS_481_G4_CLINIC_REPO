@@ -1,0 +1,142 @@
+<div class="profile-layout">
+
+  <div class="profile-content-container">
+    
+    <div class="card profile-section-card photo-card">
+      <div class="photo-upload-wrapper">
+        <div class="profile-avatar-large">
+          <img src="icons/user.svg" alt="Profile" class="avatar-img"/>
+
+          <button class="camera-btn" aria-label="Upload photo">
+            <img src="icons/camera.svg" alt="Upload" class="camera-icon-img">
+          </button>
+        </div>
+        <div class="photo-info">
+          <h4 class="photo-title">Change your profile photo</h4>
+          <p class="photo-subtitle">JPG or PNG. Max size 2MB.</p>
+          <button class="btn-secondary-outline">Choose File</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card profile-section-card">
+      <div class="section-header">
+        <h3>Personal Information</h3>
+        <button class="edit-icon-btn" aria-label="Edit Personal Info">
+          <img src="icons/pencil.svg" alt="Edit" class="pencil-icon-img"/>
+        </button>
+      </div>
+      
+      <div class="info-grid">
+        <div class="info-group">
+          <label>First Name</label>
+          <div class="info-value" id="profile-fname"></div>
+        </div>
+        <div class="info-group">
+          <label>Last Name</label>
+          <div class="info-value" id="profile-lname"></div>
+        </div>
+        <div class="info-group">
+          <label>Email</label>
+          <div class="info-value" id="profile-email"></div>
+        </div>
+        <div class="info-group">
+          <label>Phone</label>
+          <div class="info-value" id="profile-phone"></div>
+        </div>
+        <div class="info-group">
+          <label>Date of Birth</label>
+          <div class="info-value" id="profile-dob"></div>
+        </div>
+        <div class="info-group">
+          <label>Sex</label>
+          <div class="info-value" id="profile-sex"></div>
+        </div>
+        <div class="info-group">
+          <label>Alberta Health Number</label>
+          <div class="info-value" id="profile-health"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card profile-section-card">
+      <div class="section-header">
+        <h3>Address</h3>
+        <button class="edit-icon-btn" aria-label="Edit Address">
+          <img src="icons/pencil.svg" alt="Edit" class="pencil-icon-img"/>
+        </button>
+      </div>
+      <div class="info-grid">
+        <div class="info-group full-width">
+          <label>Street Address</label>
+          <div class="info-value" id="profile-street"></div>
+        </div>
+        <div class="info-group">
+          <label>City</label>
+          <div class="info-value" id="profile-city"></div>
+        </div>
+        <div class="info-group">
+          <label>State</label>
+          <div class="info-value" id="profile-state"></div>
+        </div>
+        <div class="info-group">
+          <label>Postal Code</label>
+          <div class="info-value" id="profile-postal"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card profile-section-card">
+      <div class="section-header">
+        <h3>Emergency Contact</h3>
+        <button class="btn-small-outline">
+          <span class="icon-plus"></span> Add Contact
+        </button>
+      </div>
+      <div class="empty-state-text">
+        No contacts added
+      </div>
+    </div>
+
+    <div class="card profile-section-card">
+      <div class="section-header">
+        <h3>Notification Preferences</h3>
+      </div>
+      
+      <div class="preferences-list">
+        <div class="pref-item">
+          <div class="pref-icon-box blue-bg">
+            <span class="icon-mail"></span>
+          </div>
+          <div class="pref-content">
+            <h4 class="pref-title">Email Notifications</h4>
+            <p class="pref-desc">Receive appointment reminders and updates via email</p>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="pref-item">
+          <div class="pref-icon-box blue-bg">
+            <span class="icon-chat"></span>
+          </div>
+          <div class="pref-content">
+            <h4 class="pref-title">SMS Notifications</h4>
+            <p class="pref-desc">Receive appointment reminders and updates via text message</p>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-footer">
+      <button class="btn-primary disabled-look">Save Changes</button>
+    </div>
+
+  </div>
+</div>

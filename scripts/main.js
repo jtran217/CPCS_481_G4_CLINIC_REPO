@@ -1,4 +1,58 @@
 // ============================
+// User Data Manager
+// ============================
+let currentUser = null;
+
+async function initSession() {
+  try {
+    const response = await fetch('data/users.json');
+    const data = await response.json();
+
+    // Simulated login - automatically picks Sarah Jones
+    currentUser = data.users[0]
+
+    updateHeaderProfile();
+  } catch (error) {
+    console.error("Failed to load user data:", error);
+  }
+}
+
+function updateHeaderProfile() {
+  if (!currentUser) return;
+
+  const profileNameEl = document.querySelector('.profile-name');
+  if (profileNameEl) {
+    profileNameEl.textContent = currentUser.profile.name; 
+  }
+}
+
+function populateProfilePage() {
+  if (!currentUser) return;
+
+  const setVal = (id, value) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+  };
+
+  const names = currentUser.profile.name.split(' ');
+  const fname = names [0];
+  const lname = names.slice(1).join(' ');
+
+  setVal('profile-fname', fname);
+    setVal('profile-lname', lname);
+    setVal('profile-email', currentUser.email);
+    setVal('profile-phone', currentUser.profile.phone);
+    setVal('profile-dob', currentUser.profile.dateOfBirth);
+    setVal('profile-sex', currentUser.profile.sex);
+    setVal('profile-health', currentUser.profile.healthNumber);
+
+    setVal('profile-street', currentUser.profile.address.street);
+    setVal('profile-city', currentUser.profile.address.city);
+    setVal('profile-state', currentUser.profile.address.state);
+    setVal('profile-postal', currentUser.profile.address.postalCode);
+}
+
+// ============================
 // SPA Router for Bellhart Clinic
 // ============================
 const routes = {
@@ -62,6 +116,11 @@ const routes = {
     title: "Alberta Blue Cross",
     subtitle: "View your Alberta Blue Cross insurance document.",
   },
+  profile: {
+    path: "pages/profile.html",
+    title: "My Account", 
+    subtitle: "Manage your personal information and preferences",
+  },
 };
 
 async function loadPage(routeName) {
@@ -86,6 +145,10 @@ async function loadPage(routeName) {
     }
 
     updateActiveNav(routeName);
+
+    if (routeName == 'profile') {
+      populateProfilePage();
+    }
 
     if (routeName === "schedule") {
       setTimeout(() => {
@@ -382,3 +445,34 @@ function markAllAsRead() {
 // Expose notification functions globally
 window.addNotification = addNotification;
 window.showNotifications = showNotifications;
+
+document.addEventListener("DOMContentLoaded", () => {
+  initSession();
+  const profileTrigger = document.getElementById('profile-trigger');
+  const profileDropdown = document.getElementById('profile-dropdown');
+  const logoutBtn = document.getElementById('logout-btn');
+
+  // Toggle Dropdown
+    profileTrigger.addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevent event bubbling
+        profileDropdown.classList.toggle('show');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!profileTrigger.contains(e.target) && !profileDropdown.contains(e.target)) {
+            profileDropdown.classList.remove('show');
+        }
+    });
+
+    handleRouteChange();
+
+    // Handle Logout Action
+    if(logoutBtn) {
+        logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Add your logout logic here (e.g., clearing tokens)
+            window.location.href = 'login.html'; 
+        });
+    }
+});
