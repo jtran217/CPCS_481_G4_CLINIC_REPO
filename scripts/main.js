@@ -1,7 +1,7 @@
 // ============================
 // User Data Manager
 // ============================
-let currentUser = null;
+let sessionUser = null;
 
 async function initSession() {
   try {
@@ -9,7 +9,7 @@ async function initSession() {
     const data = await response.json();
 
     // Simulated login - automatically picks Sarah Jones
-    currentUser = data.users[0]
+    sessionUser = data.users[0]
 
     updateHeaderProfile();
   } catch (error) {
@@ -18,38 +18,38 @@ async function initSession() {
 }
 
 function updateHeaderProfile() {
-  if (!currentUser) return;
+  if (!sessionUser) return;
 
   const profileNameEl = document.querySelector('.profile-name');
   if (profileNameEl) {
-    profileNameEl.textContent = currentUser.profile.name; 
+    profileNameEl.textContent = sessionUser.profile.name; 
   }
 }
 
 function populateProfilePage() {
-  if (!currentUser) return;
+  if (!sessionUser) return;
 
   const setVal = (id, value) => {
     const el = document.getElementById(id);
     if (el) el.textContent = value;
   };
 
-  const names = currentUser.profile.name.split(' ');
+  const names = sessionUser.profile.name.split(' ');
   const fname = names [0];
   const lname = names.slice(1).join(' ');
 
   setVal('profile-fname', fname);
     setVal('profile-lname', lname);
-    setVal('profile-email', currentUser.email);
-    setVal('profile-phone', currentUser.profile.phone);
-    setVal('profile-dob', currentUser.profile.dateOfBirth);
-    setVal('profile-sex', currentUser.profile.sex);
-    setVal('profile-health', currentUser.profile.healthNumber);
+    setVal('profile-email', sessionUser.email);
+    setVal('profile-phone', sessionUser.profile.phone);
+    setVal('profile-dob', sessionUser.profile.dateOfBirth);
+    setVal('profile-sex', sessionUser.profile.sex);
+    setVal('profile-health', sessionUser.profile.healthNumber);
 
-    setVal('profile-street', currentUser.profile.address.street);
-    setVal('profile-city', currentUser.profile.address.city);
-    setVal('profile-state', currentUser.profile.address.state);
-    setVal('profile-postal', currentUser.profile.address.postalCode);
+    setVal('profile-street', sessionUser.profile.address.street);
+    setVal('profile-city', sessionUser.profile.address.city);
+    setVal('profile-state', sessionUser.profile.address.state);
+    setVal('profile-postal', sessionUser.profile.address.postalCode);
 }
 
 // ============================
