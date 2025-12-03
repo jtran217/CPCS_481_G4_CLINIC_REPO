@@ -59,3 +59,16 @@
 .records-table tr:last-child td {
   border-bottom: none;
 }
+
+.term-tooltip-icon {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 4px;
+  opacity: 0.6;
+  cursor: help;
+  transition: opacity var(--transition-fast);
+}
+
+.term-tooltip-icon:hover {
+  opacity: 1;
+}

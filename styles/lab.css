@@ -206,7 +206,7 @@
 }
 
 .lab-modal-content {
-  padding: 32px;
+  padding: 24px 32px 32px 32px;
   overflow-y: auto;
   flex: 1;
 }
@@ -228,6 +228,19 @@
 .summary-table td {
   border-bottom: 1px solid #eee;
   padding: 10px 5px;
+}
+
+.term-tooltip-icon {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 4px;
+  opacity: 0.6;
+  cursor: help;
+  transition: opacity var(--transition-fast);
+}
+
+.term-tooltip-icon:hover {
+  opacity: 1;
 }
 
 .flag.high {
