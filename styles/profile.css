@@ -299,3 +299,78 @@ input:checked + .slider:before {
   color: #fff;
   cursor: not-allowed;
 }
+
+/* Input Styles for Edit Mode*/
+.edit-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  color: var(--color-text-main);
+  background: var(--color-bg-surface);
+  box-sizing: border-box;
+}
+
+.edit-input:focus {
+  outline: none;
+  border-color: var(--color-border-soft);
+  box-shadow: 0 0 0 2px var(--color-pill-seleced-bg);
+}
+
+.contact-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  gap: 16px;
+  align-items: end;
+  margin-top: 16px;
+  padding: 16px;
+  background: var(--color-bg-subtle);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border-subtle);
+}
+
+.contact-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.contact-field-group label {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.btn-remove {
+  padding: 8px 12px;
+  background: #fff;
+  border: 1px solid var(--color-border-soft);
+  color: var(--color-error-600);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 12px;
+  height: 38px; /* Match input height */
+}
+
+.btn-remove:hover {
+  background: var(--color-error-soft);
+  border-color: var(--color-error-border);
+}
+
+.form-footer {
+  transition: opacity 0.2s;
+  /* hidden by default as requested */
+  opacity: 0; 
+  pointer-events: none; 
+}
+
+.form-footer.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.btn-primary.active-state {
+  background-color: var(--color-brand-700);
+  color: #fff;
+  cursor: pointer;
+}
