@@ -107,14 +107,35 @@
   padding: 15px;
 }
 
+.dashboard-section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dashboard-section-header .page-header-title {
+  padding: 5px 5px 10px 5px;
+  margin: 0;
+  font-size: 1.1rem;
+}
+
 .dashboard-card .page-header-title {
   padding: 5px 5px 10px 5px;
   margin: 0;
   font-size: 1.1rem;
 }
 
+.info-icon {
+  opacity: 0.6;
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
+}
 
-.dashboard-card .summary-list + .page-header-title {
+.info-icon:hover {
+  opacity: 1;
+}
+
+.dashboard-card .summary-list + .dashboard-section-header {
   margin-top: 24px;
 }
 

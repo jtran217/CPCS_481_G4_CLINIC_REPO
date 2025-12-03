@@ -2,7 +2,12 @@
   <div class="dashboard-grid">
     <div class="left-column">
       <section class="dashboard-card">
-        <h1 class="page-header-title">Your Weekly Health Summary</h1>
+        <div class="dashboard-section-header">
+          <h1 class="page-header-title">Your Weekly Health Summary</h1>
+          <div class="tooltip-parent" data-tooltip="Shows your most recent health record changes. Green indicates normal or improved results, and red highlights areas that need attention.">
+            <img src="icons/information-circle.svg" alt="" width="20" height="20" class="info-icon">
+          </div>
+        </div>
 
         <ul class="summary-list">
           <li class="summary-item good">Your Hep A immunization is nearly finished. 2/3 doses received</li>
@@ -11,7 +16,12 @@
           <li class="summary-item bad">Elevated cholesterol level found</li>
         </ul>
 
-        <h1 class="page-header-title">Health Reminders</h1>
+        <div class="dashboard-section-header">
+          <h1 class="page-header-title">Health Reminders</h1>
+          <div class="tooltip-parent" data-tooltip="Reminders for upcoming or recommended health actions to support ongoing care.">
+            <img src="icons/information-circle.svg" alt="" width="20" height="20" class="info-icon">
+          </div>
+        </div>
         <div id="health-reminders-container">
           <div class="reminder">Your Creatine prescription renewal is coming up</div>
           <div class="reminder">Your Methadone prescription renewal is coming up</div>

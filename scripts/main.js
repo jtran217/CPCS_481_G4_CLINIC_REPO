@@ -196,6 +196,11 @@ async function loadPage(routeName) {
       }, 0);
     }
 
+    // Re-initialize tooltips after any page loads (including dashboard)
+    setTimeout(() => {
+      setupAppTooltips();
+    }, 200);
+
     // Initialize dashboard appointments
     if (routeName === "dashboard") {
       requestAnimationFrame(() => {
@@ -527,3 +532,139 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+// Tooltip functionality for app.html - using same pattern as records.js
+let appTooltipElement = null;
+
+async function loadAppTooltip() {
+  try {
+    const response = await fetch("components/tooltip.html");
+    const html = await response.text();
+    const container = document.getElementById("tooltip-container");
+    if (container) {
+      container.innerHTML = html;
+    }
+  } catch (error) {
+    console.error("Error loading tooltip component:", error);
+  }
+}
+
+function showAppTooltip(targetEl, tooltipText) {
+  if (!appTooltipElement) {
+    appTooltipElement = document.getElementById("tooltip");
+  }
+  if (!appTooltipElement) return;
+
+  const tooltipContent = appTooltipElement.querySelector("[data-tooltip-content]");
+  if (tooltipContent) tooltipContent.textContent = tooltipText;
+
+  // Reset for measurement
+  appTooltipElement.style.left = "-9999px";
+  appTooltipElement.style.top = "-9999px";
+  appTooltipElement.classList.add("visible");
+  void appTooltipElement.offsetWidth;
+
+  const rect = targetEl.getBoundingClientRect();
+  const tooltipRect = appTooltipElement.getBoundingClientRect();
+  const viewportWidth = window.innerWidth;
+  const viewportHeight = window.innerHeight;
+
+  // Check if this is the notifications button - position below
+  const isNotificationsBtn = targetEl.id === "notifications-btn";
+  
+  if (isNotificationsBtn) {
+    // Position below the button
+    let left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+    let top = rect.bottom + 8;
+
+    // Check if tooltip goes off screen to the right
+    if (left + tooltipRect.width > viewportWidth) {
+      left = viewportWidth - tooltipRect.width - 8;
+    }
+
+    // Check if tooltip goes off screen to the left
+    if (left < 0) {
+      left = 8;
+    }
+
+    // Check if tooltip goes off screen at the bottom
+    if (top + tooltipRect.height > viewportHeight) {
+      // Position above instead
+      top = rect.top - tooltipRect.height - 8;
+    }
+
+    appTooltipElement.style.left = `${left}px`;
+    appTooltipElement.style.top = `${top}px`;
+  } else {
+    // Default: Try positioning to the right first
+    let left = rect.right + 8;
+    let top = rect.top + (rect.height / 2) - (tooltipRect.height / 2);
+
+    // Check if tooltip goes off screen to the right
+    if (left + tooltipRect.width > viewportWidth) {
+      // Position to the left instead
+      left = rect.left - tooltipRect.width - 8;
+    }
+
+    // Check if tooltip goes off screen to the left
+    if (left < 0) {
+      // Center horizontally if both sides don't work
+      left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+    }
+
+    // Check if tooltip goes off screen at the top
+    if (top < 0) {
+      top = 8; // Small margin from top
+    }
+
+    // Check if tooltip goes off screen at the bottom
+    if (top + tooltipRect.height > viewportHeight) {
+      top = viewportHeight - tooltipRect.height - 8; // Small margin from bottom
+    }
+
+    appTooltipElement.style.left = `${left}px`;
+    appTooltipElement.style.top = `${top}px`;
+  }
+}
+
+function hideAppTooltip() {
+  if (!appTooltipElement) return;
+  appTooltipElement.classList.remove("visible");
+}
+
+function setupAppTooltips() {
+  const tooltipParents = document.querySelectorAll(".tooltip-parent");
+  console.log(`App: found ${tooltipParents.length} tooltip-parent elements`);
+
+  tooltipParents.forEach((parentEl) => {
+    if (parentEl.dataset.tooltipInitialized === "true") return;
+
+    let tooltipText = parentEl.getAttribute("data-tooltip");
+    if (!tooltipText) {
+      const inlineTooltip = parentEl.querySelector(".tooltip");
+      if (inlineTooltip) {
+        tooltipText = inlineTooltip.textContent.trim();
+        inlineTooltip.remove();
+      }
+    }
+    if (!tooltipText) return;
+
+    parentEl.dataset.tooltipInitialized = "true";
+
+    parentEl.addEventListener("mouseenter", () => {
+      showAppTooltip(parentEl, tooltipText);
+    });
+
+    parentEl.addEventListener("mouseleave", () => {
+      hideAppTooltip();
+    });
+  });
+}
+
+async function initAppTooltips() {
+  await loadAppTooltip();
+  await new Promise((r) => setTimeout(r, 50)); // wait for DOM render
+  appTooltipElement = document.getElementById("tooltip");
+  if (appTooltipElement) {
+    setupAppTooltips();
+  }
+}
