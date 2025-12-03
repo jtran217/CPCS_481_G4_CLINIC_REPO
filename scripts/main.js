@@ -57,62 +57,62 @@ function populateProfilePage() {
 // ============================
 const routes = {
   dashboard: {
-    path: "pages/dashboard.html",
+    path: "./pages/dashboard.html",
     title: "Welcome Sarah",
     subtitle: "Here's your healthcare at a glance!",
   },
   schedule: {
-    path: "pages/schedule.html",
+    path: "./pages/schedule.html",
     title: "Appointment Schedule",
     subtitle: "Select a time slot to book or view appointment details.",
   },
   labtest: {
-    path: "pages/labtest.html",
+    path: "./pages/labtest.html",
     title: "Lab Tests",
     subtitle: "View and track your lab results.",
   },
   reports: {
-    path: "pages/reports.html",
+    path: "./pages/reports.html",
     title: "My Reports",
     subtitle: "View and manage your medical reports.",
   },
   lab: {
-    path: "pages/lab.html",
+    path: "./pages/lab.html",
     title: "Lab Test Results",
     subtitle: "View and track your lab results.",
   },
   prescriptions: {
-    path: "pages/prescriptions.html",
+    path: "./pages/prescriptions.html",
     title: "Prescriptions and Medications",
     subtitle: "Manage your prescriptions and medications.",
   },
   physical: {
-    path: "pages/physical.html",
+    path: "./pages/physical.html",
     title: "Physical Test Results",
     subtitle: "View your physical examination results.",
   },
   imaging: {
-    path: "pages/imaging.html",
+    path: "./pages/imaging.html",
     title: "Imaging and Scans",
     subtitle: "View your medical imaging and scan results.",
   },
   immunization: {
-    path: "pages/immunization.html",
+    path: "./pages/immunization.html",
     title: "Immunization Records",
     subtitle: "View your vaccination and immunization history.",
   },
   insurance: {
-    path: "pages/insurance.html",
+    path: "./pages/insurance.html",
     title: "Insurance Documents",
     subtitle: "Access your insurance documents and policies.",
   },
   xray: {
-    path: "pages/xray.html",
+    path: "./pages/xray.html",
     title: "Lung X-Ray",
     subtitle: "View your lung X-Ray scan results.",
   },
   bluecross: {
-    path: "pages/bluecross.html",
+    path: "./pages/bluecross.html",
     title: "Alberta Blue Cross",
     subtitle: "View your Alberta Blue Cross insurance document.",
   },
@@ -250,14 +250,14 @@ function handleRouteChange() {
 
 document.addEventListener("DOMContentLoaded", () => {
   // Load booking modal component
-  fetch("components/booking-modal.html")
+  fetch("./components/booking-modal.html")
     .then((response) => response.text())
     .then((html) => {
       document.getElementById("booking-modal-container").innerHTML = html;
     });
 
   // Load appointment details modal component
-  fetch("components/appointment-details-modal.html")
+  fetch("./components/appointment-details-modal.html")
     .then((response) => response.text())
     .then((html) => {
       document.getElementById("appointment-details-modal-container").innerHTML =
@@ -265,7 +265,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
   // Load toast component
-  fetch("components/toast.html")
+  fetch("./components/toast.html")
     .then((response) => response.text())
     .then((html) => {
       document.getElementById("toast-container-wrapper").innerHTML = html;
@@ -292,7 +292,7 @@ let notifications = [];
 
 async function loadNotifications() {
   try {
-    const response = await fetch("data/notifications.json");
+    const response = await fetch("./data/notifications.json");
     const data = await response.json();
     notifications = data.notifications || [];
     updateNotificationBadge();
@@ -537,7 +537,7 @@ let appTooltipElement = null;
 
 async function loadAppTooltip() {
   try {
-    const response = await fetch("components/tooltip.html");
+    const response = await fetch("./components/tooltip.html");
     const html = await response.text();
     const container = document.getElementById("tooltip-container");
     if (container) {

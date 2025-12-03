@@ -89,7 +89,7 @@
 
     async function validateLogin(email, password) {
       try {
-        const response = await fetch('data/users.json');
+        const response = await fetch('./data/users.json');
         const data = await response.json();
 
         const user = data.users.find(u =>
@@ -145,7 +145,7 @@
 
     // Tooltip functionality for login page
     async function initLoginTooltips() {
-      const response = await fetch('components/tooltip.html');
+      const response = await fetch('./components/tooltip.html');
       const html = await response.text();
       const container = document.getElementById('tooltip-container');
       if (container) {

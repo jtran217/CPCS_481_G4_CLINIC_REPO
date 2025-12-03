@@ -108,7 +108,7 @@
 
       // Check if email exists
       try {
-        const res = await fetch("data/users.json");
+        const res = await fetch("./data/users.json");
         const data = await res.json();
 
         const exists = data.users.some(

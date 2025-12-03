@@ -2,7 +2,7 @@ async function loadAlertComponent() {
     const container = document.getElementById("alert-container");
     if (!container) return;
   
-    const res = await fetch("components/alert.html");
+    const res = await fetch("./components/alert.html");
     container.innerHTML = await res.text();
   }
   

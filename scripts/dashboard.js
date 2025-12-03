@@ -122,7 +122,7 @@ function createAppointmentCardElement(appointment) {
   container.appendChild(skeleton);
 
   // Now fetch the real template
-  fetch("components/appointment-card.html")
+  fetch("./components/appointment-card.html")
     .then(r => r.text())
     .then(html => {
       const wrapper = document.createElement("div");

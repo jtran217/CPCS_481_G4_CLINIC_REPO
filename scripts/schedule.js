@@ -560,7 +560,7 @@ let rescheduleNewSlot = null;
 // Load user data from JSON
 async function loadUserData() {
   try {
-    const response = await fetch('data/users.json');
+    const response = await fetch('./data/users.json');
     const data = await response.json();
     currentUser = data.users[0]; // Get the first (and only) user
   } catch (error) {
@@ -1506,7 +1506,7 @@ function startReschedule() {
 }
 
 function loadRescheduleBanner() {
-  fetch('components/reschedule-banner.html')
+  fetch('./components/reschedule-banner.html')
     .then(response => response.text())
     .then(html => {
       const container = document.getElementById('reschedule-banner-container');
