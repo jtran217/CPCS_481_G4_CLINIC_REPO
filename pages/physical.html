@@ -1,127 +1,163 @@
 <div id="lab-results-page">
-<a href="#reports" class="back-link">← Back to My Reports</a>
+  <a href="#reports" class="back-link">← Back to My Reports</a>
 
-<label class="year-label">
-  Viewing records for
-  <select class="year-select">
-    <option>2025</option>
-    <option>2024</option>
-    <option>2023</option>
-  </select>
-</label>
+  <label class="year-label">
+    Viewing records for
+    <select class="year-select">
+      <option>2025</option>
+      <option>2024</option>
+      <option>2023</option>
+    </select>
+  </label>
 
-<!-- FLAGGED SECTION -->
-<div class="flagged-box">
-  <div class="flagged-header">
-    <h2>Flagged Lab Tests</h2>
-    <div class="attention-badge tooltip-parent" data-tooltip="This item requires your attention">
-      2 items need attention
+  <!-- FLAGGED SECTION -->
+  <div class="flagged-box">
+    <div class="flagged-header">
+      <h2>Flagged Physical Tests</h2>
+      <div class="attention-badge tooltip-parent" data-tooltip="This item requires your attention">
+        2 items need attention
+      </div>
+    </div>
+
+    <!-- FLAGGED ITEM 1 -->
+    <div class="result-card flagged">
+      <div class="result-info">
+        <div class="date">September 15, 2025</div>
+        <div class="type">Physical Test</div>
+      </div>
+
+      <div class="doctor-info">
+        <div class="label">Doctor</div>
+        <div class="name">Jason Lee</div>
+      </div>
+
+      <div class="flag-reason">
+        <span class="label">Flag Reason</span>
+        <span class="reason">Streaks Found In Nail Of Left Thumb</span>
+      </div>
+
+      <div class="action-icons">
+        <div class="icon-btn tooltip-parent open-physical-summary" data-tooltip="View">
+          <img src="icons/maximize.svg" />
+        </div>
+        <div class="icon-btn tooltip-parent" data-tooltip="Print">
+          <img src="icons/print.svg" />
+        </div>
+        <img class="flag-icon" src="icons/red-flag.svg" />
+      </div>
+    </div>
+
+    <!-- FLAGGED ITEM 2 -->
+    <div class="result-card flagged">
+      <div class="result-info">
+        <div class="date">September 13, 2025</div>
+        <div class="type">Physical Test</div>
+      </div>
+
+      <div class="doctor-info">
+        <div class="label">Doctor</div>
+        <div class="name">Jason Lee</div>
+      </div>
+
+      <div class="flag-reason">
+        <span class="label">Flag Reason</span>
+        <span class="reason">Elevated Blood Pressure Level</span>
+      </div>
+
+      <div class="action-icons">
+        <div class="icon-btn tooltip-parent open-physical-summary" data-tooltip="View">
+          <img src="icons/maximize.svg" />
+        </div>
+        <div class="icon-btn tooltip-parent" data-tooltip="Print">
+          <img src="icons/print.svg" />
+        </div>
+        <img class="flag-icon" src="icons/red-flag.svg" />
+      </div>
     </div>
   </div>
 
-  <!-- FLAGGED ITEM 1 -->
-  <div class="result-card flagged">
-    <div class="result-info">
-      <div class="date">September 15, 2025</div>
-      <div class="type">Physical Test</div>
-    </div>
-
-    <div class="doctor-info">
-      <div class="label">Doctor</div>
-      <div class="name">Jason Lee</div>
-    </div>
-
-    <div class="flag-reason">
-      <span class="label">Flag Reason</span>
-      <span class="reason">Streaks Found In Nail Of Left Thumb</span>
-    </div>
-
-    <div class="action-icons">
-      <div class="icon-btn tooltip-parent" data-tooltip="View">
-        <img src="icons/maximize.svg" />
+  <!-- NORMAL RESULTS -->
+  <div class="normal-box">
+    <div class="result-card normal">
+      <div class="result-info">
+        <div class="date">September 1, 2025</div>
+        <div class="type">Physical Test</div>
       </div>
-      <div class="icon-btn tooltip-parent" data-tooltip="Print">
-        <img src="icons/print.svg" />
+
+      <div class="doctor-info">
+        <div class="label">Doctor</div>
+        <div class="name">Jason Lee</div>
       </div>
-      <img class="flag-icon" src="icons/red-flag.svg" />
-    </div>
-  </div>
 
-  <!-- FLAGGED ITEM 2 -->
-  <div class="result-card flagged">
-    <div class="result-info">
-      <div class="date">September 13, 2025</div>
-      <div class="type">Physical Test</div>
-    </div>
-
-    <div class="doctor-info">
-      <div class="label">Doctor</div>
-      <div class="name">Jason Lee</div>
-    </div>
-
-    <div class="flag-reason">
-      <span class="label">Flag Reason</span>
-      <span class="reason">Elevated Blood Pressure Level</span>
-    </div>
-
-    <div class="action-icons">
-      <div class="icon-btn tooltip-parent" data-tooltip="View">
-        <img src="icons/maximize.svg" />
+      <div class="action-icons">
+        <div class="icon-btn tooltip-parent open-physical-summary" data-tooltip="View">
+          <img src="icons/maximize.svg" />
+        </div>
+        <div class="icon-btn tooltip-parent" data-tooltip="Print">
+          <img src="icons/print.svg" />
+        </div>
       </div>
-      <div class="icon-btn tooltip-parent" data-tooltip="Print">
-        <img src="icons/print.svg" />
+
+      <img class="flag-icon light" src="icons/flag.svg" />
+    </div>
+
+    <div class="result-card normal">
+      <div class="result-info">
+        <div class="date">September 9, 2025</div>
+        <div class="type">Physical Test</div>
       </div>
-      <img class="flag-icon" src="icons/red-flag.svg" />
+
+      <div class="doctor-info">
+        <div class="label">Doctor</div>
+        <div class="name">Jason Lee</div>
+      </div>
+
+      <div class="action-icons">
+        <div class="icon-btn tooltip-parent open-physical-summary" data-tooltip="View">
+          <img src="icons/maximize.svg" />
+        </div>
+        <div class="icon-btn tooltip-parent" data-tooltip="Print">
+          <img src="icons/print.svg" />
+        </div>
+      </div>
+
+      <img class="flag-icon light" src="icons/flag.svg" />
     </div>
   </div>
 </div>
 
-<!-- NORMAL RESULTS -->
-<div class="normal-box">
-  <div class="result-card normal">
-    <div class="result-info">
-      <div class="date">September 1, 2025</div>
-      <div class="type">Physical Test</div>
-    </div>
+<!-- === MODAL === -->
 
-    <div class="doctor-info">
-      <div class="label">Doctor</div>
-      <div class="name">Jason Lee</div>
-    </div>
+<div id="physical-overlay" class="lab-overlay hidden"></div>
 
-    <div class="action-icons">
-      <div class="icon-btn tooltip-parent" data-tooltip="View">
-        <img src="icons/maximize.svg" />
-      </div>
-      <div class="icon-btn tooltip-parent" data-tooltip="Print">
-        <img src="icons/print.svg" />
-      </div>
-    </div>
+<div id="physical-summary-modal" class="lab-summary-modal hidden">
 
-    <img class="flag-icon light" src="icons/flag.svg" />
-  </div>
+  <button class="lab-close-btn">✕</button>
 
-  <div class="result-card normal">
-    <div class="result-info">
-      <div class="date">September 9, 2025</div>
-      <div class="type">Physical Test</div>
-    </div>
+  <h2>2025 Physical Test – Summary</h2>
+  <p class="summary-date">September 15, 2025</p>
+  <p class="summary-provided">Results provided by: Dr. Jason Lee</p>
 
-    <div class="doctor-info">
-      <div class="label">Doctor</div>
-      <div class="name">Jason Lee</div>
-    </div>
+  <h3>Patient Info</h3>
+  <p>Name: [Patient name]</p>
+  <p>Date of Birth: [Patient DOB]</p>
+  <p>Patient ID: [Patient ID]</p>
 
-    <div class="action-icons">
-      <div class="icon-btn tooltip-parent" data-tooltip="View">
-        <img src="icons/maximize.svg" />
-      </div>
-      <div class="icon-btn tooltip-parent" data-tooltip="Print">
-        <img src="icons/print.svg" />
-      </div>
-    </div>
+  <h3>Physical Measurements</h3>
 
-    <img class="flag-icon light" src="icons/flag.svg" />
-  </div>
-</div>
+  <table class="summary-table">
+    <tr>
+      <th>Measurement</th>
+      <th>Result</th>
+      <th>Range</th>
+      <th>Flag</th>
+    </tr>
+
+    <tr><td>Blood Pressure</td><td>145/92</td><td>90–120 / 60–80</td><td class="flag high">High</td></tr>
+    <tr><td>Heart Rate</td><td>72 bpm</td><td>60–100 bpm</td><td></td></tr>
+    <tr><td>Respiratory Rate</td><td>18/min</td><td>12–18/min</td><td></td></tr>
+    <tr><td>Temperature</td><td>98.6 °F</td><td>97–99 °F</td><td></td></tr>
+    <tr><td>Nail Inspection</td><td>Streak present</td><td>Clear</td><td class="flag low">Irregular</td></tr>
+  </table>
+
 </div>
