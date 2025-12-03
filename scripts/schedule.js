@@ -460,6 +460,75 @@ async function initSchedulePage() {
   
   // Store calendar instance globally
   window.scheduleCalendar = calendar;
+  
+  // Check for dashboard actions (reschedule/cancel)
+  checkDashboardActions();
+}
+
+// Check for dashboard actions and handle them
+function checkDashboardActions() {
+  // Check for reschedule action
+  const rescheduleData = sessionStorage.getItem('dashboardReschedule');
+  if (rescheduleData) {
+    try {
+      const data = JSON.parse(rescheduleData);
+      sessionStorage.removeItem('dashboardReschedule');
+      
+      // Wait for calendar to be fully rendered
+      setTimeout(() => {
+        const event = calendar.getEventById(data.slotId);
+        if (event) {
+          // Set as original appointment and start reschedule
+          originalAppointment = event;
+          startReschedule();
+        }
+      }, 200);
+    } catch (error) {
+      console.error('Error handling dashboard reschedule:', error);
+    }
+  }
+  
+  // Check for cancel action
+  const cancelData = sessionStorage.getItem('dashboardCancel');
+  if (cancelData) {
+    try {
+      const data = JSON.parse(cancelData);
+      sessionStorage.removeItem('dashboardCancel');
+      
+      // Wait for calendar to be fully rendered
+      setTimeout(() => {
+        const event = calendar.getEventById(data.slotId);
+        if (event) {
+          // Set as original appointment and show details modal (which has cancel button)
+          originalAppointment = event;
+          showAppointmentDetails(event);
+        }
+      }, 200);
+    } catch (error) {
+      console.error('Error handling dashboard cancel:', error);
+    }
+  }
+  
+  // Check for mark as complete action
+  const markCompleteData = sessionStorage.getItem('dashboardMarkComplete');
+  if (markCompleteData) {
+    try {
+      const data = JSON.parse(markCompleteData);
+      sessionStorage.removeItem('dashboardMarkComplete');
+      
+      // Wait for calendar to be fully rendered
+      setTimeout(() => {
+        const event = calendar.getEventById(data.slotId);
+        if (event) {
+          // Set as original appointment and mark as complete
+          originalAppointment = event;
+          markAsComplete();
+        }
+      }, 200);
+    } catch (error) {
+      console.error('Error handling dashboard mark complete:', error);
+    }
+  }
 }
 
 // ============================
@@ -1254,6 +1323,9 @@ function confirmBooking() {
         // window.showNotifications();
       }
       closeBookingModal();
+      
+      // Trigger dashboard update
+      window.dispatchEvent(new Event('appointmentsUpdated'));
   }
 }
 
@@ -1399,6 +1471,9 @@ function cancelAppointment() {
       });
     }
     closeAppointmentDetailsModal();
+    
+    // Trigger dashboard update
+    window.dispatchEvent(new Event('appointmentsUpdated'));
   }
 }
 
@@ -1420,6 +1495,9 @@ function markAsComplete() {
     
     showToast('success', 'Appointment Completed', 'This appointment has been marked as completed.');
     closeAppointmentDetailsModal();
+    
+    // Trigger dashboard update
+    window.dispatchEvent(new Event('appointmentsUpdated'));
   }
 }
 
@@ -1583,6 +1661,9 @@ function handleRescheduleConfirmation() {
   }
   closeBookingModal();
   cancelReschedule();
+  
+  // Trigger dashboard update
+  window.dispatchEvent(new Event('appointmentsUpdated'));
 }
 
 // ============================

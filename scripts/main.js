@@ -58,7 +58,7 @@ function populateProfilePage() {
 const routes = {
   dashboard: {
     path: "pages/dashboard.html",
-    title: "Welcome [User]!",
+    title: "Welcome Sarah",
     subtitle: "Here's your healthcare at a glance!",
   },
   schedule: {
@@ -167,6 +167,21 @@ async function loadPage(routeName) {
         }
       }, 0);
     }
+
+    // Initialize dashboard appointments
+    if (routeName === "dashboard") {
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          if (typeof window.initDashboardAppointments === "function") {
+            window.initDashboardAppointments();
+          } else if (typeof window.renderAppointments === "function") {
+            // Fallback: just render if init doesn't exist
+            window.renderAppointments();
+          }
+        }, 50);
+      });
+    }
+
   } catch (err) {
     console.error("Error loading page:", err);
     pageContentEl.innerHTML = "<p>Failed to load page.</p>";
