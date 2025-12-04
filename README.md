@@ -22,7 +22,7 @@ This is a high-fidelity prototype of the **Bellhart Clinic Patient Portal** demo
 
 Access our application at the following link:
 
-**[insert URL]**
+[**Bellhart Clinic Portal**](https://jtran217.github.io/CPCS_481_G4_CLINIC_REPO/)
 
 ## 3. Full Walkthrough
 
@@ -230,7 +230,6 @@ The following sections cover all appointment-related functionality. Navigate to 
    - **Emergency contact** information
    - **Notification preferences** (email, SMS)
 6. After making changes, click **Save Changes**.
-7. A **success toast message** appears confirming the changes were saved.
 
 > **Note:** Changes are only saved locally and will remain until you refresh or log out.
 
