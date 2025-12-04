@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="styles/imaging.css" />
     <link rel="stylesheet" href="styles/immunization.css" />
     <link rel="stylesheet" href="styles/insurance.css" />
+    <link rel="stylesheet" href="styles/profile.css"/>
     <link rel="stylesheet" href="styles/dashboard.css" />
 
 
@@ -91,12 +92,18 @@
               <span class="notification-badge" id="notification-badge">2</span>
             </button>
 
-            <div class="profile-pill">
+            <div class="profile-pill" id="profile-trigger">
               <div class="avatar-circle">
                 <span class="avatar-icon icon-user"></span>
               </div>
               <span class="profile-name"></span>
               <span class="chevron-icon icon-chevron-down"></span>
+            </div>
+
+            <div class="dropdown-menu" id="profile-dropdown">
+              <a href="#profile" class="dropdown-item" data-route="profile">My Account</a>
+              <div class="dropdown-divider"></div>
+              <a href="login.html" class="dropdown-item logout-text" id="logout-btn">Logout</a>
             </div>
           </div>
         </header>
@@ -152,5 +159,6 @@
     <script src="scripts/schedule.js"></script>
     <script src="scripts/records.js"></script>
     <script src="scripts/dashboard.js"></script>
+    <script src="scripts/profile.js"></script>
   </body>
 </html>

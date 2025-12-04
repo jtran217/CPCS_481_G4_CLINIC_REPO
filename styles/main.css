@@ -368,6 +368,62 @@ body {
   color: inherit;
 }
 
+.topbar-right {
+  position: relative; /* Crucial: anchors the dropdown */
+}
+
+/* 2. Add Dropdown Styles */
+.dropdown-menu {
+  position: absolute;
+  top: 110%; /* sits just below the buttons */
+  right: 0;  /* aligns with the right edge */
+  width: 180px;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  display: none;
+  flex-direction: column;
+  padding: 6px;
+  z-index: 1000;
+}
+
+.dropdown-menu.show {
+  display: flex;
+  animation: fadeSlideIn 0.2s ease-out;
+}
+
+.dropdown-item {
+  padding: 10px 12px;
+  font-size: 14px;
+  color: var(--color-text-body);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  transition: background 0.1s;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background: var(--color-pill-bg-hover);
+  color: var(--color-text-main);
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: var(--color-border-subtle);
+  margin: 4px 0;
+}
+
+.logout-text:hover {
+  color: var(--color-error-600);
+  background: var(--color-error-soft);
+}
+
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 /* =========================================================
    PAGE HEADER
    ========================================================= */
