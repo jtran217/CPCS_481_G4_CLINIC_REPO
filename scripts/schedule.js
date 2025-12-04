@@ -1393,8 +1393,9 @@ function showAppointmentDetails(event) {
     } else {
       actionsContainer.style.display = 'flex';
       
-      // Always get fresh button reference
+      // Get both buttons
       const cancelBtn = actionsContainer.querySelector('button:first-child');
+      const rescheduleBtn = actionsContainer.querySelector('button:last-child');
       
       if (cancelBtn) {
         // Reset button completely
@@ -1405,11 +1406,15 @@ function showAppointmentDetails(event) {
           cancelBtn.innerHTML = '<img src="icons/check-circle.svg" alt="" width="16" height="16" style="margin-right: 8px;"> Mark as Complete';
           cancelBtn.className = 'btn btn-secondary'; // Neutral styling
           cancelBtn.onclick = function() { markAsComplete(); };
+          // Hide reschedule button for past appointments
+          if (rescheduleBtn) rescheduleBtn.style.display = 'none';
         } else {
           // Keep as "Cancel Appointment" button
           cancelBtn.textContent = 'Cancel Appointment';
           cancelBtn.className = 'btn btn-warning';
           cancelBtn.onclick = function() { cancelAppointment(); };
+          // Show reschedule button for future appointments
+          if (rescheduleBtn) rescheduleBtn.style.display = 'block';
         }
       }
     }

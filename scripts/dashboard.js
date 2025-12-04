@@ -148,19 +148,25 @@ function createAppointmentCardElement(appointment) {
       const rescheduleBtn = card.querySelector(".btn-reschedule");
       const cancelBtn = card.querySelector(".btn-cancel");
 
-      // Update button classes to match modal
-      if (rescheduleBtn) {
-        rescheduleBtn.className = "btn btn-primary";
-        rescheduleBtn.onclick = () => handleReschedule(appointment);
-      }
-
-      if (cancelBtn) {
-        if (isPast) {
+      if (isPast) {
+        // Hide reschedule button for past appointments
+        if (rescheduleBtn) rescheduleBtn.style.display = 'none';
+        
+        if (cancelBtn) {
           // Change to "Mark as Complete" button
           cancelBtn.innerHTML = '<img src="icons/check-circle.svg" alt="" width="16" height="16" style="margin-right: 8px;"> Mark as Complete';
           cancelBtn.className = "btn btn-secondary";
           cancelBtn.onclick = () => handleMarkAsComplete(appointment);
-        } else {
+        }
+      } else {
+        // Show reschedule button for future appointments
+        if (rescheduleBtn) {
+          rescheduleBtn.style.display = 'block';
+          rescheduleBtn.className = "btn btn-primary";
+          rescheduleBtn.onclick = () => handleReschedule(appointment);
+        }
+        
+        if (cancelBtn) {
           // Keep as "Cancel Appointment" button
           cancelBtn.textContent = "Cancel";
           cancelBtn.className = "btn btn-warning";
