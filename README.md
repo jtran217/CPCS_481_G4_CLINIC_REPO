@@ -230,6 +230,7 @@ The following sections cover all appointment-related functionality. Navigate to 
    - **Emergency contact** information
    - **Notification preferences** (email, SMS)
 6. After making changes, click **Save Changes**.
+7. A **success toast** shows on confirmation.
 
 > **Note:** Changes are only saved locally and will remain until you refresh or log out.
 
