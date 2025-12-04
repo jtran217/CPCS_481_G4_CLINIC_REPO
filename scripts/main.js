@@ -5,7 +5,7 @@ let sessionUser = null;
 
 async function initSession() {
   try {
-    const response = await fetch('data/users.json');
+    const response = await fetch('./data/users.json');
     const data = await response.json();
 
     // Simulated login - automatically picks Sarah Jones
@@ -57,67 +57,67 @@ function populateProfilePage() {
 // ============================
 const routes = {
   dashboard: {
-    path: "pages/dashboard.html",
+    path: "./pages/dashboard.html",
     title: "Welcome Sarah",
     subtitle: "Here's your healthcare at a glance!",
   },
   schedule: {
-    path: "pages/schedule.html",
+    path: "./pages/schedule.html",
     title: "Appointment Schedule",
     subtitle: "Select a time slot to book or view appointment details.",
   },
   labtest: {
-    path: "pages/labtest.html",
+    path: "./pages/labtest.html",
     title: "Lab Tests",
     subtitle: "View and track your lab results.",
   },
   reports: {
-    path: "pages/reports.html",
+    path: "./pages/reports.html",
     title: "My Reports",
     subtitle: "View and manage your medical reports.",
   },
   lab: {
-    path: "pages/lab.html",
+    path: "./pages/lab.html",
     title: "Lab Test Results",
     subtitle: "View and track your lab results.",
   },
   prescriptions: {
-    path: "pages/prescriptions.html",
+    path: "./pages/prescriptions.html",
     title: "Prescriptions and Medications",
     subtitle: "Manage your prescriptions and medications.",
   },
   physical: {
-    path: "pages/physical.html",
+    path: "./pages/physical.html",
     title: "Physical Test Results",
     subtitle: "View your physical examination results.",
   },
   imaging: {
-    path: "pages/imaging.html",
+    path: "./pages/imaging.html",
     title: "Imaging and Scans",
     subtitle: "View your medical imaging and scan results.",
   },
   immunization: {
-    path: "pages/immunization.html",
+    path: "./pages/immunization.html",
     title: "Immunization Records",
     subtitle: "View your vaccination and immunization history.",
   },
   insurance: {
-    path: "pages/insurance.html",
+    path: "./pages/insurance.html",
     title: "Insurance Documents",
     subtitle: "Access your insurance documents and policies.",
   },
   xray: {
-    path: "pages/xray.html",
+    path: "./pages/xray.html",
     title: "Lung X-Ray",
     subtitle: "View your lung X-Ray scan results.",
   },
   bluecross: {
-    path: "pages/bluecross.html",
+    path: "./pages/bluecross.html",
     title: "Alberta Blue Cross",
     subtitle: "View your Alberta Blue Cross insurance document.",
   },
   profile: {
-    path: "pages/profile.html",
+    path: "./pages/profile.html",
     title: "My Account", 
     subtitle: "Manage your personal information and preferences",
   },
@@ -127,6 +127,7 @@ async function loadPage(routeName) {
   const route = routes[routeName] || routes.dashboard;
   const pageContentEl = document.getElementById("page-content");
   const headerContainer = document.getElementById("page-header-container");
+  const breadcrumbContainer = document.getElementById("breadcrumb-container");
 
   if (!pageContentEl) return;
 
@@ -134,6 +135,29 @@ async function loadPage(routeName) {
     const response = await fetch(route.path);
     const html = await response.text();
     pageContentEl.innerHTML = html;
+
+    // Extract breadcrumb links from page content
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = html;
+    const backLink = tempDiv.querySelector(".back-link");
+    
+    // Clear breadcrumb container
+    if (breadcrumbContainer) {
+      breadcrumbContainer.innerHTML = "";
+      breadcrumbContainer.style.display = "none";
+    }
+
+    // If breadcrumb exists, move it above the header
+    if (backLink && breadcrumbContainer) {
+      breadcrumbContainer.innerHTML = backLink.outerHTML;
+      breadcrumbContainer.style.display = "block";
+      
+      // Remove breadcrumb from page content
+      const backLinkInContent = pageContentEl.querySelector(".back-link");
+      if (backLinkInContent) {
+        backLinkInContent.remove();
+      }
+    }
 
     if (headerContainer) {
       headerContainer.innerHTML = `
@@ -155,6 +179,10 @@ async function loadPage(routeName) {
         if (typeof initSchedulePage === "function") {
           initSchedulePage();
         }
+        // Re-initialize tooltips after schedule page loads
+        setTimeout(() => {
+          setupAppTooltips();
+        }, 200);
       }, 0);
     }
 
@@ -167,6 +195,11 @@ async function loadPage(routeName) {
         }
       }, 0);
     }
+
+    // Re-initialize tooltips after any page loads (including dashboard)
+    setTimeout(() => {
+      setupAppTooltips();
+    }, 200);
 
     // Initialize dashboard appointments
     if (routeName === "dashboard") {
@@ -192,8 +225,13 @@ function updateActiveNav(routeName) {
   document.querySelectorAll(".nav-item").forEach((item) => {
     item.classList.remove("nav-item--active");
   });
+  
+  // If it's a records page, highlight "reports" instead
+  const recordsRoutes = ["reports", "lab", "prescriptions", "physical", "imaging", "immunization", "insurance", "xray", "bluecross"];
+  const navRouteName = recordsRoutes.includes(routeName) ? "reports" : routeName;
+  
   const activeLink = document.querySelector(
-    `.nav-item[data-route="${routeName}"]`
+    `.nav-item[data-route="${navRouteName}"]`
   );
   if (activeLink) {
     activeLink.classList.add("nav-item--active");
@@ -212,14 +250,14 @@ function handleRouteChange() {
 
 document.addEventListener("DOMContentLoaded", () => {
   // Load booking modal component
-  fetch("components/booking-modal.html")
+  fetch("./components/booking-modal.html")
     .then((response) => response.text())
     .then((html) => {
       document.getElementById("booking-modal-container").innerHTML = html;
     });
 
   // Load appointment details modal component
-  fetch("components/appointment-details-modal.html")
+  fetch("./components/appointment-details-modal.html")
     .then((response) => response.text())
     .then((html) => {
       document.getElementById("appointment-details-modal-container").innerHTML =
@@ -227,11 +265,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
   // Load toast component
-  fetch("components/toast.html")
+  fetch("./components/toast.html")
     .then((response) => response.text())
     .then((html) => {
       document.getElementById("toast-container-wrapper").innerHTML = html;
     });
+
+  // Initialize tooltips for app
+  initAppTooltips();
 
   // Handle initial route
   handleRouteChange();
@@ -251,7 +292,7 @@ let notifications = [];
 
 async function loadNotifications() {
   try {
-    const response = await fetch("data/notifications.json");
+    const response = await fetch("./data/notifications.json");
     const data = await response.json();
     notifications = data.notifications || [];
     updateNotificationBadge();
@@ -491,3 +532,139 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+// Tooltip functionality for app.html - using same pattern as records.js
+let appTooltipElement = null;
+
+async function loadAppTooltip() {
+  try {
+    const response = await fetch("./components/tooltip.html");
+    const html = await response.text();
+    const container = document.getElementById("tooltip-container");
+    if (container) {
+      container.innerHTML = html;
+    }
+  } catch (error) {
+    console.error("Error loading tooltip component:", error);
+  }
+}
+
+function showAppTooltip(targetEl, tooltipText) {
+  if (!appTooltipElement) {
+    appTooltipElement = document.getElementById("tooltip");
+  }
+  if (!appTooltipElement) return;
+
+  const tooltipContent = appTooltipElement.querySelector("[data-tooltip-content]");
+  if (tooltipContent) tooltipContent.textContent = tooltipText;
+
+  // Reset for measurement
+  appTooltipElement.style.left = "-9999px";
+  appTooltipElement.style.top = "-9999px";
+  appTooltipElement.classList.add("visible");
+  void appTooltipElement.offsetWidth;
+
+  const rect = targetEl.getBoundingClientRect();
+  const tooltipRect = appTooltipElement.getBoundingClientRect();
+  const viewportWidth = window.innerWidth;
+  const viewportHeight = window.innerHeight;
+
+  // Check if this is the notifications button - position below
+  const isNotificationsBtn = targetEl.id === "notifications-btn";
+  
+  if (isNotificationsBtn) {
+    // Position below the button
+    let left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+    let top = rect.bottom + 8;
+
+    // Check if tooltip goes off screen to the right
+    if (left + tooltipRect.width > viewportWidth) {
+      left = viewportWidth - tooltipRect.width - 8;
+    }
+
+    // Check if tooltip goes off screen to the left
+    if (left < 0) {
+      left = 8;
+    }
+
+    // Check if tooltip goes off screen at the bottom
+    if (top + tooltipRect.height > viewportHeight) {
+      // Position above instead
+      top = rect.top - tooltipRect.height - 8;
+    }
+
+    appTooltipElement.style.left = `${left}px`;
+    appTooltipElement.style.top = `${top}px`;
+  } else {
+    // Default: Try positioning to the right first
+    let left = rect.right + 8;
+    let top = rect.top + (rect.height / 2) - (tooltipRect.height / 2);
+
+    // Check if tooltip goes off screen to the right
+    if (left + tooltipRect.width > viewportWidth) {
+      // Position to the left instead
+      left = rect.left - tooltipRect.width - 8;
+    }
+
+    // Check if tooltip goes off screen to the left
+    if (left < 0) {
+      // Center horizontally if both sides don't work
+      left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+    }
+
+    // Check if tooltip goes off screen at the top
+    if (top < 0) {
+      top = 8; // Small margin from top
+    }
+
+    // Check if tooltip goes off screen at the bottom
+    if (top + tooltipRect.height > viewportHeight) {
+      top = viewportHeight - tooltipRect.height - 8; // Small margin from bottom
+    }
+
+    appTooltipElement.style.left = `${left}px`;
+    appTooltipElement.style.top = `${top}px`;
+  }
+}
+
+function hideAppTooltip() {
+  if (!appTooltipElement) return;
+  appTooltipElement.classList.remove("visible");
+}
+
+function setupAppTooltips() {
+  const tooltipParents = document.querySelectorAll(".tooltip-parent");
+  console.log(`App: found ${tooltipParents.length} tooltip-parent elements`);
+
+  tooltipParents.forEach((parentEl) => {
+    if (parentEl.dataset.tooltipInitialized === "true") return;
+
+    let tooltipText = parentEl.getAttribute("data-tooltip");
+    if (!tooltipText) {
+      const inlineTooltip = parentEl.querySelector(".tooltip");
+      if (inlineTooltip) {
+        tooltipText = inlineTooltip.textContent.trim();
+        inlineTooltip.remove();
+      }
+    }
+    if (!tooltipText) return;
+
+    parentEl.dataset.tooltipInitialized = "true";
+
+    parentEl.addEventListener("mouseenter", () => {
+      showAppTooltip(parentEl, tooltipText);
+    });
+
+    parentEl.addEventListener("mouseleave", () => {
+      hideAppTooltip();
+    });
+  });
+}
+
+async function initAppTooltips() {
+  await loadAppTooltip();
+  await new Promise((r) => setTimeout(r, 50)); // wait for DOM render
+  appTooltipElement = document.getElementById("tooltip");
+  if (appTooltipElement) {
+    setupAppTooltips();
+  }
+}

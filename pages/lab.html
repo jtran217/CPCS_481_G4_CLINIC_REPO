@@ -39,12 +39,12 @@
 
       <div class="action-icons">
         <div class="icon-btn tooltip-parent open-lab-summary" data-tooltip="View">
-          <img src="icons/maximize.svg" />
+          <img src="./icons/maximize.svg" />
         </div>
         <div class="icon-btn tooltip-parent" data-tooltip="Print">
-          <img src="icons/print.svg" />
+          <img src="./icons/print.svg" />
         </div>
-        <img class="flag-icon" src="icons/red-flag.svg" />
+        <img class="flag-icon" src="./icons/red-flag.svg" />
       </div>
     </div>
 
@@ -67,12 +67,12 @@
 
       <div class="action-icons">
         <div class="icon-btn tooltip-parent open-lab-summary" data-tooltip="View">
-          <img src="icons/maximize.svg" />
+          <img src="./icons/maximize.svg" />
         </div>
         <div class="icon-btn tooltip-parent" data-tooltip="Print">
-          <img src="icons/print.svg" />
+          <img src="./icons/print.svg" />
         </div>
-        <img class="flag-icon" src="icons/red-flag.svg" />
+        <img class="flag-icon" src="./icons/red-flag.svg" />
       </div>
     </div>
   </div>
@@ -93,14 +93,14 @@
 
       <div class="action-icons">
         <div class="icon-btn tooltip-parent open-lab-summary" data-tooltip="View">
-          <img src="icons/maximize.svg" />
+          <img src="./icons/maximize.svg" />
         </div>
         <div class="icon-btn tooltip-parent" data-tooltip="Print">
-          <img src="icons/print.svg" />
+          <img src="./icons/print.svg" />
         </div>
       </div>
 
-      <img class="flag-icon light" src="icons/flag.svg" />
+      <img class="flag-icon light" src="./icons/flag.svg" />
     </div>
 
     <div class="result-card normal">
@@ -116,14 +116,14 @@
 
       <div class="action-icons">
         <div class="icon-btn tooltip-parent open-lab-summary" data-tooltip="View">
-          <img src="icons/maximize.svg" />
+          <img src="./icons/maximize.svg" />
         </div>
         <div class="icon-btn tooltip-parent" data-tooltip="Print">
-          <img src="icons/print.svg" />
+          <img src="./icons/print.svg" />
         </div>
       </div>
 
-      <img class="flag-icon light" src="icons/flag.svg" />
+      <img class="flag-icon light" src="./icons/flag.svg" />
     </div>
   </div>
 
@@ -136,34 +136,40 @@
 <div id="lab-overlay" class="lab-overlay hidden"></div>
 
 <div id="lab-summary-modal" class="lab-summary-modal hidden">
+  <!-- Modal Header -->
+  <div class="lab-modal-header">
+    <h2 class="lab-modal-title">2025 Blood Test – Summary</h2>
+    <button class="lab-close-btn">
+      <img src="./icons/x-mark.svg" alt="" width="20" height="20">
+    </button>
+  </div>
 
-  <button class="lab-close-btn">✕</button>
+  <!-- Modal Content -->
+  <div class="lab-modal-content">
+    <p class="summary-date">September 15, 2025</p>
+    <p class="summary-provided">Results provided by: Dr. Jason Lee</p>
 
-  <h2>2025 Blood Test – Summary</h2>
-  <p class="summary-date">September 15, 2025</p>
-  <p class="summary-provided">Results provided by: Dr. Jason Lee</p>
+    <h3>Patient Info</h3>
+    <p>Name: Sarah Jones</p>
+    <p>Date of Birth: March 15, 2002</p>
+    <p>Patient ID: 12345-6789</p>
 
-  <h3>Patient Info</h3>
-  <p>Name: [Patient name]</p>
-  <p>Date of Birth: [Patient DOB]</p>
-  <p>Patient ID: [Patient ID]</p>
-
-  <h3>Key Results</h3>
+    <h3>Key Results</h3>
 
   <table class="summary-table">
     <tr>
       <th>Test Component</th>
       <th>Result</th>
-      <th>Range</th>
+      <th>Normal Range</th>
       <th>Flag</th>
     </tr>
 
     <tr><td>Cholesterol (Total)</td><td>12/24</td><td>3/24–9/24</td><td class="flag high">High</td></tr>
-    <tr><td>HDL</td><td>13/31</td><td>15/31–24/31</td><td class="flag low">Low</td></tr>
-    <tr><td>LDL</td><td>42/43</td><td>15/31–24/31</td><td class="flag high">High</td></tr>
+    <tr><td>HDL <span class="tooltip-parent" data-tooltip="High-Density Lipoprotein: Often called 'good cholesterol' that helps remove other forms of cholesterol from your bloodstream."><img src="./icons/question-mark-circle.svg" alt="" width="16" height="16" class="term-tooltip-icon"></span></td><td>13/31</td><td>15/31–24/31</td><td class="flag low">Low</td></tr>
+    <tr><td>LDL <span class="tooltip-parent" data-tooltip="Low-Density Lipoprotein: Often called 'bad cholesterol' that can build up in arteries and increase risk of heart disease."><img src="./icons/question-mark-circle.svg" alt="" width="16" height="16" class="term-tooltip-icon"></span></td><td>42/43</td><td>15/31–24/31</td><td class="flag high">High</td></tr>
     <tr><td>Glucose</td><td>11/12</td><td>8/12–11/12</td><td></td></tr>
     <tr><td>Testosterone</td><td>22/33</td><td>11/33–22/33</td><td></td></tr>
     <tr><td>Cellulose</td><td>1/31</td><td>15/31–24/31</td><td class="flag low">Low</td></tr>
   </table>
-
+  </div>
 </div>

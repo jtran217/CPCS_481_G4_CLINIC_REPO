@@ -5,20 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bellhart Clinic</title>
 
-    <link rel="stylesheet" href="styles/root.css" />
-    <link rel="stylesheet" href="styles/main.css" />
-    <link rel="stylesheet" href="styles/schedule.css" />
-    <link rel="stylesheet" href="styles/booking-modal.css" />
-    <link rel="stylesheet" href="styles/reschedule.css" />
-    <link rel="stylesheet" href="styles/reports.css" />
-    <link rel="stylesheet" href="styles/lab.css" />
-    <link rel="stylesheet" href="styles/prescriptions.css" />
-    <link rel="stylesheet" href="styles/physical.css" />
-    <link rel="stylesheet" href="styles/imaging.css" />
-    <link rel="stylesheet" href="styles/immunization.css" />
-    <link rel="stylesheet" href="styles/insurance.css" />
-    <link rel="stylesheet" href="styles/profile.css"/>
-    <link rel="stylesheet" href="styles/dashboard.css" />
+    <link rel="stylesheet" href="./styles/root.css" />
+    <link rel="stylesheet" href="./styles/main.css" />
+    <link rel="stylesheet" href="./styles/schedule.css" />
+    <link rel="stylesheet" href="./styles/booking-modal.css" />
+    <link rel="stylesheet" href="./styles/reschedule.css" />
+    <link rel="stylesheet" href="./styles/reports.css" />
+    <link rel="stylesheet" href="./styles/lab.css" />
+    <link rel="stylesheet" href="./styles/prescriptions.css" />
+    <link rel="stylesheet" href="./styles/physical.css" />
+    <link rel="stylesheet" href="./styles/imaging.css" />
+    <link rel="stylesheet" href="./styles/immunization.css" />
+    <link rel="stylesheet" href="./styles/insurance.css" />
+    <link rel="stylesheet" href="./styles/profile.css"/>
+    <link rel="stylesheet" href="./styles/dashboard.css" />
 
 
     <!-- FullCalendar for schedule page -->
@@ -35,7 +35,7 @@
       <aside class="sidebar">
         <div class="sidebar-logo">
           <img
-            src="icons/BellhartLogo.png"
+            src="./icons/BellhartLogo.png"
             alt="Bellhart Clinic"
             class="logo-image"
           />
@@ -60,7 +60,7 @@
         </nav>
 
         <div class="sidebar-support">
-          <a href="#" class="support-link">
+          <a href="#" class="support-link tooltip-parent" data-tooltip="Feature is under development">
             <span class="nav-icon nav-icon-help"></span>
             <span>Support</span>
           </a>
@@ -70,7 +70,7 @@
       <div class="main-area">
         <!-- Static topbar -->
         <header class="topbar">
-          <div class="search-wrapper">
+          <div class="search-wrapper tooltip-parent" data-tooltip="Feature is under development">
             <div class="search-inner">
               <span class="search-icon icon-search"></span>
               <input
@@ -84,9 +84,10 @@
 
           <div class="topbar-right">
             <button
-              class="icon-btn"
+              class="icon-btn tooltip-parent"
               aria-label="Notifications"
               id="notifications-btn"
+              data-tooltip="Notifications"
             >
               <span class="topbar-icon icon-bell"></span>
               <span class="notification-badge" id="notification-badge">2</span>
@@ -103,13 +104,14 @@
             <div class="dropdown-menu" id="profile-dropdown">
               <a href="#profile" class="dropdown-item" data-route="profile">My Account</a>
               <div class="dropdown-divider"></div>
-              <a href="login.html" class="dropdown-item logout-text" id="logout-btn">Logout</a>
+              <a href="./login.html" class="dropdown-item logout-text" id="logout-btn">Logout</a>
             </div>
           </div>
         </header>
 
         <!-- Dynamic content area -->
         <main class="content">
+          <div id="breadcrumb-container"></div>
           <div id="page-header-container"></div>
           <div id="page-content"></div>
         </main>
@@ -153,12 +155,12 @@
     <div id="toast-container-wrapper"></div>
     <div id="tooltip-container"></div>
 
-    <script src="data/baseSchedule.js"></script>
-    <script src="scripts/validation.js"></script>
-    <script src="scripts/main.js"></script>
-    <script src="scripts/schedule.js"></script>
-    <script src="scripts/records.js"></script>
-    <script src="scripts/dashboard.js"></script>
-    <script src="scripts/profile.js"></script>
+    <script src="./data/baseSchedule.js"></script>
+    <script src="./scripts/validation.js"></script>
+    <script src="./scripts/main.js"></script>
+    <script src="./scripts/schedule.js"></script>
+    <script src="./scripts/records.js"></script>
+    <script src="./scripts/dashboard.js"></script>
+    <script src="./scripts/profile.js"></script>
   </body>
 </html>

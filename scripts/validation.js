@@ -1,7 +1,7 @@
 // Field validation system used across forms
 
 async function loadValidationRules() {
-    const res = await fetch("data/validation-rules.json");
+    const res = await fetch("./data/validation-rules.json");
     return await res.json();
   }
   

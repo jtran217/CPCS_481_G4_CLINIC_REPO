@@ -71,6 +71,46 @@
   "captcha-check": {
     "required": true,
     "errorMessage": "Please verify that you are not a robot"
+  },
+  "emergency-contact-name": {
+    "required": true,
+    "errorMessage": "Please enter contact name",
+    "minLength": 2,
+    "pattern": "^[a-zA-Z\\s'-]+$",
+    "patternMessage": "Name can only contain letters, spaces, hyphens, and apostrophes"
+  },
+  "emergency-contact-relationship": {
+    "required": true,
+    "errorMessage": "Please enter relationship"
+  },
+  "emergency-contact-phone": {
+    "required": true,
+    "errorMessage": "Please enter phone number",
+    "pattern": "^[\\d\\s\\-()]+$",
+    "patternMessage": "Phone number can only contain numbers, spaces, hyphens, and parentheses",
+    "minLength": 10,
+    "lengthMessage": "Phone number must be at least 10 digits"
+  },
+  "street-address": {
+    "required": true,
+    "errorMessage": "Please enter street address"
+  },
+  "city": {
+    "required": true,
+    "errorMessage": "Please enter city",
+    "minLength": 2,
+    "pattern": "^[a-zA-Z\\s'-]+$",
+    "patternMessage": "City can only contain letters, spaces, hyphens, and apostrophes"
+  },
+  "state": {
+    "required": true,
+    "errorMessage": "Please select state"
+  },
+  "postal-code": {
+    "required": true,
+    "errorMessage": "Please enter postal code",
+    "pattern": "^[A-Za-z]\\d[A-Za-z][ -]?\\d[A-Za-z]\\d$",
+    "patternMessage": "Please enter a valid postal code"
   }
 }
 

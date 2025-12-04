@@ -133,7 +133,6 @@ window.viewBookings = function() {
 
 window.viewOverrides = function() {
   const overrides = loadOverrides();
-  console.log('All overrides:', overrides);
   return overrides;
 };
 
@@ -259,20 +258,6 @@ function setupFilters() {
   }
 }
 
-// Load tooltip component
-async function loadScheduleTooltip() {
-  try {
-    const response = await fetch('components/tooltip.html');
-    const html = await response.text();
-    const container = document.getElementById('tooltip-container');
-    if (container) {
-      container.innerHTML = html;
-    }
-  } catch (error) {
-    console.error('Error loading tooltip component:', error);
-  }
-}
-
 // Tooltip management
 let tooltipElement = null;
 
@@ -352,12 +337,7 @@ function hideTooltip() {
 
 // Initialize schedule page - called by router
 async function initSchedulePage() {
-  // Load tooltip component AND WAIT FOR IT
-  await loadScheduleTooltip();
-  
-  // Wait 50ms for HTML to render
-  await new Promise(r => setTimeout(r, 50));
-  
+  // Reuse global tooltip element (loaded once by main.js)
   tooltipElement = document.getElementById("tooltip");
   
   if (!tooltipElement) {
@@ -580,7 +560,7 @@ let rescheduleNewSlot = null;
 // Load user data from JSON
 async function loadUserData() {
   try {
-    const response = await fetch('data/users.json');
+    const response = await fetch('./data/users.json');
     const data = await response.json();
     currentUser = data.users[0]; // Get the first (and only) user
   } catch (error) {
@@ -1413,8 +1393,9 @@ function showAppointmentDetails(event) {
     } else {
       actionsContainer.style.display = 'flex';
       
-      // Always get fresh button reference
+      // Get both buttons
       const cancelBtn = actionsContainer.querySelector('button:first-child');
+      const rescheduleBtn = actionsContainer.querySelector('button:last-child');
       
       if (cancelBtn) {
         // Reset button completely
@@ -1422,14 +1403,18 @@ function showAppointmentDetails(event) {
         
         if (isPast) {
           // Change to "Mark as Complete" button
-          cancelBtn.innerHTML = '<img src="icons/check-circle.svg" alt="" width="16" height="16" style="margin-right: 8px;"> Mark as Complete';
+          cancelBtn.innerHTML = '<img src="./icons/check-circle.svg" alt="" width="16" height="16" style="margin-right: 8px;"> Mark as Complete';
           cancelBtn.className = 'btn btn-secondary'; // Neutral styling
           cancelBtn.onclick = function() { markAsComplete(); };
+          // Hide reschedule button for past appointments
+          if (rescheduleBtn) rescheduleBtn.style.display = 'none';
         } else {
           // Keep as "Cancel Appointment" button
           cancelBtn.textContent = 'Cancel Appointment';
           cancelBtn.className = 'btn btn-warning';
           cancelBtn.onclick = function() { cancelAppointment(); };
+          // Show reschedule button for future appointments
+          if (rescheduleBtn) rescheduleBtn.style.display = 'block';
         }
       }
     }
@@ -1526,7 +1511,7 @@ function startReschedule() {
 }
 
 function loadRescheduleBanner() {
-  fetch('components/reschedule-banner.html')
+  fetch('./components/reschedule-banner.html')
     .then(response => response.text())
     .then(html => {
       const container = document.getElementById('reschedule-banner-container');
@@ -1678,10 +1663,10 @@ function showToast(type, title, message, duration = 5000) {
   toast.className = `toast toast-${type}`;
   
   const iconMap = {
-    success: `<img src="icons/check-circle.svg" alt="" width="24" height="24">`,
-    error: `<img src="icons/x-circle.svg" alt="" width="24" height="24">`,
-    warning: `<img src="icons/exclamation-circle.svg" alt="" width="24" height="24">`,
-    info: `<img src="icons/information-circle.svg" alt="" width="24" height="24">`
+    success: `<img src="./icons/check-circle.svg" alt="" width="24" height="24">`,
+    error: `<img src="./icons/x-circle.svg" alt="" width="24" height="24">`,
+    warning: `<img src="./icons/exclamation-circle.svg" alt="" width="24" height="24">`,
+    info: `<img src="./icons/information-circle.svg" alt="" width="24" height="24">`
   };
 
   toast.innerHTML = `
@@ -1691,7 +1676,7 @@ function showToast(type, title, message, duration = 5000) {
       ${message ? `<div class="toast-message">${message}</div>` : ''}
     </div>
     <button class="toast-close" onclick="this.parentElement.remove()">
-      <img src="icons/x-mark.svg" alt="" width="20" height="20">
+      <img src="./icons/x-mark.svg" alt="" width="20" height="20">
     </button>
   `;
 
@@ -1701,7 +1686,7 @@ function showToast(type, title, message, duration = 5000) {
   if (duration > 0) {
     setTimeout(() => {
       toast.style.opacity = '0';
-      toast.style.transform = 'translateX(100px)';
+      toast.style.transform = 'translateY(-100px)';
       setTimeout(() => toast.remove(), 300);
     }, duration);
   }

@@ -2,19 +2,7 @@
 // Records Pages Tooltip Logic
 // =======================================================
 
-// Load tooltip component for records pages
-async function loadRecordsTooltip() {
-  try {
-    const response = await fetch("components/tooltip.html");
-    const html = await response.text();
-    const container = document.getElementById("tooltip-container");
-    if (container) container.innerHTML = html;
-  } catch (error) {
-    console.error("Error loading records tooltip:", error);
-  }
-}
-
-// SEPARATE tooltip element (avoid conflict with schedule page)
+// Reuse global tooltip element (loaded once by main.js)
 let recordsTooltipElement = null;
 
 // Show tooltip on hover
@@ -35,9 +23,34 @@ function showRecordsTooltip(targetEl, tooltipText) {
 
   const rect = targetEl.getBoundingClientRect();
   const tooltipRect = recordsTooltipElement.getBoundingClientRect();
+  const viewportWidth = window.innerWidth;
+  const viewportHeight = window.innerHeight;
 
-  const left = rect.left + rect.width / 2 - tooltipRect.width / 2;
-  const top = rect.top - tooltipRect.height - 8;
+  // Try positioning to the right first
+  let left = rect.right + 8;
+  let top = rect.top + (rect.height / 2) - (tooltipRect.height / 2);
+
+  // Check if tooltip goes off screen to the right
+  if (left + tooltipRect.width > viewportWidth) {
+    // Position to the left instead
+    left = rect.left - tooltipRect.width - 8;
+  }
+
+  // Check if tooltip goes off screen to the left
+  if (left < 0) {
+    // Center horizontally if both sides don't work
+    left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+  }
+
+  // Check if tooltip goes off screen at the top
+  if (top < 0) {
+    top = 8; // Small margin from top
+  }
+
+  // Check if tooltip goes off screen at the bottom
+  if (top + tooltipRect.height > viewportHeight) {
+    top = viewportHeight - tooltipRect.height - 8; // Small margin from bottom
+  }
 
   recordsTooltipElement.style.left = `${left}px`;
   recordsTooltipElement.style.top = `${top}px`;
@@ -54,10 +67,7 @@ function hideRecordsTooltip() {
 // =======================================================
 
 async function initRecordsPage() {
-  // --- Load tooltip component ---
-  await loadRecordsTooltip();
-
-  await new Promise((r) => setTimeout(r, 50)); // wait for DOM render
+  // Reuse global tooltip element (loaded once by main.js)
   recordsTooltipElement = document.getElementById("tooltip");
 
   setupRecordsTooltips();
@@ -68,7 +78,6 @@ async function initRecordsPage() {
 // Attach listeners to tooltip-parent elements
 function setupRecordsTooltips() {
   const tooltipParents = document.querySelectorAll(".tooltip-parent");
-  console.log(`Records: found ${tooltipParents.length} tooltip-parent elements`);
 
   tooltipParents.forEach((parentEl) => {
     if (parentEl.dataset.tooltipInitialized === "true") return;
