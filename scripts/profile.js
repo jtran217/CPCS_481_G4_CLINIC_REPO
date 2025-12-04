@@ -337,6 +337,11 @@ document.addEventListener('click', function(e) {
             saveBtnContainer.classList.remove('active');
             saveBtn.classList.add('disabled-look');
         }
+        
+        // Show success toast
+        if (typeof showToast === 'function') {
+            showToast('success', 'Changes saved successfully', '');
+        }
     }
     
     async function validateEmergencyContacts() {
