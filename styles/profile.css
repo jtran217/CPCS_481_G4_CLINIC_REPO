@@ -156,6 +156,22 @@
   color: var(--color-text-muted);
 }
 
+.info-group .form-error {
+  font-size: 12px;
+  color: var(--color-error-600);
+  margin-top: 4px;
+  display: none;
+}
+
+.info-group .form-error.visible {
+  display: block;
+}
+
+.info-group .edit-input.error,
+.info-group .edit-input.error:focus {
+  border-color: var(--color-error-600);
+}
+
 .info-value {
   font-size: 15px;
   color: var(--color-text-main);
@@ -223,8 +239,25 @@
 .icon-mail { mask-image: url('../icons/mail.svg'); -webkit-mask-image: url('../icons/mail.svg'); }
 .icon-chat { mask-image: url('../icons/chat.svg'); -webkit-mask-image: url('../icons/chat.svg'); }
 
+.pref-icon-img {
+  width: 20px;
+  height: 20px;
+  display: block;
+  object-fit: contain;
+}
+
+.pref-icon-box.blue-bg .pref-icon-img {
+  /* Convert to dark blue (#1e40af) */
+  filter: brightness(0) saturate(100%) invert(27%) sepia(98%) saturate(1352%) hue-rotate(201deg) brightness(98%) contrast(96%);
+}
+
 .pref-content {
   flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  visibility: visible;
+  opacity: 1;
 }
 
 .pref-title {
@@ -232,12 +265,16 @@
   font-weight: 500;
   margin: 0;
   color: var(--color-text-main);
+  display: block;
+  visibility: visible;
 }
 
 .pref-desc {
   font-size: 12px;
   color: var(--color-text-muted);
   margin: 2px 0 0 0;
+  display: block;
+  visibility: visible;
 }
 
 /* Toggle Switch */
@@ -322,7 +359,7 @@ input:checked + .slider:before {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr auto;
   gap: 16px;
-  align-items: end;
+  align-items: start;
   margin-top: 16px;
   padding: 16px;
   background: var(--color-bg-subtle);
@@ -341,6 +378,21 @@ input:checked + .slider:before {
   color: var(--color-text-muted);
 }
 
+.contact-field-group .form-error {
+  font-size: 12px;
+  color: var(--color-error-600);
+  margin-top: 4px;
+  display: none;
+}
+
+.contact-field-group .form-error.visible {
+  display: block;
+}
+
+.contact-field-group .edit-input.error {
+  border-color: var(--color-error-600);
+}
+
 .btn-remove {
   padding: 8px 12px;
   background: #fff;
@@ -350,11 +402,38 @@ input:checked + .slider:before {
   cursor: pointer;
   font-size: 12px;
   height: 38px; /* Match input height */
+  align-self: end;
+  margin-top: 20px; /* Align with input field (label height + gap) */
 }
 
 .btn-remove:hover {
   background: var(--color-error-soft);
   border-color: var(--color-error-border);
+}
+
+.contact-item {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.contact-item:last-child {
+  border-bottom: none;
+}
+
+.emergency-contacts-edit {
+  display: none;
+}
+
+.emergency-contacts-edit .btn-add-contact {
+  margin-top: 16px;
+  background: var(--color-primary);
+  color: var(--color-primary-text);
+  border: 1px solid var(--color-primary);
+}
+
+.emergency-contacts-edit .btn-add-contact:hover {
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
 }
 
 .form-footer {
