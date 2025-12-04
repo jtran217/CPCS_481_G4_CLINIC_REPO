@@ -1403,7 +1403,7 @@ function showAppointmentDetails(event) {
         
         if (isPast) {
           // Change to "Mark as Complete" button
-          cancelBtn.innerHTML = '<img src="icons/check-circle.svg" alt="" width="16" height="16" style="margin-right: 8px;"> Mark as Complete';
+          cancelBtn.innerHTML = '<img src="./icons/check-circle.svg" alt="" width="16" height="16" style="margin-right: 8px;"> Mark as Complete';
           cancelBtn.className = 'btn btn-secondary'; // Neutral styling
           cancelBtn.onclick = function() { markAsComplete(); };
           // Hide reschedule button for past appointments
@@ -1663,10 +1663,10 @@ function showToast(type, title, message, duration = 5000) {
   toast.className = `toast toast-${type}`;
   
   const iconMap = {
-    success: `<img src="icons/check-circle.svg" alt="" width="24" height="24">`,
-    error: `<img src="icons/x-circle.svg" alt="" width="24" height="24">`,
-    warning: `<img src="icons/exclamation-circle.svg" alt="" width="24" height="24">`,
-    info: `<img src="icons/information-circle.svg" alt="" width="24" height="24">`
+    success: `<img src="./icons/check-circle.svg" alt="" width="24" height="24">`,
+    error: `<img src="./icons/x-circle.svg" alt="" width="24" height="24">`,
+    warning: `<img src="./icons/exclamation-circle.svg" alt="" width="24" height="24">`,
+    info: `<img src="./icons/information-circle.svg" alt="" width="24" height="24">`
   };
 
   toast.innerHTML = `
@@ -1676,7 +1676,7 @@ function showToast(type, title, message, duration = 5000) {
       ${message ? `<div class="toast-message">${message}</div>` : ''}
     </div>
     <button class="toast-close" onclick="this.parentElement.remove()">
-      <img src="icons/x-mark.svg" alt="" width="20" height="20">
+      <img src="./icons/x-mark.svg" alt="" width="20" height="20">
     </button>
   `;
 

@@ -5,7 +5,7 @@ let sessionUser = null;
 
 async function initSession() {
   try {
-    const response = await fetch('data/users.json');
+    const response = await fetch('./data/users.json');
     const data = await response.json();
 
     // Simulated login - automatically picks Sarah Jones
@@ -117,7 +117,7 @@ const routes = {
     subtitle: "View your Alberta Blue Cross insurance document.",
   },
   profile: {
-    path: "pages/profile.html",
+    path: "./pages/profile.html",
     title: "My Account", 
     subtitle: "Manage your personal information and preferences",
   },

@@ -154,7 +154,7 @@ function createAppointmentCardElement(appointment) {
         
         if (cancelBtn) {
           // Change to "Mark as Complete" button
-          cancelBtn.innerHTML = '<img src="icons/check-circle.svg" alt="" width="16" height="16" style="margin-right: 8px;"> Mark as Complete';
+          cancelBtn.innerHTML = '<img src="./icons/check-circle.svg" alt="" width="16" height="16" style="margin-right: 8px;"> Mark as Complete';
           cancelBtn.className = "btn btn-secondary";
           cancelBtn.onclick = () => handleMarkAsComplete(appointment);
         }
